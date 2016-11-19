@@ -22,7 +22,8 @@ import java.util.ArrayList;
 
 import uwi.dcit.AgriExpenseTT.R;
 import uwi.dcit.AgriExpenseTT.helpers.GAnalyticsHelper;
-import uwi.dcit.AgriExpenseTT.helpers.ReportHelper;
+// import uwi.dcit.AgriExpenseTT.helpers.ReportHelper;
+import uwi.dcit.AgriExpenseTT.Report.ExcelReport;
 
 public class FragmentReportList extends ListFragment {
 
@@ -38,14 +39,14 @@ public class FragmentReportList extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		ReportHelper.createReportDirectory();
+		ExcelReport.createReportDirectory();
 		populateList();
         GAnalyticsHelper.getInstance(this.getActivity()).sendScreenView("Report List Fragment");
 	}
 	
 	public void populateList() {
 		list = new ArrayList<String>(); //Reinitialise to ensure always a empty list starting with		
-        String path = Environment.getExternalStorageDirectory().toString() + "/" + ReportHelper.folderLocation;
+        String path = Environment.getExternalStorageDirectory().toString() + "/" + ExcelReport.folderLocation;
 		files = (new File(path)).listFiles(); //Store the file in an array of files
 		Log.d(FragmentReportList.class.toString(), "Path: " + path + " Size: "+ files.length);
 		for (int i=0; i < files.length; i++){
