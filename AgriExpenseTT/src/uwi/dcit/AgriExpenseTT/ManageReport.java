@@ -44,6 +44,7 @@ public class ManageReport extends BaseActivity {
 //		ReportHelper cvh = new ReportHelper(this);
 //    	cvh.createReport();
 
+		//Create a report factory and then create an excel report
 		ReportFactory cvh = new ReportFactory(this);
 		cvh.createReport("excel");
 		

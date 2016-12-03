@@ -35,7 +35,7 @@ import uwi.dcit.AgriExpenseTT.models.LocalResourcePurchase;
 import uwi.dcit.agriexpensesvr.rPurchaseApi.model.RPurchase;
 
 /**
- * Created by randy on 19/11/2016.
+ * Created by Randy Ram on 19/11/2016.
  */
 
 public class ExcelReport extends Report {
@@ -86,6 +86,13 @@ public class ExcelReport extends Report {
         this.writeExcel(path, filename, l, 0);
     }
 
+    /**
+     * Create an Excel report
+     * @param path - Location where the file would be saved
+     * @param  filename - Name of the Excel file
+     * @param endDate - Last date to search for crop cycles
+     * @param  beginDate - First date to search for crop cycles
+     */
     private void writeExcel(File path, String filename, long endDate, long beginDate){
 
         ArrayList<LocalCycle> cycleList = new ArrayList<LocalCycle>();
@@ -107,6 +114,17 @@ public class ExcelReport extends Report {
         }
     }
 
+
+    /**
+     * Write the first row in the Excel workbook and call writeCategory to populate it with data
+     * from the database
+     * @param filename This string will identify the name of the file that will be generated
+     * @param path - Location where Excel sheet would be saved
+     * @param agriWrkbk - The actual Excel workbook
+     * @param useSheet - An Excel Worksheet within the workbook
+     * @param cycId - The specific ID of a cycle
+     * @param rowNum - The row in Excel that the data is being written to.
+     */
     private int writeCategories(String filename, File path, HSSFWorkbook agriWrkbk, HSSFSheet useSheet, int cycId, int rowNum) {
         HSSFCellStyle styleGen = agriWrkbk.createCellStyle();
 
@@ -157,6 +175,15 @@ public class ExcelReport extends Report {
 
     }
 
+
+    /**
+     * Write data from the database to the Excel file
+     * @param type - A string representing what type of data the column contains (Chemical, Fertilizer,
+     *             etc.)
+     * @param cycId - The specific ID of a cycle
+     * @param useSheet - A reference to the actual sheet being inserted in, in the Excel workbook
+     * @param style - The specific styling of the cell being written to.
+     */
     private int writeCategory(String type, int cycId,HSSFSheet useSheet, int rowNum, HSSFCellStyle style){
         ArrayList<LocalCycleUse> useList = new ArrayList<LocalCycleUse>();
         ArrayList<LocalResourcePurchase> purList = new ArrayList<LocalResourcePurchase>();
@@ -202,12 +229,24 @@ public class ExcelReport extends Report {
         return ++rowNum;
     }
 
+    /**
+     * Helper function used to populate two ArrayLists with Purchases and Cycle information from the
+     * database
+     * @param useList - ArrayList to store the Cycle data
+     * @param purList - ArrayList used to store the Purchases data
+     */
     private void populate(ArrayList<LocalCycleUse> useList,
                           ArrayList<LocalResourcePurchase> purList, String type, int cycId) {
         DbQuery.getPurchases(db, dbh, purList, type, null,true);
         DbQuery.getCycleUse(db, dbh, cycId, useList, type);
     }
 
+
+    /**
+     * Notify the user that a report has been created
+     * @param name - Name of file that is being created
+     * @param path - Location to to the file on the filesystem
+     */
     public void notify(String name,File path){
         //controls what activity is called when notification is clicked
         Intent intent = new Intent();
