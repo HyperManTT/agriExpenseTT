@@ -7,13 +7,13 @@ import java.util.List;
  */
 
 public interface ObjectCRUD {
-    public void insert();
+    public int insertObject();
 
-    public void delete();
+    public void deleteObject();
 
-    public void update();
+    public void updateObject();
 
-    public void getObject();
+    public void getObjectFromDB();
 
     public List getAllObjects();
 }

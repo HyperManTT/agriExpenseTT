@@ -14,6 +14,8 @@ import uwi.dcit.AgriExpenseTT.CRUD.ObjectCRUD;
  * Created by shivr on 12/1/2016.
  */
 
+// TODO: 12/4/2016 This class must also be linked with the transaction log code!
+
 public class CycleCRUD implements ObjectCRUD {
 
     private Cycle cycle;
@@ -27,46 +29,57 @@ public class CycleCRUD implements ObjectCRUD {
 
 
     @Override
-    public void insert() {
+    public int insertObject() {
         ContentValues cv = new ContentValues();
         DBOperations dbcrud = new DBOperations(context);
-        //Map Cycle Object's Properties to a context value.
+        // TODO: 12/4/2016 Map the properties of the cycle to content values.
 
-        dbcrud.insertObject(cv,CycleContract.CycleEntry.TABLE_NAME);
+        int rowId = dbcrud.insertObject(cv,CycleContract.CycleEntry.TABLE_NAME);
+        return rowId;
     }
 
     @Override
-    public void delete() {
-
+    public void deleteObject() {
+        DBOperations dbOperations = new DBOperations(context);
+        dbOperations.deleteObject(CycleContract.CycleEntry.TABLE_NAME, CycleContract.CycleEntry.CROPCYCLE_CROPID, cycle.getCropId());
     }
 
     @Override
-    public void update() {
+    public void updateObject() {
         if(cycle.isValidObject()){
-            DBOperations dbcrud = new DBOperations(context);
-            dbcrud.deleteObject(CycleContract.CycleEntry.TABLE_NAME, CycleContract.CycleEntry.CROPCYCLE_CROPID, cycle.getCropId());
+            DBOperations dbOperations = new DBOperations(context);
+            ContentValues contentValues = new ContentValues();
+            // TODO: 12/4/2016 Get content values of object via function.
+
+            dbOperations.updateObject(CycleContract.CycleEntry.TABLE_NAME, contentValues, CycleContract.CycleEntry.CROPCYCLE_CROPID, cycle.getCropId());
         }
     }
 
     @Override
-    public void getObject() {
+    public void getObjectFromDB() {
         ContentValues cv = new ContentValues();
-        DBOperations dbcrud = new DBOperations(context);
-        Cursor receivedData = dbcrud.getObject(CycleContract.CycleEntry.TABLE_NAME, "Fred", 24);
+        DBOperations dbOperations = new DBOperations(context);
+        Cursor receivedData = dbOperations.getObject(CycleContract.CycleEntry.TABLE_NAME, "Fred", 24);
         if(receivedData.getCount()<1){
             cycle.setCropId(-1);
         }
         else{
-            //Populate entire object with the content values!
+            // TODO: 12/4/2016 Take cursor data and populate cycle object.
+
         }
     }
 
     @Override
     public List getAllObjects() {
         List list = new ArrayList();
-        DBOperations dbcrud = new DBOperations(context);
-        Cursor allObjects = dbcrud.getAllObjects(CycleContract.CycleEntry.TABLE_NAME);
-        //Build List From Cursor.
+        DBOperations dbOperations = new DBOperations(context);
+        Cursor allObjects = dbOperations.getAllObjects(CycleContract.CycleEntry.TABLE_NAME);
+        allObjects.moveToFirst();
+        if(allObjects.getCount()>0){
+            while(allObjects.moveToNext()){
+                // TODO: 12/4/2016 Build list of objects from cursor and store to ArrayList of Cycles.
+            }
+        }
         return list;
     }
 }
