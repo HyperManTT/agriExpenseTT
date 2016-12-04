@@ -31,6 +31,7 @@ public class CycleCRUD implements ObjectCRUD {
     @Override
     public int insertObject() {
         ContentValues cv = new ContentValues();
+        cv = cycle.getContentValues();
         DBOperations dbcrud = new DBOperations(context);
         // TODO: 12/4/2016 Map the properties of the cycle to content values.
 
