@@ -1,17 +1,19 @@
 package uwi.dcit.AgriExpenseTT.CRUD;
 
+import java.util.List;
+
 /**
- * Created by shivr on 12/1/2016.
+ * Created by shivr on 12/3/2016.
  */
 
 public interface ObjectCRUD {
-    void insert();
+    public void insert();
 
-    void delete();
+    public void delete();
 
-    void update();
+    public void update();
 
-    void getAll();
+    public void getObject();
 
-    void getByID();
+    public List getAllObjects();
 }

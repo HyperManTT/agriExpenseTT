@@ -5,7 +5,7 @@ package uwi.dcit.AgriExpenseTT.CRUD.Cycle;
  */
 
 public class Cycle {
-    private String cropId;
+    private Integer cropId;
     private String cropName;
     private String landType;
     private String harvestType;
@@ -15,7 +15,7 @@ public class Cycle {
     private Double harvestAmount;
     private String county;
 
-    public Cycle(String cropId, String landType, String cropName, String harvestType, Integer landAmount, Integer date, Double totalSpent, Double harvestAmount, String county) {
+    public Cycle(Integer cropId, String landType, String cropName, String harvestType, Integer landAmount, Integer date, Double totalSpent, Double harvestAmount, String county) {
         this.cropId = cropId;
         this.landType = landType;
         this.cropName = cropName;
@@ -27,11 +27,11 @@ public class Cycle {
         this.county = county;
     }
 
-    public String getCropId() {
+    public Integer getCropId() {
         return cropId;
     }
 
-    public void setCropId(String cropId) {
+    public void setCropId(Integer cropId) {
         this.cropId = cropId;
     }
 
@@ -97,5 +97,12 @@ public class Cycle {
 
     public void setCounty(String county) {
         this.county = county;
+    }
+
+    public boolean isValidObject(){
+        if(this.cropId == -1){
+            return false;
+        }
+        return true;
     }
 }

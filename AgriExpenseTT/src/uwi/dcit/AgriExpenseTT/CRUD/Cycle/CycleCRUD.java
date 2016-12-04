@@ -2,8 +2,12 @@ package uwi.dcit.AgriExpenseTT.CRUD.Cycle;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 
-import uwi.dcit.AgriExpenseTT.CRUD.DBCRUD;
+import java.util.ArrayList;
+import java.util.List;
+
+import uwi.dcit.AgriExpenseTT.CRUD.DBOperations;
 import uwi.dcit.AgriExpenseTT.CRUD.ObjectCRUD;
 
 /**
@@ -25,7 +29,7 @@ public class CycleCRUD implements ObjectCRUD {
     @Override
     public void insert() {
         ContentValues cv = new ContentValues();
-        DBCRUD dbcrud = new DBCRUD(context);
+        DBOperations dbcrud = new DBOperations(context);
         //Map Cycle Object's Properties to a context value.
 
         dbcrud.insertObject(cv,CycleContract.CycleEntry.TABLE_NAME);
@@ -38,16 +42,31 @@ public class CycleCRUD implements ObjectCRUD {
 
     @Override
     public void update() {
-
+        if(cycle.isValidObject()){
+            DBOperations dbcrud = new DBOperations(context);
+            dbcrud.deleteObject(CycleContract.CycleEntry.TABLE_NAME, CycleContract.CycleEntry.CROPCYCLE_CROPID, cycle.getCropId());
+        }
     }
 
     @Override
-    public void getAll() {
-
+    public void getObject() {
+        ContentValues cv = new ContentValues();
+        DBOperations dbcrud = new DBOperations(context);
+        Cursor receivedData = dbcrud.getObject(CycleContract.CycleEntry.TABLE_NAME, "Fred", 24);
+        if(receivedData.getCount()<1){
+            cycle.setCropId(-1);
+        }
+        else{
+            //Populate entire object with the content values!
+        }
     }
 
     @Override
-    public void getByID() {
-
+    public List getAllObjects() {
+        List list = new ArrayList();
+        DBOperations dbcrud = new DBOperations(context);
+        Cursor allObjects = dbcrud.getAllObjects(CycleContract.CycleEntry.TABLE_NAME);
+        //Build List From Cursor.
+        return list;
     }
 }
