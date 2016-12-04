@@ -12,8 +12,8 @@ public class DeleteData extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_navigation);
 
-        GAnalyticsHelper.getInstance(this.getApplicationContext()).sendScreenView("Delete Data");
 
+        GAnalyticsHelper.getInstance(this.getApplicationContext()).sendScreenView("Delete Data");
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.navContentLeft,new FragmentSlidingDelete())

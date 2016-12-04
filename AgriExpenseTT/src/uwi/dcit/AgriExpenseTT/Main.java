@@ -10,12 +10,21 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
+import java.util.ArrayList;
+
+import uwi.dcit.AgriExpenseTT.fragments.FragmentChoosePurchaseT;
 import uwi.dcit.AgriExpenseTT.fragments.FragmentEmpty;
+import uwi.dcit.AgriExpenseTT.fragments.FragmentHomeT;
+import uwi.dcit.AgriExpenseTT.fragments.FragmentSlideInLocationT;
 import uwi.dcit.AgriExpenseTT.fragments.FragmentSlidingMain;
+import uwi.dcit.AgriExpenseTT.fragments.FragmentSysModuleT;
+import uwi.dcit.AgriExpenseTT.fragments.FragmentViewCyclesT;
+import uwi.dcit.AgriExpenseTT.fragments.FragmentViewResourcesT;
 import uwi.dcit.AgriExpenseTT.helpers.GAnalyticsHelper;
 
 
-public class Main extends BaseActivity{
+public class Main extends BaseActivity {
+
 
     private CharSequence mTitle;
     public final static String APP_NAME = "AgriExpenseTT";
@@ -28,22 +37,38 @@ public class Main extends BaseActivity{
         // Needed after setContentView to refer to the appropriate XML View
         setupNavDrawer();
 
-        mTitle = getTitle();
+        if(this.isTablet && this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setupLandT();
+        }else {
+            setupPortT();
+        }
+
+//        Fragment currentFrag = getSupportFragmentManager().findFragmentById(R.id.container);
+//        mTitle = currentFrag.getTag();
+//        mTitle = getTitle();
 
         // Added Google Analytics
         GAnalyticsHelper.getInstance(this.getApplicationContext()).sendScreenView("Main Screen");
     }
 
     @Override
+    public void onAttachFragment(Fragment fragment) {
+        String fragTag = fragment.getTag();
+        if (fragTag != null) {
+            mTitle = fragTag.substring(0, 1).toUpperCase() + fragTag.substring(1);
+            restoreActionBar();
+        }
+    }
+
+    @Override
     protected void onResume(){
         super.onResume();
-        Log.d(TAG, "Running On Resume" );
         // Check for orientation to determine which interface to load => if portrait will use leftfrag
-        if(this.isTablet && this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            setupLand();
-        }else {
-            setupPort();
-        }
+//        if(this.isTablet && this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//            setupLandT();
+//        }else {
+//            setupPortT();
+//        }
     }
 
     private void setupPort() {
@@ -68,6 +93,17 @@ public class Main extends BaseActivity{
             .replace(R.id.navContentLeft, leftFrag)
             .replace(R.id.navContentRight, rightFrag)
             .commit();
+    }
+
+    private void setupPortT(){
+        this.loadHomeFragment();
+    }
+    private void setupLandT(){
+        this.loadHomeFragment();
+    }
+    private void loadHomeFragment(){
+
+        super.goToLocation(new FragmentHomeT(),"home");
     }
 
     public void restoreActionBar() {
@@ -108,7 +144,6 @@ public class Main extends BaseActivity{
         ft.commit();
     }
 
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         if(findViewById(R.id.navContentRight)!=null){
@@ -140,5 +175,33 @@ public class Main extends BaseActivity{
 
     public void openNewPurchase(View view){
         startActivity(new Intent(getApplicationContext(), NewPurchase.class));
+    }
+
+    /**
+     * Loads all the appropriate system modules depending a given user location request
+     * @param userLocationRequest
+     */
+    public void loadSysModules(String userLocationRequest ){
+
+        //Add modules to  be used by system
+        ArrayList<FragmentSysModuleT> fragmentSysModuleTArrayList = new ArrayList<FragmentSysModuleT>();
+
+        fragmentSysModuleTArrayList.add(new FragmentViewCyclesT());
+        fragmentSysModuleTArrayList.add(new FragmentViewResourcesT());
+        fragmentSysModuleTArrayList.add(new FragmentChoosePurchaseT());
+
+        FragmentSlideInLocationT fragmentSlideInLocationT = new FragmentSlideInLocationT();
+        fragmentSlideInLocationT.initializer(fragmentSysModuleTArrayList);
+
+        Bundle args = new Bundle();
+        args.putString("userLocationRequest",userLocationRequest);
+        fragmentSlideInLocationT.setArguments(args);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.navContentLeft, fragmentSlideInLocationT,userLocationRequest);
+        transaction.addToBackStack(null);
+        transaction.commit();
+
+
     }
 }
