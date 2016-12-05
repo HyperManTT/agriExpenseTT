@@ -25,6 +25,8 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import uwi.dcit.AgriExpenseTT.CRUD.Cycle.Cycle;
+import uwi.dcit.AgriExpenseTT.CRUD.Cycle.CycleCRUD;
 import uwi.dcit.AgriExpenseTT.Main;
 import uwi.dcit.AgriExpenseTT.NewCycle;
 import uwi.dcit.AgriExpenseTT.R;
@@ -145,8 +147,15 @@ public class FragmentNewCycleLast extends Fragment {
                     formatDisplayDate(null);
                 }
 
+
                 DataManager dm = new DataManager(getActivity().getBaseContext(), db, dbh);
-                int res = dm.insertCycle(plantMaterialId,et_CycleName.getText().toString() , land,Double.parseDouble(et_landQty.getText().toString()), unixDate);
+                int res = dm.insertCycle(plantMaterialId, et_CycleName.getText().toString() , land, Double.parseDouble(et_landQty.getText().toString()), unixDate);
+
+                // TODO: 12/5/2016 Uncomment this code for new cycle insertion code to work.
+//                CycleCRUD cycleCRUD = new CycleCRUD(getActivity().getApplicationContext());
+//                Cycle cyc = new Cycle(land, cycleCRUD.getCropNameFromID(plantMaterialId), "lb", Double.parseDouble(et_landQty.getText().toString()), unixDate , et_CycleName.getText().toString());
+//                int res = cycleCRUD.insertObject(cyc);
+
 
                 if (res != -1)Toast.makeText(getActivity(), "Cycle Successfully Created", Toast.LENGTH_SHORT).show();
                 else Toast.makeText(getActivity(), "Unable to create Cycle", Toast.LENGTH_SHORT).show();

@@ -257,6 +257,8 @@ public class NavigationDrawerFragment extends Fragment {
         if (mDrawerLayout != null && isDrawerOpen()) {
             inflater.inflate(R.menu.global, menu);
             showGlobalContextActionBar();
+            getActionBar().setTitle(R.string.app_name);
+
         }
         super.onCreateOptionsMenu(menu, inflater);
     }

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import uwi.dcit.AgriExpenseTT.helpers.DbHelper;
 import uwi.dcit.AgriExpenseTT.helpers.DbQuery;
@@ -35,10 +36,21 @@ public class Sync {
 	public void start(String namespace,UpAcc cloudAcc){
         UpAcc localAcc = DbQuery.getUpAcc(db);
 		this.cloudAcc=cloudAcc;
+
+		localAcc = new UpAcc();
+
+		localAcc.setLastUpdated(1480805211187l);
+		localAcc.setSignedIn(1);
+		localAcc.setAddress("No Address");
+		localAcc.setCountry("Trinidad and Tobago");
+		localAcc.setKeyrep("Personal");
+		localAcc.setAcc("anderson");
+
 		//both exist
 		if(cloudAcc!=null){
+			Log.i("DESIGN UPDATE 1", "SYNC CLOUD ACCOUNT IS NOT NULL");
 			long localUpdate= localAcc.getLastUpdated();
-			long cloudUpdate=cloudAcc.getLastUpdated();
+			long cloudUpdate= cloudAcc.getLastUpdated();
 			if(localUpdate>=cloudUpdate){//local more recent than cloud
 				//the local does not have an account which means it has never been synced 
 				if(localAcc.getAcc()==null || localAcc.getAcc().equals("")){
@@ -107,6 +119,7 @@ public class Sync {
 					break;
 					
 				case updateLocalOpt:
+					Log.i("DESIGN UPDATE 1", "UPDATING LOCAL DEVICE");
 					tL.logsUpdateLocal(namespace,localUpdate);
 					cv.put(UpdateAccountContract.UpdateAccountEntry.UPDATE_ACCOUNT_SIGNEDIN, 1);
 					db.update(UpdateAccountContract.UpdateAccountEntry.TABLE_NAME, cv, UpdateAccountContract.UpdateAccountEntry._ID+"=1", null);

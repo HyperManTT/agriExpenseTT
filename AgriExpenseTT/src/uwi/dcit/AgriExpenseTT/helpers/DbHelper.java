@@ -25,6 +25,7 @@ import uwi.dcit.AgriExpenseTT.models.TransactionLogContract;
 import uwi.dcit.AgriExpenseTT.models.TransactionLogContract.TransactionLogEntry;
 import uwi.dcit.AgriExpenseTT.models.UpdateAccountContract;
 import uwi.dcit.agriexpensesvr.upAccApi.model.UpAcc;
+import uwi.dcit.AgriExpenseTT.DefaultInput.defaultInsert;
 
 public class DbHelper extends SQLiteOpenHelper{
 
@@ -248,13 +249,15 @@ public class DbHelper extends SQLiteOpenHelper{
 		acc.setSignedIn(0);
 		acc.setLastUpdated(System.currentTimeMillis() / 1000L);
 		DbQuery.insertUpAcc(db, acc);
-		
-		insertDefaultCrops(db);
-		insertDefaultFertilizers(db);
-		insertDefaultSoilAdds(db);
-		insertDefaultChemicals(db);
-		insertDefaultCountries(db);
-		insertDefaultCounties(db);
+
+		// edited by Kirk 12/5/2016;
+		defaultInsert.insert(db);
+		//insertDefaultCrops(db);
+		//insertDefaultFertilizers(db);
+		//insertDefaultSoilAdds(db);
+		//insertDefaultChemicals(db);
+		//insertDefaultCountries(db);
+		//insertDefaultCounties(db);
 	}
 	
 	public void insertDefaultCrops(SQLiteDatabase db){
@@ -366,7 +369,7 @@ public class DbHelper extends SQLiteOpenHelper{
 		DbQuery.insertResource(db, this, DHelper.cat_plantingMaterial, "ESCALLION");
 		
 	}
-	
+
 	public void updateCropList(SQLiteDatabase db){
 		//VEGETABLES
 		DbQuery.insertResource(db, this, DHelper.cat_plantingMaterial, "BHAGI");
@@ -437,7 +440,7 @@ public class DbHelper extends SQLiteOpenHelper{
 		DbQuery.insertResource(db, this, DHelper.cat_plantingMaterial, "PUMPKIN");
 
 	}
-	
+
 	public void insertDefaultFertilizers(SQLiteDatabase db){
 		//fertilizer -Plant Doctors tt
 		DbQuery.insertResource(db, this, DHelper.cat_fertilizer, "Fersan (7.12.40 + 1TEM)");
@@ -494,7 +497,7 @@ public class DbHelper extends SQLiteOpenHelper{
 		DbQuery.insertResource(db, this, DHelper.cat_chemical, "Repellents");
 		DbQuery.insertResource(db, this, DHelper.cat_chemical, "Rodenticides");
 	}
-	
+
 	public void insertDefaultCountries(SQLiteDatabase db){
 		for (String [] country : CountryContract.countries){
 			DbQuery.insertCountry(db, country[0], country[1]);
