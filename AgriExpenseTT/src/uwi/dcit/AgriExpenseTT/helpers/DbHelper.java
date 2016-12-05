@@ -260,7 +260,7 @@ public class DbHelper extends SQLiteOpenHelper{
 		//insertDefaultCounties(db);
 	}
 	
-/*	public void insertDefaultCrops(SQLiteDatabase db){
+	public void insertDefaultCrops(SQLiteDatabase db){
 		//planting material - reference cardi - Caribbean Agricultural Research and Development Institute
 		//general
 		DbQuery.insertResource(db, this, DHelper.cat_plantingMaterial, "SOYABEAN");
@@ -369,7 +369,7 @@ public class DbHelper extends SQLiteOpenHelper{
 		DbQuery.insertResource(db, this, DHelper.cat_plantingMaterial, "ESCALLION");
 		
 	}
-*/
+
 	public void updateCropList(SQLiteDatabase db){
 		//VEGETABLES
 		DbQuery.insertResource(db, this, DHelper.cat_plantingMaterial, "BHAGI");
@@ -440,7 +440,7 @@ public class DbHelper extends SQLiteOpenHelper{
 		DbQuery.insertResource(db, this, DHelper.cat_plantingMaterial, "PUMPKIN");
 
 	}
-/*
+
 	public void insertDefaultFertilizers(SQLiteDatabase db){
 		//fertilizer -Plant Doctors tt
 		DbQuery.insertResource(db, this, DHelper.cat_fertilizer, "Fersan (7.12.40 + 1TEM)");
@@ -497,7 +497,7 @@ public class DbHelper extends SQLiteOpenHelper{
 		DbQuery.insertResource(db, this, DHelper.cat_chemical, "Repellents");
 		DbQuery.insertResource(db, this, DHelper.cat_chemical, "Rodenticides");
 	}
-*/
+
 	public void insertDefaultCountries(SQLiteDatabase db){
 		for (String [] country : CountryContract.countries){
 			DbQuery.insertCountry(db, country[0], country[1]);
