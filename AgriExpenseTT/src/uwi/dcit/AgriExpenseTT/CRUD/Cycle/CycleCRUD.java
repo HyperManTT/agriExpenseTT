@@ -44,6 +44,7 @@ public class CycleCRUD extends ObjectTypeMapper {
             while(allObjectsCursor.moveToNext()){
                 Cycle cycleObject = new Cycle();
                 cycleObject.setCursorValues(allObjectsCursor);
+                list.add(cycleObject);
             }
         }
         return list;

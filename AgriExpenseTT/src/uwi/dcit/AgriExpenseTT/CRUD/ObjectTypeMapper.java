@@ -2,7 +2,6 @@ package uwi.dcit.AgriExpenseTT.CRUD;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.util.Log;
 
 import java.util.List;
 
@@ -23,7 +22,6 @@ public abstract class ObjectTypeMapper {
     }
 
     public int insertObject(ObjectMapper objectTypeMapper){
-        Log.i("WOOOO","INSERTING!!!");
         ContentValues cv = objectTypeMapper.getContentValues();
         DBOperations dbOperations = new DBOperations(context);
         int rowId = dbOperations.insertObject(cv, tableName);
