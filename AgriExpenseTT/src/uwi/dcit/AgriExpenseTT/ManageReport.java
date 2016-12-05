@@ -8,6 +8,7 @@ import android.view.View;
 import uwi.dcit.AgriExpenseTT.fragments.FragmentReportList;
 import uwi.dcit.AgriExpenseTT.helpers.GAnalyticsHelper;
 import uwi.dcit.AgriExpenseTT.helpers.ReportHelper;
+import uwi.dcit.AgriExpenseTT.ReportFactory;
 
 public class ManageReport extends BaseActivity {
 
@@ -40,8 +41,12 @@ public class ManageReport extends BaseActivity {
 	
 	public void createNewReport(View view){
 		//TODO open time dialog to set time frame
-		ReportHelper cvh = new ReportHelper(this);
-    	cvh.createReport();
+//		ReportHelper cvh = new ReportHelper(this);
+//    	cvh.createReport();
+
+		//Create a report factory and then create an excel report
+		ReportFactory cvh = new ReportFactory(this);
+		cvh.createReport("excel");
 		
 	}
 }
