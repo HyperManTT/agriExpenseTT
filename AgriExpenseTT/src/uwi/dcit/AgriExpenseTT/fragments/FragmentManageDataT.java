@@ -31,7 +31,7 @@ public class FragmentManageDataT extends Fragment implements InterfaceSlideInLoc
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_manage_datat,container,false);
+        return inflater.inflate(R.layout.fragment_manage_data_t,container,false);
 
     }
 
