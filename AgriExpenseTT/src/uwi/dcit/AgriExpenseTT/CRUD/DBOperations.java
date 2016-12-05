@@ -42,6 +42,8 @@ public class DBOperations {
         db.close();
     }
 
+    //The following two methods are not bound to the object itself in the respective classes.
+
     public Cursor getObject(String tableName, String fieldName, int id){
         Cursor cursor = db.rawQuery("select * from "+tableName+" where "+fieldName+"="+id+";", null);
         db.close();
