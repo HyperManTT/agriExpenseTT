@@ -71,6 +71,7 @@ public class Cycle extends ObjectMapper{
         this.cropName = cycleCursor.getString(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_RESOURCE));
         this.cycleName = cycleCursor.getString(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_NAME));
         cycleCursor.close();
+
     }
 
     public boolean isValidObject() {
