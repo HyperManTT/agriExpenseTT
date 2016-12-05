@@ -66,7 +66,7 @@ public abstract class BaseActivity extends ActionBarActivity implements Navigati
                 startActivity(new Intent(this,ManageData.class));
                 break;
             case 6:
-                backUpData();
+                signInManager.signIn();
                 break;
 
         }

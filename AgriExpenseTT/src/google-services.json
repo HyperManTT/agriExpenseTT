@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "866280846670",
+    "project_id": "agriexpense-softeng"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:866280846670:android:8a92be1f808c8e1d",
+        "android_client_info": {
+          "package_name": "uwi.dcit.AgriExpenseTT"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "866280846670-8f71qvppa9c46dbjhlmen2nvk524k4th.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "uwi.dcit.AgriExpenseTT",
+            "certificate_hash": "84A5EECE9C574813500050218F3D3EEA05F0FCDA"
+          }
+        },
+        {
+          "client_id": "866280846670-qn1mjl5mlqorv55n5a0cetlbm0s8e1ls.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWYgXrTWkZ9EzsueTJ6o5OIEWz-XcbsCs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
