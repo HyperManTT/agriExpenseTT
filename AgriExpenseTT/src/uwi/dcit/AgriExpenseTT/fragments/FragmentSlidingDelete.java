@@ -1,5 +1,6 @@
 package uwi.dcit.AgriExpenseTT.fragments;
 
+import android.app.Activity;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,6 +12,10 @@ import uwi.dcit.AgriExpenseTT.helpers.DbQuery;
 public class FragmentSlidingDelete extends FragmentSlidingTabs {
 
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+    }
     public void populateList(){
         SQLiteDatabase db;
         DbHelper dbh=new DbHelper(getActivity().getApplicationContext());
