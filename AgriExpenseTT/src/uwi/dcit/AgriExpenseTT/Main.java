@@ -18,6 +18,7 @@ import uwi.dcit.AgriExpenseTT.fragments.FragmentHomeT;
 import uwi.dcit.AgriExpenseTT.fragments.FragmentSlideInLocationT;
 import uwi.dcit.AgriExpenseTT.fragments.FragmentSlidingMain;
 import uwi.dcit.AgriExpenseTT.fragments.FragmentSysModuleT;
+import uwi.dcit.AgriExpenseTT.fragments.FragmentTestSales;
 import uwi.dcit.AgriExpenseTT.fragments.FragmentViewCyclesT;
 import uwi.dcit.AgriExpenseTT.fragments.FragmentViewResourcesT;
 import uwi.dcit.AgriExpenseTT.helpers.GAnalyticsHelper;
@@ -189,6 +190,7 @@ public class Main extends BaseActivity {
         fragmentSysModuleTArrayList.add(new FragmentViewCyclesT());
         fragmentSysModuleTArrayList.add(new FragmentViewResourcesT());
         fragmentSysModuleTArrayList.add(new FragmentChoosePurchaseT());
+        fragmentSysModuleTArrayList.add(new FragmentTestSales());
 
         FragmentSlideInLocationT fragmentSlideInLocationT = new FragmentSlideInLocationT();
         fragmentSlideInLocationT.initializer(fragmentSysModuleTArrayList);

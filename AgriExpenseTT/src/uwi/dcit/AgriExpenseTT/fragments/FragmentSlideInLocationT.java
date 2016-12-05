@@ -12,10 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
+import uwi.dcit.AgriExpenseTT.InterfaceSysModuleTabElement;
 import uwi.dcit.AgriExpenseTT.R;
 import uwi.dcit.AgriExpenseTT.helpers.DbHelper;
 import uwi.dcit.AgriExpenseTT.widgets.SlidingTabLayout;
@@ -72,7 +71,7 @@ public class FragmentSlideInLocationT extends Fragment {
             for (String moduleLocation: moduleLocationList) {
                 if (userLocationRequest.equalsIgnoreCase(moduleLocation)){
 
-                    FragmentSysModuleTabElement fragmentSysModuleTabElement = (FragmentSysModuleTabElement) fragmentSysModuleT;
+                    InterfaceSysModuleTabElement interfaceSysModuleTabElement = (InterfaceSysModuleTabElement) fragmentSysModuleT;
                     Fragment fragmentSysModule = (Fragment) fragmentSysModuleT;
                     Fragment emptyFragment = fragmentSysModuleT.getEmptyFrag();
                     if (emptyFragment == null){
@@ -84,12 +83,12 @@ public class FragmentSlideInLocationT extends Fragment {
                     if (fragmentSysModuleT.isExistInDb()) {
 
                         fragments.add(new FragItem(fragmentSysModule,
-                                fragmentSysModuleTabElement.getTabColor(), fragmentSysModuleTabElement.getTabName()));
+                                interfaceSysModuleTabElement.getTabColor(), interfaceSysModuleTabElement.getTabName()));
                     }
                     else{
 
                         fragments.add(new FragItem(emptyFragment
-                                , fragmentSysModuleTabElement.getTabColor(),fragmentSysModuleTabElement.getTabName()));
+                                , interfaceSysModuleTabElement.getTabColor(), interfaceSysModuleTabElement.getTabName()));
                     }
 
                 }
