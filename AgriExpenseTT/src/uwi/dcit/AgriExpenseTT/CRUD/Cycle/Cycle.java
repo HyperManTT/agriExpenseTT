@@ -3,13 +3,15 @@ package uwi.dcit.AgriExpenseTT.CRUD.Cycle;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import uwi.dcit.AgriExpenseTT.CRUD.ObjectMapper;
+
 /**
  * Created by shivr on 12/2/2016.
  * Edited by Kirk on 12/4/2016.
  */
 
-public class Cycle {
-    private Integer cropId;
+public class Cycle extends ObjectMapper{
+
     private String cropName;
     private String landType;
     private String harvestType;
@@ -21,8 +23,13 @@ public class Cycle {
     private String county;
     private String cycleName;
 
+    public Cycle(){
+        super(-1);
+    }
+
     public Cycle(Integer cropId, String landType, String cropName, String harvestType, Integer landAmount, Integer date, Double totalSpent, Double harvestAmount, Double costPer, String county, String cycleName) {
-        this.cropId = cropId;
+        super(-1);
+        this.id = cropId;
         this.landType = landType;
         this.cropName = cropName;
         this.harvestType = harvestType;
@@ -33,12 +40,11 @@ public class Cycle {
         this.costPer = costPer;
         this.county = county;
         this.cycleName = cycleName;
-
-
     }
+
     public ContentValues getContentValues(){
         ContentValues cv = new ContentValues();
-        cv.put(CycleContract.CycleEntry.CROPCYCLE_CROPID, cropId);
+        cv.put(CycleContract.CycleEntry.CROPCYCLE_CROPID, id);
         cv.put(CycleContract.CycleEntry.CROPCYCLE_LAND_TYPE, landType);
         cv.put(CycleContract.CycleEntry.CROPCYCLE_LAND_AMOUNT, landAmount);
         cv.put(CycleContract.CycleEntry.CROPCYCLE_DATE, date);
@@ -52,8 +58,8 @@ public class Cycle {
         return cv;
     }
 
-    public void setCursorVaues(Cursor cycleCursor){
-        this.cropId = cycleCursor.getInt(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_CROPID));
+    public void setCursorValues(Cursor cycleCursor){
+        this.id = cycleCursor.getInt(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_CROPID));
         this.landType = cycleCursor.getString(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_LAND_TYPE));
         this.landAmount = cycleCursor.getInt(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_LAND_AMOUNT));
         this.date = cycleCursor.getInt(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_DATE));
@@ -65,14 +71,18 @@ public class Cycle {
         this.cropName = cycleCursor.getString(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_RESOURCE));
         this.cycleName = cycleCursor.getString(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_NAME));
         cycleCursor.close();
-
     }
+
+    public boolean isValidObject() {
+        return !(this.getCropId()==-1);
+    }
+
     public Integer getCropId() {
-        return cropId;
+        return id;
     }
 
     public void setCropId(Integer cropId) {
-        this.cropId = cropId;
+        this.id = cropId;
     }
 
     public String getCropName() {

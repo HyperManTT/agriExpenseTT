@@ -53,7 +53,12 @@ public class FragmentViewCycles extends ListFragment{
 	
 	ArrayList<LocalCycle> cycleList = new ArrayList<LocalCycle>();
 	CycleListAdapter cycAdapt;
-	
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+	}
+
 	@Override
 	public void onActivityCreated(Bundle savedState){
 		super.onActivityCreated(savedState);

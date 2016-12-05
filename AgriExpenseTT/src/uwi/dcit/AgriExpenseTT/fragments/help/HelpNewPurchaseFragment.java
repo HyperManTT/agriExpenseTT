@@ -8,11 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import uwi.dcit.AgriExpenseTT.R;
 import uwi.dcit.AgriExpenseTT.helpers.GAnalyticsHelper;
 
 
-public class HelpNewPurchaseFragment extends Fragment {
+public  class HelpNewPurchaseFragment extends Fragment {
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -20,10 +23,11 @@ public class HelpNewPurchaseFragment extends Fragment {
 		
 		TextView txtHeading = (TextView)view.findViewById(R.id.article_heading);
 		txtHeading.setText("New Purchase");
-		
+
+
 		ImageView imgView1 =(ImageView)view.findViewById(R.id.article_image);
 		imgView1.setImageDrawable(getResources().getDrawable(R.drawable.help_new_purchase_category));
-		
+
 		TextView txt1 = (TextView)view.findViewById(R.id.article_text);
 		txt1.setText(getResources().getString(R.string.help_purchase_new_resource_1));
 		
@@ -49,4 +53,7 @@ public class HelpNewPurchaseFragment extends Fragment {
 		
 		return view;
 	}
+
+
+
 }
