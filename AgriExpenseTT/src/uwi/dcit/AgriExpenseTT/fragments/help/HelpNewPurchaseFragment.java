@@ -63,9 +63,11 @@ public class HelpNewPurchaseFragment extends HelpOption {
 		return screenViewText;
 	}
 
+
 	public int getLayout()
 	{
 		int layout = R.layout.fragment_help_article_view_layout4;
 		return layout;
+		
 	}
 }

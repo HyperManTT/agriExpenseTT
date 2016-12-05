@@ -53,7 +53,12 @@ public class FragmentViewCycles extends ListFragment{
 	
 	ArrayList<LocalCycle> cycleList = new ArrayList<LocalCycle>();
 	CycleListAdapter cycAdapt;
-	
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+	}
+
 	@Override
 	public void onActivityCreated(Bundle savedState){
 		super.onActivityCreated(savedState);
@@ -88,7 +93,7 @@ public class FragmentViewCycles extends ListFragment{
 				if (item1.getTime() == item2.getTime())return 0;
 				else if (item1.getTime() > item2.getTime())return -1;
 				else return 1;
-			}			
+			}
 		});
 	}
 
