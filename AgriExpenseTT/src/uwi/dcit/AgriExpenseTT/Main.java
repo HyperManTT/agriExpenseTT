@@ -30,6 +30,7 @@ public class Main extends BaseActivity {
     private CharSequence mTitle;
     public final static String APP_NAME = "AgriExpenseTT";
     public final static String TAG = "Main";
+    public ArrayList<FragmentSysModuleT> fragmentSysModuleTArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +40,14 @@ public class Main extends BaseActivity {
         setupNavDrawer();
 
         if(this.isTablet && this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            setupLandT();
+            setupLand();
         }else {
-            setupPortT();
+            setupPort();
         }
 
 //        Fragment currentFrag = getSupportFragmentManager().findFragmentById(R.id.container);
 //        mTitle = currentFrag.getTag();
-//        mTitle = getTitle();
+        mTitle = getTitle();
 
         // Added Google Analytics
         GAnalyticsHelper.getInstance(this.getApplicationContext()).sendScreenView("Main Screen");
@@ -54,22 +55,22 @@ public class Main extends BaseActivity {
 
     @Override
     public void onAttachFragment(Fragment fragment) {
-        String fragTag = fragment.getTag();
-        if (fragTag != null) {
-            mTitle = fragTag.substring(0, 1).toUpperCase() + fragTag.substring(1);
-            restoreActionBar();
-        }
+//        String fragTag = fragment.getTag();
+//        if (fragTag != null) {
+//            mTitle = fragTag.substring(0, 1).toUpperCase() + fragTag.substring(1);
+//            restoreActionBar();
+//        }
     }
 
     @Override
     protected void onResume(){
         super.onResume();
         // Check for orientation to determine which interface to load => if portrait will use leftfrag
-//        if(this.isTablet && this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//            setupLandT();
-//        }else {
-//            setupPortT();
-//        }
+        if(this.isTablet && this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setupLand();
+        }else {
+            setupPort();
+        }
     }
 
     private void setupPort() {
@@ -185,12 +186,12 @@ public class Main extends BaseActivity {
     public void loadSysModules(String userLocationRequest ){
 
         //Add modules to  be used by system
-        ArrayList<FragmentSysModuleT> fragmentSysModuleTArrayList = new ArrayList<FragmentSysModuleT>();
+        fragmentSysModuleTArrayList = new ArrayList<FragmentSysModuleT>();
 
         fragmentSysModuleTArrayList.add(new FragmentViewCyclesT());
-        fragmentSysModuleTArrayList.add(new FragmentViewResourcesT());
-        fragmentSysModuleTArrayList.add(new FragmentChoosePurchaseT());
-        fragmentSysModuleTArrayList.add(new FragmentTestSales());
+//        fragmentSysModuleTArrayList.add(new FragmentViewResourcesT());
+//        fragmentSysModuleTArrayList.add(new FragmentChoosePurchaseT());
+//        fragmentSysModuleTArrayList.add(new FragmentTestSales());
 
         FragmentSlideInLocationT fragmentSlideInLocationT = new FragmentSlideInLocationT();
         fragmentSlideInLocationT.initializer(fragmentSysModuleTArrayList);
@@ -205,5 +206,10 @@ public class Main extends BaseActivity {
         transaction.commit();
 
 
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
     }
 }

@@ -64,8 +64,10 @@ public class FragmentAddDataLastT extends Fragment {
                         getActivity().runOnUiThread(new Runnable() {
                             public void run() {
                                 NotifyHelper.notify(getActivity(),getArguments().getString("type") + " Saved" );
-                                Main main = (Main)getActivity();
-								main.goToLocation(new FragmentHomeT(),"home");
+								getActivity().finish();
+
+								//Main main = (Main)getActivity();
+								//main.goToLocation(new FragmentHomeT(),"home");
                             }
                         });
                     }

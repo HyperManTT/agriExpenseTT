@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import uwi.dcit.AgriExpenseTT.InterfaceSysModuleTabElement;
+import uwi.dcit.AgriExpenseTT.Main;
 import uwi.dcit.AgriExpenseTT.R;
 import uwi.dcit.AgriExpenseTT.helpers.DbHelper;
 import uwi.dcit.AgriExpenseTT.widgets.SlidingTabLayout;
@@ -42,9 +43,11 @@ public class FragmentSlideInLocationT extends Fragment {
         dbh = new DbHelper(getActivity().getBaseContext());
         db = dbh.getWritableDatabase();
         userLocationRequest = getArguments().getString("userLocationRequest");
+
         populateList();
 
     }
+
 
     public void initializer (ArrayList<FragmentSysModuleT> fragmentSysModuleTList){
         this.fragmentSysModuleList = fragmentSysModuleTList;
