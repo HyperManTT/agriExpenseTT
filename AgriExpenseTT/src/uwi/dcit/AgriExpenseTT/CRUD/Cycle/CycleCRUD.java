@@ -48,4 +48,9 @@ public class CycleCRUD extends ObjectTypeMapper {
         }
         return list;
     }
+
+    public String getCropNameFromID(int id){
+        DBOperations dbOperations = new DBOperations(context);
+        return dbOperations.findResourceName(id);
+    }
 }

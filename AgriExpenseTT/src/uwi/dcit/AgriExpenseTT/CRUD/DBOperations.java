@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uwi.dcit.AgriExpenseTT.helpers.DbHelper;
+import uwi.dcit.AgriExpenseTT.models.ResourceContract;
 
 /**
  * Created by shivr on 12/1/2016.
@@ -53,6 +54,20 @@ public class DBOperations {
     public Cursor getAllObjects(String tableName){
         List list = new ArrayList();
         Cursor cursor =db.rawQuery("select * from "+tableName, null);
+        db.close();
         return cursor;
+    }
+
+    public String findResourceName(int id){
+        String code="select name from "+ ResourceContract.ResourceEntry.TABLE_NAME+" where "+ ResourceContract.ResourceEntry._ID +"="+id+";";
+        String res = null;
+        Cursor cursor = db.rawQuery(code, null);
+        if(cursor.getCount()>0){
+            cursor.moveToFirst();
+            res = cursor.getString(cursor.getColumnIndex("name"));
+        }
+        cursor.close();
+        db.close();
+        return res;
     }
 }

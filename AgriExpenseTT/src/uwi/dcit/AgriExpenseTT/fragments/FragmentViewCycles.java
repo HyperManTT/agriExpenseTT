@@ -93,7 +93,7 @@ public class FragmentViewCycles extends ListFragment{
 				if (item1.getTime() == item2.getTime())return 0;
 				else if (item1.getTime() > item2.getTime())return -1;
 				else return 1;
-			}			
+			}
 		});
 	}
 

@@ -15,8 +15,8 @@ public class Cycle extends ObjectMapper{
     private String cropName;
     private String landType;
     private String harvestType;
-    private Integer landAmount;
-    private Integer date;
+    private Double landAmount;
+    private Long date;
     private Double totalSpent;
     private Double harvestAmount;
     private Double costPer;
@@ -27,18 +27,16 @@ public class Cycle extends ObjectMapper{
         super(-1);
     }
 
-    public Cycle(Integer cropId, String landType, String cropName, String harvestType, Integer landAmount, Integer date, Double totalSpent, Double harvestAmount, Double costPer, String county, String cycleName) {
+    public Cycle(String landType, String cropName, String harvestType, Double landAmount, Long date, String cycleName) {
         super(-1);
-        this.id = cropId;
         this.landType = landType;
         this.cropName = cropName;
         this.harvestType = harvestType;
         this.landAmount = landAmount;
         this.date = date;
-        this.totalSpent = totalSpent;
-        this.harvestAmount = harvestAmount;
-        this.costPer = costPer;
-        this.county = county;
+        this.totalSpent = 0.0;
+        this.harvestAmount = 0.0;
+        this.costPer = 0.0;
         this.cycleName = cycleName;
     }
 
@@ -61,8 +59,8 @@ public class Cycle extends ObjectMapper{
     public void setCursorValues(Cursor cycleCursor){
         this.id = cycleCursor.getInt(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_CROPID));
         this.landType = cycleCursor.getString(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_LAND_TYPE));
-        this.landAmount = cycleCursor.getInt(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_LAND_AMOUNT));
-        this.date = cycleCursor.getInt(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_DATE));
+        this.landAmount = cycleCursor.getDouble(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_LAND_AMOUNT));
+        this.date = cycleCursor.getLong(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_DATE));
         this.totalSpent = cycleCursor.getDouble(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_TOTALSPENT));
         this.harvestType = cycleCursor.getString(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_HARVEST_TYPE));
         this.harvestAmount = cycleCursor.getDouble(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_HARVEST_AMT));
@@ -110,19 +108,19 @@ public class Cycle extends ObjectMapper{
         this.harvestType = harvestType;
     }
 
-    public Integer getLandAmount() {
+    public Double getLandAmount() {
         return landAmount;
     }
 
-    public void setLandAmount(Integer landAmount) {
+    public void setLandAmount(Double landAmount) {
         this.landAmount = landAmount;
     }
 
-    public Integer getDate() {
+    public Long getDate() {
         return date;
     }
 
-    public void setDate(Integer date) {
+    public void setDate(Long date) {
         this.date = date;
     }
 
