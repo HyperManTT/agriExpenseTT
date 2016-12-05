@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -110,6 +112,8 @@ public class FragmentViewResourcesT extends FragmentSysModuleT implements Interf
             alert1.show();
         }
     }
+
+
     private class Confirm implements DialogInterface.OnClickListener{
         int position;
         int id;

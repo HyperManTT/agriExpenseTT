@@ -48,8 +48,8 @@ public abstract class BaseActivity extends ActionBarActivity implements Navigati
         switch (position){
             case 0:
                 // Home
-//                startActivity(new Intent(this, Main.class));
-                goToLocation(new FragmentHomeT(),"home");
+                startActivity(new Intent(this, Main.class));
+//                goToLocation(new FragmentHomeT(),"home");
 
                 break;
             case 1:
@@ -70,7 +70,9 @@ public abstract class BaseActivity extends ActionBarActivity implements Navigati
                 break;
             case 5:
                 // manage data
-                goToLocation(new FragmentManageDataT(),"manage data");
+                startActivity(new Intent(this, ManageData.class));
+
+//                goToLocation(new FragmentManageDataT(),"manage data");
                 break;
             case 6:
                 signInManager.signIn();
@@ -158,8 +160,8 @@ public abstract class BaseActivity extends ActionBarActivity implements Navigati
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_settings) {
-//            startActivity(new Intent(getApplicationContext(),ManageData.class));
-            this.goToLocation(new FragmentManageDataT(),"manage data");
+            startActivity(new Intent(getApplicationContext(),ManageData.class));
+//            this.goToLocation(new FragmentManageDataT(),"manage data");
             return true;
         }
         return super.onOptionsItemSelected(item);
