@@ -2,7 +2,11 @@ package uwi.dcit.AgriExpenseTT.CRUD;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+
 import java.util.List;
+
+import uwi.dcit.AgriExpenseTT.helpers.DbHelper;
 
 
 /**
@@ -15,29 +19,34 @@ public abstract class ObjectTypeMapper {
     protected String tableName;
     protected  String idFieldName;
 
+    protected SQLiteDatabase db;
+    protected DbHelper dbh;
+
     public ObjectTypeMapper(Context context, String tableName, String idFieldName){
         this.context = context;
         this.tableName = tableName;
         this.idFieldName = idFieldName;
+        dbh= DbHelper.getInstance(context);
+        db = dbh.getWritableDatabase();
     }
 
     public int insertObject(ObjectMapper objectTypeMapper){
         ContentValues cv = objectTypeMapper.getContentValues();
-        DBOperations dbOperations = new DBOperations(context);
+        DBOperations dbOperations = new DBOperations(db, dbh);
         int rowId = dbOperations.insertObject(cv, tableName);
         return rowId;
     }
 
     public void updateObject(ObjectMapper objectMapper) {
         if(objectMapper.isValidObject()){
-            DBOperations dbOperations = new DBOperations(context);
+            DBOperations dbOperations = new DBOperations(db, dbh);
             ContentValues contentValues = objectMapper.getContentValues();
             dbOperations.updateObject(tableName, contentValues, idFieldName, objectMapper.getId());
         }
     }
 
     public void deleteObject(int id) {
-        DBOperations dbOperations = new DBOperations(context);
+        DBOperations dbOperations = new DBOperations(db, dbh);
         dbOperations.deleteObject(tableName, idFieldName, id);
     }
 

@@ -46,7 +46,8 @@ public class FragmentGeneralCategory extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		view=inflater.inflate(R.layout.fragment_general_cat, container, false);
-		dbh=new DbHelper(getActivity());
+		//dbh=new DbHelper(getActivity());
+		dbh= DbHelper.getInstance(getActivity().getApplicationContext());
 		db=dbh.getWritableDatabase();
 		calcTotals();
 		setup();

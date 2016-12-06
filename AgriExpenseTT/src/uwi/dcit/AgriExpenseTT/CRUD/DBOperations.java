@@ -17,49 +17,43 @@ import uwi.dcit.AgriExpenseTT.models.ResourceContract;
 
 public class DBOperations {
 
-    private SQLiteDatabase db;
-    private DbHelper dbh;
-    private Context context;
+    protected SQLiteDatabase db;
+    protected DbHelper dbh;
 
-    public DBOperations(Context context){
-        dbh= new DbHelper(context);
-        db = dbh.getWritableDatabase();
-        this.context = context;
+
+    public DBOperations(SQLiteDatabase db, DbHelper dbh){
+        this.dbh= dbh;
+        this.db = db;
     }
 
     public int insertObject(ContentValues cv, String tableName){
         Long rowId = db.insert(tableName, null, cv);
-        //db.close();
         return rowId.intValue();
     }
 
     public void updateObject(String tableName, ContentValues contentValues, String fieldName, int id){
         db.update(tableName, contentValues, fieldName+"="+id, null);
-        //db.close();
     }
 
     public void deleteObject(String tableName, String fieldName, int id){
         db.delete(tableName, fieldName+"="+id, null);
-        //db.close();
     }
 
     //The following two methods are not bound to the object itself in the respective classes.
 
     public Cursor getObject(String tableName, String fieldName, int id){
         Cursor cursor = db.rawQuery("select * from "+tableName+" where "+fieldName+"="+id+";", null);
-        //db.close();
         return cursor;
     }
 
     public Cursor getAllObjects(String tableName){
         List list = new ArrayList();
         Cursor cursor =db.rawQuery("select * from "+tableName, null);
-        //db.close();
         return cursor;
     }
 
     public String findResourceName(int id){
-        String code="select name from "+ ResourceContract.ResourceEntry.TABLE_NAME +" where "+ ResourceContract.ResourceEntry._ID +"="+id+";";
+        String code="select name from "+ ResourceContract.ResourceEntry.TABLE_NAME+" where "+ ResourceContract.ResourceEntry._ID +"="+id+";";
         String res = null;
         Cursor cursor = db.rawQuery(code, null);
         if(cursor.getCount()>0){
@@ -67,7 +61,6 @@ public class DBOperations {
             res = cursor.getString(cursor.getColumnIndex("name"));
         }
         cursor.close();
-        //db.close();
         return res;
     }
 }

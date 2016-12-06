@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import uwi.dcit.AgriExpenseTT.CRUD.Cycle.Cycle;
+import uwi.dcit.AgriExpenseTT.CRUD.Cycle.CycleCRUD;
 import uwi.dcit.AgriExpenseTT.EditCycle;
 import uwi.dcit.AgriExpenseTT.HireLabour;
 import uwi.dcit.AgriExpenseTT.Main;
@@ -42,16 +44,307 @@ import uwi.dcit.AgriExpenseTT.helpers.NavigationControl;
 import uwi.dcit.AgriExpenseTT.models.LocalCycle;
 
 public class FragmentViewCycles extends ListFragment{
+//	String type=null;
+//	SQLiteDatabase db;
+//	DbHelper dbh;
+//	final int req_edit=1;
+//	final String className = "ViewCycles";
+//
+//    private static final String STATE_ACTIVATED_POSITION = "cycle_activated_position";
+//    private int mActivatedPosition = ListView.INVALID_POSITION;
+//
+//	ArrayList<LocalCycle> cycleList = new ArrayList<LocalCycle>();
+//	CycleListAdapter cycAdapt;
+//
+//	@Override
+//	public void onAttach(Activity activity) {
+//		super.onAttach(activity);
+//	}
+//
+//	@Override
+//	public void onActivityCreated(Bundle savedState){
+//		super.onActivityCreated(savedState);
+//		this.registerForContextMenu(getListView());
+//        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+//	}
+//
+//	@Override
+//	public void onCreate(Bundle savedInstanceState) {
+//		super.onCreate(savedInstanceState);
+//		dbh	= new DbHelper(this.getActivity().getBaseContext());
+//		db	= dbh.getWritableDatabase();
+//
+//        if (getArguments() != null && getArguments().containsKey("type"))
+//            type = getArguments().getString("type");
+//
+//		populateList();
+//
+//		cycAdapt = new CycleListAdapter(getActivity(), R.layout.cycle_list_item, cycleList);
+//		setListAdapter(cycAdapt);
+//
+//        GAnalyticsHelper.getInstance(this.getActivity()).sendScreenView("View Cycles Fragment");
+//	}
+//
+//	public void populateList() {
+//		DbQuery.getCycles(db, dbh, cycleList);
+//
+//		//Attempt to solve the List of Cycles in Descending order of time (Most recent cycle first)
+//		Collections.sort(cycleList, new Comparator<LocalCycle>(){
+//			@Override
+//			public int compare(LocalCycle item1, LocalCycle item2) {
+//				if (item1.getTime() == item2.getTime())return 0;
+//				else if (item1.getTime() > item2.getTime())return -1;
+//				else return 1;
+//			}
+//		});
+//	}
+//
+//	@Override
+//	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+//        return inflater.inflate(R.layout.fragment_choose_purchase, container, false);
+//	}
+//
+//	@Override
+//	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
+//		super.onCreateContextMenu(menu, v, menuInfo);
+//
+//		MenuInflater inflater = this.getActivity().getMenuInflater();
+//		inflater.inflate(R.menu.resource_crop_context_menu, menu);
+//	}
+//
+//	public boolean onContextItemSelected(MenuItem item){
+//		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+//
+//		switch(item.getItemId()){
+//			case R.id.crop_view:
+//				Log.i(Main.APP_NAME, "View The details for resource: "+cycleList.get(info.position).getCropName());
+//				launchCycleUsage(info.position);
+//				break;
+//			case R.id.crop_edit: //Edit Cycle
+//				Log.i(Main.APP_NAME, "Edit The details for resource: "+cycleList.get(info.position).getCropName());
+//				editCycleCoption(info.position);
+//				break;
+//			case R.id.crop_delete:
+//				Log.i(Main.APP_NAME, "Delete The details for resource: "+cycleList.get(info.position).getCropName());
+//				deletCycleOption(this.getListView(), info.position); //Use the same delete operation from list item click
+//				break;
+//			default:
+//				return super.onContextItemSelected(item);
+//		}
+//		return false;
+//	}
+//
+//	@Override
+//	public void onListItemClick(ListView l, View v, int position, long id) {
+//        super.onListItemClick(l, v, position, id);
+//        setActivatedPosition(position);
+//
+//		if(type == null){
+//			launchCycleUsage(position);
+//		}else if(type.equals(DHelper.cat_labour)){ //Assigning labour to cycle
+//			assignCycleToLabour(position);
+//		}else if(type.equals("delete")){ //When called by delete data
+//			deletCycleOption(l, position);
+//		}else if(type.equals("edit")){//when called by edit data
+//			editCycleCoption(position);
+//		}
+//	}
+//
+//    @Override
+//    public void onViewCreated(View view, Bundle savedInstanceState) {
+//        super.onViewCreated(view, savedInstanceState);
+//
+//        // Restore the previously serialized activated item position.
+//        if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
+//            setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
+//        }
+//    }
+//
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        if (mActivatedPosition != ListView.INVALID_POSITION) {
+//            // Serialize and persist the activated item position.
+//            Log.d("ViewCycles", "Saving state: " + mActivatedPosition);
+//            outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
+//        }
+//    }
+//
+//    private void setActivatedPosition(int position) {
+//        if (position == ListView.INVALID_POSITION) {
+//            getListView().setItemChecked(mActivatedPosition, false);
+//        } else {
+//            Log.d("ViewCycles", "Setting position to: "+position);
+//            getListView().setItemChecked(position, true);
+//        }
+//
+//        mActivatedPosition = position;
+//    }
+//
+//	public void launchCycleUsage(int position){
+//        Bundle arguments = new Bundle();
+//		arguments.putParcelable("cycleMain",cycleList.get(position));
+//        Log.d("FragmentViewCycles", cycleList.get(position).toString());
+//
+//		Fragment newFrag= new FragmentCycleUseage();
+//        newFrag.setArguments(arguments);
+//
+//        boolean isTablet = this.getResources().getBoolean(R.bool.isTablet);
+//
+//        if(!isTablet || this.getResources().getConfiguration().orientation== Configuration.ORIENTATION_PORTRAIT){
+//            ((NavigationControl) getActivity()).navigate(((NavigationControl) getActivity()).getLeftFrag(),newFrag);
+//            return;
+//        }
+//        if(getActivity() instanceof NavigationControl) {
+//            if(((NavigationControl) getActivity()).getRightFrag() instanceof  FragmentEmpty
+//                ||(((NavigationControl) getActivity()).getRightFrag().getClass() == newFrag.getClass()))
+//                    ((NavigationControl) getActivity()).navigate(((NavigationControl) getActivity()).getLeftFrag(),newFrag);
+//            else
+//                ((NavigationControl) getActivity()).navigate(((NavigationControl) getActivity()).getRightFrag(),newFrag);
+//        }
+//	}
+//
+//	public void editCycleCoption(int position){
+//		Intent i = new Intent(getActivity(),EditCycle.class);
+// 		i.putExtra("cycle", cycleList.get(position));
+// 		startActivityForResult(i,req_edit);
+//	}
+//
+//	public void deletCycleOption(ListView l, int position){
+//		DeleteConfirmator c=new DeleteConfirmator(position,(CycleListAdapter) l.getAdapter());
+//		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
+//
+//        alertBuilder.setMessage("Are you sure you want to delete?")
+//        			.setCancelable(true)
+//        			.setPositiveButton("Delete",c)
+//        			.setNegativeButton("Cancel",c)
+//        			.create()
+//        			.show();
+//	}
+//
+//	public void assignCycleToLabour(int position){
+//		ListFragment fragment	= new HireLabourLists();
+//
+//		Bundle arguments		= new Bundle();
+//		arguments.putString("type", "quantifier");
+//		arguments.putString("name", getArguments().getString("name"));
+//		arguments.putParcelable("cycle", cycleList.get(position));
+//
+//		StringBuilder stb = new StringBuilder();
+//		stb.append("Details: ")
+//			.append(getArguments().getString("name"))
+//			.append(", cycle#")
+//			.append(cycleList.get(position).getId());
+//
+//		((HireLabour)getActivity()).replaceSub(stb.toString());
+//
+//
+//		fragment.setArguments(arguments);
+//		getFragmentManager()
+//			.beginTransaction()
+//				.replace(R.id.NewCycleListContainer, fragment)
+//				.commit();
+//	}
+//
+//	@Override
+//	public void onActivityResult(int requestCode,int resultCode,Intent data){
+//		super.onActivityResult(requestCode, resultCode, data);
+//		//refill list
+//		cycleList=new ArrayList<LocalCycle>();
+//		DbQuery.getCycles(db, dbh, cycleList);
+//		cycAdapt.notifyDataSetChanged();
+//	}
+//
+//	public class DeleteConfirmator implements DialogInterface.OnClickListener{
+//		int position;
+//		CycleListAdapter listAdapter;
+//
+//		public DeleteConfirmator(int position,CycleListAdapter l){
+//			this.position=position;
+//			this.listAdapter=l;
+//		}
+//		@Override
+//		public void onClick(DialogInterface dialog, int which) {
+//
+//			if(which==DialogInterface.BUTTON_POSITIVE){
+//
+//				DataManager dm=new DataManager(getActivity(), db, dbh);
+//				dm.deleteCycle(cycleList.get(position));
+//
+//				//DbQuery.deleteRecord(db, dbh, DbHelper.TABLE_CROPCYLE, cList.get(position).getId());
+//				cycleList.remove(position);
+//				listAdapter.notifyDataSetChanged();
+//				Toast.makeText(getActivity(),"Cycle successfully deleted", Toast.LENGTH_SHORT).show();
+//				dialog.cancel();
+//				//DeleteExpenseList.this.finish();
+//			}else if(which==DialogInterface.BUTTON_NEGATIVE){
+//				dialog.cancel();
+//			}
+//		}
+//	}
+//
+//	public class CycleListAdapter extends ArrayAdapter<LocalCycle> {
+//        Context myContext;
+//
+//        public CycleListAdapter(Context context, int textViewResourceId, ArrayList<LocalCycle> objects) {
+//		    super(context, textViewResourceId, objects);
+//		    myContext = context;
+//		}
+//
+//        @SuppressLint("ViewHolder")
+//		@Override
+//        public View getView(int position, View convertView, ViewGroup parent) {
+//            LayoutInflater inflater = ((Activity)myContext).getLayoutInflater();
+//            View row = inflater.inflate(R.layout.cycle_list_item, parent, false);
+//
+//            //get the elements of that view and set them accordingly
+//            LocalCycle currCycle = cycleList.get(position);
+//
+//            String txt = (currCycle.getCropName() != null ) ? currCycle.getCropName() : DbQuery.findResourceName(db, dbh, currCycle.getCropId());
+//            String cycleName = (currCycle.getCycleName() != null) ? currCycle.getCycleName().toUpperCase() : txt;
+//
+//            ((TextView)row.findViewById(R.id.tv_cycleList_crop)).setText("Crop: " + txt);
+//            ((TextView)row.findViewById(R.id.tv_cycleList_name)).setText(("Name: "+ cycleName));
+//
+//            // TODO Use this template to insert an appropriate image for the crop cycle based on crop type
+//
+//            double qty=currCycle.getLandQty();
+//            txt = currCycle.getLandType();
+//            txt = qty +" "+ txt;
+//            ((TextView)row.findViewById(R.id.tv_cycleList_Land)).setText("Land: " + txt);
+//            ((TextView)row.findViewById(R.id.tv_cycleList_date)).setText("Date Planted: " + DateFormatHelper.getDateStr(currCycle.getTime()));
+//
+////            Log.d("ViewCycle-getView", "selectedposition: " + getSelectedItemPosition() + "position: "+position);
+//            if (position == getSelectedItemPosition()){
+//                row.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
+//            }
+//
+//            return row;
+//		}
+//
+//        @Override
+//        public int getCount(){
+//            return cycleList.size();
+//        }
+//
+//		  //register click
+//	 }
+
+
+
+
 	String type=null;
 	SQLiteDatabase db;
 	DbHelper dbh;
 	final int req_edit=1;
 	final String className = "ViewCycles";
 
-    private static final String STATE_ACTIVATED_POSITION = "cycle_activated_position";
-    private int mActivatedPosition = ListView.INVALID_POSITION;
-	
-	ArrayList<LocalCycle> cycleList = new ArrayList<LocalCycle>();
+	private static final String STATE_ACTIVATED_POSITION = "cycle_activated_position";
+	private int mActivatedPosition = ListView.INVALID_POSITION;
+	private CycleCRUD cycleCRUD;
+
+
+	ArrayList<Cycle> cycleList = new ArrayList<Cycle>();
 	CycleListAdapter cycAdapt;
 
 	@Override
@@ -63,33 +356,38 @@ public class FragmentViewCycles extends ListFragment{
 	public void onActivityCreated(Bundle savedState){
 		super.onActivityCreated(savedState);
 		this.registerForContextMenu(getListView());
-        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		dbh	= new DbHelper(this.getActivity().getBaseContext());
-		db	= dbh.getWritableDatabase();
+		//dbh	= new DbHelper(this.getActivity().getBaseContext());
+		//db	= dbh.getWritableDatabase();
 
-        if (getArguments() != null && getArguments().containsKey("type"))
-            type = getArguments().getString("type");
+		cycleCRUD = new CycleCRUD(this.getActivity().getApplicationContext());
+
+		if (getArguments() != null && getArguments().containsKey("type"))
+			type = getArguments().getString("type");
 
 		populateList();
 
 		cycAdapt = new CycleListAdapter(getActivity(), R.layout.cycle_list_item, cycleList);
 		setListAdapter(cycAdapt);
 
-        GAnalyticsHelper.getInstance(this.getActivity()).sendScreenView("View Cycles Fragment");
+		GAnalyticsHelper.getInstance(this.getActivity()).sendScreenView("View Cycles Fragment");
+
 	}
-	
+
 	public void populateList() {
-		DbQuery.getCycles(db, dbh, cycleList);
+		//DbQuery.getCycles(db, dbh, cycleList);
+		cycleList=new ArrayList<Cycle>();
+		cycleList = cycleCRUD.getAllObjectsFromDB();
 
 		//Attempt to solve the List of Cycles in Descending order of time (Most recent cycle first)
-		Collections.sort(cycleList, new Comparator<LocalCycle>(){
+		Collections.sort(cycleList, new Comparator<Cycle>(){
 			@Override
-			public int compare(LocalCycle item1, LocalCycle item2) {
+			public int compare(Cycle item1, Cycle item2) {
 				if (item1.getTime() == item2.getTime())return 0;
 				else if (item1.getTime() > item2.getTime())return -1;
 				else return 1;
@@ -99,20 +397,20 @@ public class FragmentViewCycles extends ListFragment{
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_choose_purchase, container, false);
+		return inflater.inflate(R.layout.fragment_choose_purchase, container, false);
 	}
-	
+
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
 		super.onCreateContextMenu(menu, v, menuInfo);
-		
+
 		MenuInflater inflater = this.getActivity().getMenuInflater();
 		inflater.inflate(R.menu.resource_crop_context_menu, menu);
 	}
-	
+
 	public boolean onContextItemSelected(MenuItem item){
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-		
+
 		switch(item.getItemId()){
 			case R.id.crop_view:
 				Log.i(Main.APP_NAME, "View The details for resource: "+cycleList.get(info.position).getCropName());
@@ -131,16 +429,16 @@ public class FragmentViewCycles extends ListFragment{
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        setActivatedPosition(position);
+		super.onListItemClick(l, v, position, id);
+		setActivatedPosition(position);
 
 		if(type == null){
 			launchCycleUsage(position);
 		}else if(type.equals(DHelper.cat_labour)){ //Assigning labour to cycle
-			assignCycleToLabour(position);			
+			assignCycleToLabour(position);
 		}else if(type.equals("delete")){ //When called by delete data
 			deletCycleOption(l, position);
 		}else if(type.equals("edit")){//when called by edit data
@@ -148,131 +446,131 @@ public class FragmentViewCycles extends ListFragment{
 		}
 	}
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
 
-        // Restore the previously serialized activated item position.
-        if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
-            setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
-        }
-    }
+		// Restore the previously serialized activated item position.
+		if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
+			setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
+		}
+	}
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (mActivatedPosition != ListView.INVALID_POSITION) {
-            // Serialize and persist the activated item position.
-            Log.d("ViewCycles", "Saving state: " + mActivatedPosition);
-            outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
-        }
-    }
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		if (mActivatedPosition != ListView.INVALID_POSITION) {
+			// Serialize and persist the activated item position.
+			Log.d("ViewCycles", "Saving state: " + mActivatedPosition);
+			outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
+		}
+	}
 
-    private void setActivatedPosition(int position) {
-        if (position == ListView.INVALID_POSITION) {
-            getListView().setItemChecked(mActivatedPosition, false);
-        } else {
-            Log.d("ViewCycles", "Setting position to: "+position);
-            getListView().setItemChecked(position, true);
-        }
+	private void setActivatedPosition(int position) {
+		if (position == ListView.INVALID_POSITION) {
+			getListView().setItemChecked(mActivatedPosition, false);
+		} else {
+			Log.d("ViewCycles", "Setting position to: "+position);
+			getListView().setItemChecked(position, true);
+		}
 
-        mActivatedPosition = position;
-    }
+		mActivatedPosition = position;
+	}
 
 	public void launchCycleUsage(int position){
-        Bundle arguments = new Bundle();
+		Bundle arguments = new Bundle();
 		arguments.putParcelable("cycleMain",cycleList.get(position));
-        Log.d("FragmentViewCycles", cycleList.get(position).toString());
+		Log.d("FragmentViewCycles", cycleList.get(position).toString());
 
 		Fragment newFrag= new FragmentCycleUseage();
-        newFrag.setArguments(arguments);
+		newFrag.setArguments(arguments);
 
-        boolean isTablet = this.getResources().getBoolean(R.bool.isTablet);
+		boolean isTablet = this.getResources().getBoolean(R.bool.isTablet);
 
-        if(!isTablet || this.getResources().getConfiguration().orientation== Configuration.ORIENTATION_PORTRAIT){
-            ((NavigationControl) getActivity()).navigate(((NavigationControl) getActivity()).getLeftFrag(),newFrag);
-            return;
-        }
-        if(getActivity() instanceof NavigationControl) {
-            if(((NavigationControl) getActivity()).getRightFrag() instanceof  FragmentEmpty
-                ||(((NavigationControl) getActivity()).getRightFrag().getClass() == newFrag.getClass()))
-                    ((NavigationControl) getActivity()).navigate(((NavigationControl) getActivity()).getLeftFrag(),newFrag);
-            else
-                ((NavigationControl) getActivity()).navigate(((NavigationControl) getActivity()).getRightFrag(),newFrag);
-        }
+		if(!isTablet || this.getResources().getConfiguration().orientation== Configuration.ORIENTATION_PORTRAIT){
+			((NavigationControl) getActivity()).navigate(((NavigationControl) getActivity()).getLeftFrag(),newFrag);
+			return;
+		}
+		if(getActivity() instanceof NavigationControl) {
+			if(((NavigationControl) getActivity()).getRightFrag() instanceof  FragmentEmpty
+					||(((NavigationControl) getActivity()).getRightFrag().getClass() == newFrag.getClass()))
+				((NavigationControl) getActivity()).navigate(((NavigationControl) getActivity()).getLeftFrag(),newFrag);
+			else
+				((NavigationControl) getActivity()).navigate(((NavigationControl) getActivity()).getRightFrag(),newFrag);
+		}
 	}
-	
+
 	public void editCycleCoption(int position){
 		Intent i = new Intent(getActivity(),EditCycle.class);
- 		i.putExtra("cycle", cycleList.get(position));
- 		startActivityForResult(i,req_edit);
+		i.putExtra("cycle", cycleList.get(position));
+		startActivityForResult(i,req_edit);
 	}
-	
+
 	public void deletCycleOption(ListView l, int position){
 		DeleteConfirmator c=new DeleteConfirmator(position,(CycleListAdapter) l.getAdapter());
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
-		
-        alertBuilder.setMessage("Are you sure you want to delete?")
-        			.setCancelable(true)        
-        			.setPositiveButton("Delete",c)
-        			.setNegativeButton("Cancel",c)
-        			.create() 
-        			.show();
+
+		alertBuilder.setMessage("Are you sure you want to delete?")
+				.setCancelable(true)
+				.setPositiveButton("Delete",c)
+				.setNegativeButton("Cancel",c)
+				.create()
+				.show();
 	}
-	
+
 	public void assignCycleToLabour(int position){
 		ListFragment fragment	= new HireLabourLists();
-		
+
 		Bundle arguments		= new Bundle();
 		arguments.putString("type", "quantifier");
 		arguments.putString("name", getArguments().getString("name"));
 		arguments.putParcelable("cycle", cycleList.get(position));
-		
+
 		StringBuilder stb = new StringBuilder();
 		stb.append("Details: ")
-			.append(getArguments().getString("name"))
-			.append(", cycle#")
-			.append(cycleList.get(position).getId());
-		
+				.append(getArguments().getString("name"))
+				.append(", cycle#")
+				.append(cycleList.get(position).getId());
+
 		((HireLabour)getActivity()).replaceSub(stb.toString());
-		
-		
+
+
 		fragment.setArguments(arguments);
 		getFragmentManager()
-			.beginTransaction()
+				.beginTransaction()
 				.replace(R.id.NewCycleListContainer, fragment)
 				.commit();
 	}
-	
+
 	@Override
 	public void onActivityResult(int requestCode,int resultCode,Intent data){
 		super.onActivityResult(requestCode, resultCode, data);
 		//refill list
-		cycleList=new ArrayList<LocalCycle>();
-		DbQuery.getCycles(db, dbh, cycleList);
-		cycAdapt.notifyDataSetChanged();
+		cycleList=new ArrayList<Cycle>();
+		//CycleCRUD cycleCRUD = new CycleCRUD(this.getActivity().getApplicationContext());
+		cycleList = cycleCRUD.getAllObjectsFromDB();
 	}
 
 	public class DeleteConfirmator implements DialogInterface.OnClickListener{
 		int position;
 		CycleListAdapter listAdapter;
-		
+
 		public DeleteConfirmator(int position,CycleListAdapter l){
 			this.position=position;
 			this.listAdapter=l;
 		}
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
-			
+
 			if(which==DialogInterface.BUTTON_POSITIVE){
-				
-				DataManager dm=new DataManager(getActivity(), db, dbh);
-				dm.deleteCycle(cycleList.get(position));
-				
+
+				//DataManager dm=new DataManager(getActivity(), db, dbh);
+				//dm.deleteCycle(cycleList.get(position));
+
 				//DbQuery.deleteRecord(db, dbh, DbHelper.TABLE_CROPCYLE, cList.get(position).getId());
 				cycleList.remove(position);
 				listAdapter.notifyDataSetChanged();
-				Toast.makeText(getActivity(),"Cycle successfully deleted", Toast.LENGTH_SHORT).show();			
+				Toast.makeText(getActivity(),"Cycle successfully deleted", Toast.LENGTH_SHORT).show();
 				dialog.cancel();
 				//DeleteExpenseList.this.finish();
 			}else if(which==DialogInterface.BUTTON_NEGATIVE){
@@ -280,51 +578,51 @@ public class FragmentViewCycles extends ListFragment{
 			}
 		}
 	}
-	
-	public class CycleListAdapter extends ArrayAdapter<LocalCycle> {
-        Context myContext;
 
-        public CycleListAdapter(Context context, int textViewResourceId, ArrayList<LocalCycle> objects) {
-		    super(context, textViewResourceId, objects);
-		    myContext = context;
+	public class CycleListAdapter extends ArrayAdapter<Cycle> {
+		Context myContext;
+
+		public CycleListAdapter(Context context, int textViewResourceId, ArrayList<Cycle> objects) {
+			super(context, textViewResourceId, objects);
+			myContext = context;
 		}
 
-        @SuppressLint("ViewHolder")
+		@SuppressLint("ViewHolder")
 		@Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inflater = ((Activity)myContext).getLayoutInflater();
-            View row = inflater.inflate(R.layout.cycle_list_item, parent, false);
+		public View getView(int position, View convertView, ViewGroup parent) {
+			LayoutInflater inflater = ((Activity)myContext).getLayoutInflater();
+			View row = inflater.inflate(R.layout.cycle_list_item, parent, false);
 
-            //get the elements of that view and set them accordingly
-            LocalCycle currCycle = cycleList.get(position);
+			//get the elements of that view and set them accordingly
+			Cycle currCycle = cycleList.get(position);
 
-            String txt = (currCycle.getCropName() != null ) ? currCycle.getCropName() : DbQuery.findResourceName(db, dbh, currCycle.getCropId());
-            String cycleName = (currCycle.getCycleName() != null) ? currCycle.getCycleName().toUpperCase() : txt;
+			String txt = (currCycle.getCropName() != null ) ? currCycle.getCropName() : DbQuery.findResourceName(db, dbh, currCycle.getCropId());
+			String cycleName = (currCycle.getCycleName() != null) ? currCycle.getCycleName().toUpperCase() : txt;
 
-            ((TextView)row.findViewById(R.id.tv_cycleList_crop)).setText("Crop: " + txt);
-            ((TextView)row.findViewById(R.id.tv_cycleList_name)).setText(("Name: "+ cycleName));
+			((TextView)row.findViewById(R.id.tv_cycleList_crop)).setText("Crop: " + txt);
+			((TextView)row.findViewById(R.id.tv_cycleList_name)).setText(("Name: "+ cycleName));
 
-            // TODO Use this template to insert an appropriate image for the crop cycle based on crop type
+			// TODO Use this template to insert an appropriate image for the crop cycle based on crop type
 
-            double qty=currCycle.getLandQty();
-            txt = currCycle.getLandType();
-            txt = qty +" "+ txt;
-            ((TextView)row.findViewById(R.id.tv_cycleList_Land)).setText("Land: " + txt);
-            ((TextView)row.findViewById(R.id.tv_cycleList_date)).setText("Date Planted: " + DateFormatHelper.getDateStr(currCycle.getTime()));
+			double qty=currCycle.getLandAmount();
+			txt = currCycle.getLandType();
+			txt = qty +" "+ txt;
+			((TextView)row.findViewById(R.id.tv_cycleList_Land)).setText("Land: " + txt);
+			((TextView)row.findViewById(R.id.tv_cycleList_date)).setText("Date Planted: " + DateFormatHelper.getDateStr(currCycle.getTime()));
 
 //            Log.d("ViewCycle-getView", "selectedposition: " + getSelectedItemPosition() + "position: "+position);
-            if (position == getSelectedItemPosition()){
-                row.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
-            }
+			if (position == getSelectedItemPosition()){
+				row.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
+			}
 
-            return row;
+			return row;
 		}
 
-        @Override
-        public int getCount(){
-            return cycleList.size();
-        }
-		  
-		  //register click  
-	 }
+		@Override
+		public int getCount(){
+			return cycleList.size();
+		}
+
+		//register click
+	}
 }

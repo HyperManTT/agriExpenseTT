@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import uwi.dcit.AgriExpenseTT.CRUD.DBOperations;
 import uwi.dcit.AgriExpenseTT.CRUD.ObjectTypeMapper;
@@ -24,7 +23,7 @@ public class CycleCRUD extends ObjectTypeMapper {
     @Override
     public Cycle getObjectFromDB(int id) {
         Cycle cycle = new Cycle();
-        DBOperations dbOperations = new DBOperations(context);
+        DBOperations dbOperations = new DBOperations(db, dbh);
         Cursor receivedData = dbOperations.getObject(tableName, idFieldName, id);
         if(receivedData.getCount()<1){
             cycle.setCropId(-1);
@@ -32,13 +31,14 @@ public class CycleCRUD extends ObjectTypeMapper {
         else{
             cycle.setCursorValues(receivedData);
         }
+        receivedData.close();
         return cycle;
     }
 
     @Override
-    public List getAllObjectsFromDB() {
-        List<Cycle> list = new ArrayList();
-        DBOperations dbOperations = new DBOperations(context);
+    public ArrayList getAllObjectsFromDB() {
+        ArrayList<Cycle> list = new ArrayList();
+        DBOperations dbOperations = new DBOperations(db, dbh);
         Cursor allObjectsCursor = dbOperations.getAllObjects(CycleContract.CycleEntry.TABLE_NAME);
         allObjectsCursor.moveToFirst();
         if(allObjectsCursor.getCount()>0){
@@ -48,11 +48,12 @@ public class CycleCRUD extends ObjectTypeMapper {
                 list.add(cycleObject);
             }
         }
+        allObjectsCursor.close();
         return list;
     }
 
     public String getCropNameFromID(int id){
-        DBOperations dbOperations = new DBOperations(context);
+        DBOperations dbOperations = new DBOperations(db, dbh);
         return dbOperations.findResourceName(id);
     }
 }

@@ -33,7 +33,8 @@ public class CycleObserver extends TransLogObserver {
 
         if(state.getTableName().equals(CycleContract.CycleEntry.TABLE_NAME)){
 
-            dbh= new DbHelper(dm.getContext());
+            //dbh= new DbHelper(dm.getContext());
+            dbh= DbHelper.getInstance(dm.getContext());
             db = dbh.getWritableDatabase();
 
             UpAcc acc = DbQuery.getUpAcc(db);

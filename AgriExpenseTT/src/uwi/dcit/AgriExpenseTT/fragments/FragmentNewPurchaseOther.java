@@ -101,7 +101,8 @@ public class FragmentNewPurchaseOther extends Fragment{
                 }
 
                 // TODO Check if resource name already exists
-                DbHelper dbh = new DbHelper(getActivity().getApplicationContext());
+                //DbHelper dbh = new DbHelper(getActivity().getApplicationContext());
+                DbHelper dbh= DbHelper.getInstance(getActivity().getApplicationContext());
                 SQLiteDatabase db = dbh.getWritableDatabase();
 
                 resource = resource.trim();

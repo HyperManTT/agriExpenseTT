@@ -19,7 +19,8 @@ public class SplashScreen extends Activity {
             public void run(){
                 try{
                     // Get the database will invoke the onCreate or onUpgrade method based on state of the application
-                    (new DbHelper(c)).getWritableDatabase();
+                    //(new DbHelper(c)).getWritableDatabase();
+                    (DbHelper.getInstance(c)).getWritableDatabase();
 
                     if (!PrefUtils.dbExist(c)) PrefUtils.setDbExist(c, true);
                     else sleep(2*1000); // Just to show the splash screen for 2 seconds

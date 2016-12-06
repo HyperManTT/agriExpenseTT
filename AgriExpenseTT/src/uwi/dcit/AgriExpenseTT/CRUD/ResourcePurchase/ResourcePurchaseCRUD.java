@@ -22,7 +22,7 @@ public class ResourcePurchaseCRUD extends ObjectTypeMapper{
     @Override
     public ResourcePurchase getObjectFromDB(int id) {
         ResourcePurchase resourcePurchase = new ResourcePurchase();
-        DBOperations dbOperations = new DBOperations(context);
+        DBOperations dbOperations = new DBOperations(db, dbh);
         Cursor receivedData = dbOperations.getObject(tableName, idFieldName, id);
         if(receivedData.getCount()<1){
             resourcePurchase.setId(-1);
@@ -30,13 +30,14 @@ public class ResourcePurchaseCRUD extends ObjectTypeMapper{
         else{
             resourcePurchase.setCursorValues(receivedData);
         }
+        receivedData.close();
         return resourcePurchase;
     }
 
     @Override
     public List getAllObjectsFromDB() {
         List<ResourcePurchase> list = new ArrayList();
-        DBOperations dbOperations = new DBOperations(context);
+        DBOperations dbOperations = new DBOperations(db, dbh);
         Cursor allObjectsCursor = dbOperations.getAllObjects(tableName);
         allObjectsCursor.moveToFirst();
         if(allObjectsCursor.getCount()>0){
@@ -46,11 +47,12 @@ public class ResourcePurchaseCRUD extends ObjectTypeMapper{
                 list.add(resourcePurchase);
             }
         }
+        //allObjectsCursor.close();
         return list;
     }
 
     public String getResourceFromID(int id){
-        DBOperations dbOperations = new DBOperations(context);
+        DBOperations dbOperations = new DBOperations(db, dbh);
         return dbOperations.findResourceName(id);
     }
 }

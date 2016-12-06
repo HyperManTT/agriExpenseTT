@@ -13,7 +13,8 @@ public class FragmentSlidingTabsEdit extends FragmentSlidingTabs{
     @Override
     public void populateList(){
         SQLiteDatabase db;
-        DbHelper dbh=new DbHelper(getActivity().getApplicationContext());
+        //DbHelper dbh=new DbHelper(getActivity().getApplicationContext());
+        DbHelper dbh= DbHelper.getInstance(getActivity().getApplicationContext());
         db=dbh.getWritableDatabase();
         Fragment cycleFrag,resFrag;
         Bundle arguments	= new Bundle();

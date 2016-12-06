@@ -39,7 +39,8 @@ public class DataManager {
 	TransactionLog tL;
 	UpAcc acc;
 	public DataManager(Context context){
-		dbh= new DbHelper(context);
+		//dbh= new DbHelper(context);
+		dbh= DbHelper.getInstance(context);
 //		db=dbh.getReadableDatabase();
         db = dbh.getWritableDatabase();
 		this.context=context;

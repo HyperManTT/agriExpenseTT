@@ -83,7 +83,8 @@ public class HarvestDetails extends BaseActivity {
 			ContentValues cv=new ContentValues();
 			cv.put(CycleContract.CycleEntry.CROPCYCLE_HARVEST_AMT, qty);
 			cv.put(CycleContract.CycleEntry.CROPCYCLE_HARVEST_TYPE, qtfr);
-			DbHelper dbh=new DbHelper(HarvestDetails.this);
+			//DbHelper dbh=new DbHelper(HarvestDetails.this);
+			DbHelper dbh= DbHelper.getInstance(HarvestDetails.this);
 			SQLiteDatabase db=dbh.getWritableDatabase();
 			db.update(CycleContract.CycleEntry.TABLE_NAME, cv, CycleContract.CycleEntry._ID+"="+currCycle.getId(), null);
 		}

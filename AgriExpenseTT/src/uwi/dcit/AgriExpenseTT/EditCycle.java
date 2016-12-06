@@ -55,7 +55,8 @@ public class EditCycle extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_cycle);
-		dbh = new DbHelper(this);
+		//dbh = new DbHelper(this);
+        dbh= DbHelper.getInstance(this.getApplicationContext());
 //		db= dbh.getReadableDatabase();
         db = dbh.getWritableDatabase();
 		initialize();

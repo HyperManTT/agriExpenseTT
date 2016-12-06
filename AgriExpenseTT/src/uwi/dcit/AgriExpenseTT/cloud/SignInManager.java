@@ -39,7 +39,7 @@ public class SignInManager {
 		Log.i("DESIGN UPDATE 1", "SIGNINMANAGER CREATED.");
         this.context = ctx;
         this.activity = activity;
-        dbh = new DbHelper(context);
+        dbh = DbHelper.getInstance(ctx);
         db = dbh.getWritableDatabase();
     }
 

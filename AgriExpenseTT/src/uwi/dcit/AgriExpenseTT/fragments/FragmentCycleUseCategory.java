@@ -117,7 +117,8 @@ public class FragmentCycleUseCategory extends Fragment {
 	}
 	
 	private void calculate() {
-		DbHelper dbh=new DbHelper(getActivity().getBaseContext());
+		DbHelper dbh= DbHelper.getInstance(getActivity().getApplicationContext());
+		//DbHelper dbh=new DbHelper(getActivity().getBaseContext());
 		SQLiteDatabase db=dbh.getWritableDatabase();
 
 		//getting aggregate and complex data 

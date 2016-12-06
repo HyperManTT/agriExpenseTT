@@ -40,7 +40,8 @@ public class FragmentSlideInLocationT extends Fragment {
         super.onCreate(savedInstanceState);
         fragments=new ArrayList<>();
         configured = true;
-        dbh = new DbHelper(getActivity().getBaseContext());
+        //dbh = new DbHelper(getActivity().getBaseContext());
+        dbh= DbHelper.getInstance(getActivity().getApplicationContext());
         db = dbh.getWritableDatabase();
         userLocationRequest = getArguments().getString("userLocationRequest");
 

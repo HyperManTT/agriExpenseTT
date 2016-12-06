@@ -34,7 +34,8 @@ public class PurchaseObserver extends TransLogObserver {
 
         if(state.getTableName().equals(ResourcePurchaseContract.ResourcePurchaseEntry.TABLE_NAME)) {
 
-            dbh= new DbHelper(dm.getContext());
+            //dbh= new DbHelper(dm.getContext());
+            dbh= DbHelper.getInstance(dm.getContext());
             db = dbh.getWritableDatabase();
 
             UpAcc acc = DbQuery.getUpAcc(db);

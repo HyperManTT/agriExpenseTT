@@ -2,6 +2,8 @@ package uwi.dcit.AgriExpenseTT.CRUD.Cycle;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import uwi.dcit.AgriExpenseTT.CRUD.ObjectMapper;
 
@@ -10,7 +12,7 @@ import uwi.dcit.AgriExpenseTT.CRUD.ObjectMapper;
  * Edited by Kirk on 12/4/2016.
  */
 
-public class Cycle extends ObjectMapper{
+public class Cycle extends ObjectMapper implements Parcelable {
 
     private String cropName;
     private int cropId;
@@ -69,7 +71,6 @@ public class Cycle extends ObjectMapper{
         this.costPer = cycleCursor.getDouble(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_COSTPER));
         this.cropName = cycleCursor.getString(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_RESOURCE));
         this.cycleName = cycleCursor.getString(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_NAME));
-        cycleCursor.close();
     }
 
     public boolean isValidObject() {
@@ -116,11 +117,11 @@ public class Cycle extends ObjectMapper{
         this.landAmount = landAmount;
     }
 
-    public Long getDate() {
+    public Long getTime() {
         return date;
     }
 
-    public void setDate(Long date) {
+    public void setTime(Long date) {
         this.date = date;
     }
 
@@ -154,5 +155,50 @@ public class Cycle extends ObjectMapper{
 
     public String getCycleName(){
         return cycleName;
+    }
+
+    public Cycle(Parcel dest){
+        id=dest.readInt();
+        cropId=dest.readInt();
+        landType=dest.readString();
+        landAmount=dest.readDouble();
+        date=dest.readLong();
+        totalSpent=dest.readDouble();
+        harvestAmount=dest.readDouble();
+        harvestType=dest.readString();
+        costPer=dest.readDouble();
+        cycleName =dest.readString();
+    }
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeInt(id);
+        dest.writeInt(cropId);
+        dest.writeString(landType);
+        dest.writeDouble(landAmount);
+        dest.writeLong(date);
+        dest.writeDouble(totalSpent);
+        dest.writeDouble(harvestAmount);
+        dest.writeString(harvestType);
+        dest.writeDouble(costPer);
+        dest.writeString(cycleName);
+    }
+
+    public static final Parcelable.Creator<Cycle> CREATOR = new Parcelable.Creator<Cycle>() {
+
+        @Override
+        public Cycle createFromParcel(Parcel source) {
+            return new Cycle(source);
+        }
+
+        @Override
+        public Cycle[] newArray(int size) {
+            return new Cycle[size];
+        }
+    };
+    @Override
+    public int describeContents() {
+
+        return 0;
     }
 }

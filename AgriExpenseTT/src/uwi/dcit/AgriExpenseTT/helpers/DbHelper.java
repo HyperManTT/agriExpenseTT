@@ -29,14 +29,26 @@ import uwi.dcit.AgriExpenseTT.DefaultInput.defaultInsert;
 
 public class DbHelper extends SQLiteOpenHelper{
 
+	public static DbHelper mInstance=null;
 	public static final int VERSION = 172;
 	public static final String DATABASE_NAME="agriDb";
 	public static final String TAG_NAME = "AgriExpenseDBHelper";
-	public Context ctx;
+	static public Context ctx;
 	
-	public DbHelper(Context context) {
+	private DbHelper(Context context) {
 		super(context, DATABASE_NAME, null,VERSION);
+		Log.i("Being Accessed!","!");
 		this.ctx = context;
+	}
+
+	public static DbHelper getInstance(Context ctx) {
+		// Use the application context, which will ensure that you
+		// don't accidentally leak an Activity's context.
+		// See this article for more information: http://bit.ly/6LRzfx
+		if (mInstance == null) {
+			mInstance = new DbHelper(ctx.getApplicationContext());
+		}
+		return mInstance;
 	}
 	
 	@Override

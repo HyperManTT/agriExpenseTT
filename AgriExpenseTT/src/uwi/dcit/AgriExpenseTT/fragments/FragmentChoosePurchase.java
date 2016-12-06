@@ -64,7 +64,8 @@ public class FragmentChoosePurchase extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		dbh	= new DbHelper(this.getActivity().getBaseContext());
+		//dbh	= new DbHelper(this.getActivity().getBaseContext());
+		DbHelper dbh= DbHelper.getInstance(getActivity().getApplicationContext());
 		db	= dbh.getWritableDatabase();
 		dm	= new DataManager(getActivity(), db, dbh);
 		

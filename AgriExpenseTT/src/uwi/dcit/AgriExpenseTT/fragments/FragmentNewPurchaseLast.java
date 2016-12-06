@@ -69,7 +69,8 @@ public class FragmentNewPurchaseLast extends Fragment{
 		resource=getArguments().getString("resource");
 		quantifier=getArguments().getString("quantifier");
 
-        dbh = new DbHelper(getActivity().getBaseContext());
+        //dbh = new DbHelper(getActivity().getBaseContext());
+        dbh= DbHelper.getInstance(getActivity().getApplicationContext());
         db = dbh.getWritableDatabase();
         resId = DbQuery.getNameResourceId(db, dbh, resource);
 

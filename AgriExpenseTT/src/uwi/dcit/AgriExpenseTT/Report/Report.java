@@ -29,7 +29,8 @@ public class Report {
 
 
     public Report(Activity act){
-        dbh = new DbHelper(act.getBaseContext());
+        //dbh = new DbHelper(act.getBaseContext());
+        dbh= DbHelper.getInstance(act.getApplicationContext());
         db = dbh.getWritableDatabase();
         activity = act;
     }
