@@ -10,6 +10,7 @@ import uwi.dcit.agriexpensesvr.rPurchaseApi.model.RPurchase;
 import uwi.dcit.agriexpensesvr.translogApi.model.Key;
 import uwi.dcit.agriexpensesvr.translogApi.model.TransLog;
 import uwi.dcit.agriexpensesvr.cycleApi.model.Cycle;
+import uwi.dcit.agriexpensesvr.upAccApi.model.UpAcc;
 
 /**
  * Created by ander on 12/3/2016.
@@ -23,19 +24,91 @@ public class CloudDemo {
 
     public CloudDemo(){
 
+        /* this is just to demo that the new design works, create translogs to act as though its new data from the cloud. */
+
+        /* for each new translog, create the corresponding item (cycle, purchase, cycleuse) with the correct namespace and keyrep */
+
         translogs = new ArrayList<TransLog>();
-        translogs.add(createTransLog("anderson", 100, "personal", "ins", 100, "cropCycle", 1480810277435l));
-        translogs.add(createTransLog("anderson", 101, "personal", "ins", 101, "resPurchases", 1480810277435l));
-        translogs.add(createTransLog("anderson", 102, "personal", "ins", 102, "cycleResources", 1480810200000l));
+        translogs.add(createTransLog("anderson", 100, "mycycle1", "ins", 100, "cropCycle", 1480810277435l));
+        translogs.add(createTransLog("anderson", 101, "mycycle2", "ins", 101, "cropCycle", 1480810277435l));
+        translogs.add(createTransLog("anderson", 102, "mypurchase1", "ins", 102, "resPurchases", 1480810277435l));
+        translogs.add(createTransLog("anderson", 103, "mypurchase1", "ins", 103, "resPurchases", 1480810277435l));
+        //translogs.add(createTransLog("anderson", 101, "personal", "ins", 101, "resPurchases", 1480810277435l));
+        //translogs.add(createTransLog("anderson", 102, "personal", "ins", 102, "cycleResources", 1480810200000l));
 
         cycles = new ArrayList<Cycle>();
-        cycles.add(createCycle("anderson", "personal", 1.0, "NA", 1, "fIG", 1.0, "NA", 1, 2.0, "NA", 100l, 100.0));
+        cycles.add(createCycle("anderson", "mycycle1", 20.00, "St Patrick", 70, "BROCCOLI", 100.00, "Lb", 1, 20.0, "Acre", Long.getLong("1480910400000"), 0.00));
+        cycles.add(createCycle("anderson", "mycycle2", 20.00, "St Patrick", 40, "CELERY", 100.00, "Lb",  2, 20.0, "Acre", Long.getLong("1480910400000"), 0.00));
+
 
         rPurchases = new ArrayList<RPurchase>();
-        rPurchases.add(createRPurchase("anderson", 100.00, "ElementName", "personal", 2, 10.0, 10.0, "ML", 6, "Fert"));
+        rPurchases.add(createRPurchase("anderson", 100.00, "Soil amendment", "mypurchase1", 2, 10.0, 10.0, "Bag", 2, "Compost"));
+        rPurchases.add(createRPurchase("anderson", 100.00, "Soil amendment", "mypurchase2", 3, 100.0, 10.0, "Bag", 3, "Gypsum"));
 
         cycleUses = new ArrayList<CycleUse>();
-        cycleUses.add(createCycleUse("anderson", 1.0, 10.0, 1, 3, "personal", 2, "ML"));
+        //cycleUses.add(createCycleUse("anderson", 1.0, 10.0, 1, 3, "personal", 2, "ML"));
+    }
+
+    /* inorder to test the different functionality of the transaction log, change the last updated times of the local and cloud account. */
+
+    /*
+        Instructions for testing.
+        1. How to test that local updates using data from the cloud.
+        Answer: Ensure that the last updated time for the cloud account is greater than the local account time.
+
+        2. How to test that the cloud can be updated using data from the local device. (this is handled by the cloud interface.)
+        Answer: Ensure that the last updated time for the local account is greater than the cloud account time.
+
+        3. How to test that the cloud data can be overridden, and local data written to the cloud.
+        Answer: Ensure that the last updated time for the local account is greater than the cloud account time,
+                and in uncomment the localAcc.setAcc(null) from the getLocalAccount function.
+                Finally, select the override cloud option in the pop up.
+
+        4. How to test that the local data can be overridden, and the cloud data written to the local device.
+                Answer: Ensure that the last updated time for the local account is greater than the cloud account time,
+                and in uncomment the localAcc.setAcc(null) from the getLocalAccount function.
+                Finally, select the override local option in the pop up.
+
+                (THIS FUNCTIONALITY DOES NOT WORK IN THE ORIGINAL APP)
+                The pullallfromcloud method drops all tables, but the oncreate fails to recreate the db. this section of code is commented off,
+                to show that the design works. The local data will not be cleared.
+
+        5. How to test creating a new cloud.
+            Answer: Ensure that the cloud account returned by getCloudAccount function is null
+
+          ALL DATA IS LOGGED USING LOG.I FUNCTION, WHERE THE TAG IS "DESIGN UPDATE 1"
+
+          ON WINDOWS OS USE COMMAND : adb logcat | find "DESIGN UPDATE 1"
+
+    */
+    public UpAcc getLocalAccount(){
+        UpAcc localAcc = new UpAcc();
+
+        localAcc.setLastUpdated(1480991154348l);
+        localAcc.setSignedIn(1);
+        localAcc.setAddress("No Address");
+        localAcc.setCountry("Trinidad and Tobago");
+        localAcc.setKeyrep("myaccount");
+        localAcc.setAcc("anderson");
+
+        //localAcc.setAcc(null);
+
+        return localAcc;
+    }
+
+    public UpAcc getCloudAccout(){
+        UpAcc acc = new UpAcc();
+
+
+        acc.setLastUpdated(1480805211187l);
+        acc.setSignedIn(1);
+        acc.setAddress("No Address");
+        acc.setCountry("Trinidad and Tobago");
+        acc.setKeyrep("myaccount");
+        acc.setAcc("anderson");
+
+        return null;
+        //return acc;
     }
 
     public List<TransLog> getTranslogs(){

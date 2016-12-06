@@ -1,6 +1,7 @@
 package uwi.dcit.AgriExpenseTT.TransactionLogOperations;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -119,7 +120,23 @@ public class ResourcePurchaseItem implements Item {
         cursor.close();
         */
 
+        /* DEMO CODE TO SHOW WHAT WILL BE PUSHED TO CLOUD. */
         Log.i("DESIGN UPDATE 1", "CREATING CLOUD, UPLOADING PURCHASES TO THE CLOUD.");
+
+        Cursor rows = db.rawQuery("SELECT * FROM resPurchases", null);
+        String tableString = "";
+        if (rows.moveToFirst() ){
+            String[] columnNames = rows.getColumnNames();
+            do {
+                for (String name: columnNames) {
+                    tableString += String.format("%s: %s\n", name,
+                            rows.getString(rows.getColumnIndex(name)));
+                }
+                tableString += "\n";
+
+            } while (rows.moveToNext());
+        }
+        Log.d("DESIGN UPDATE 1"," " + tableString);
 
         return true;
     }

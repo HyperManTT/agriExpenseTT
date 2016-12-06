@@ -1,6 +1,7 @@
 package uwi.dcit.AgriExpenseTT.TransactionLogOperations;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -114,7 +115,23 @@ public class CycleResourceItem implements Item{
         cursor.close();
         */
 
+        /* CODE TO DEMO WHAT WILL BE PUSHED TO CLOUD. */
         Log.i("DESIGN UPDATE 1", "CREATING CLOUD, UPLOADING CYCLE RESOURCES TO THE CLOUD.");
+
+        Cursor rows = db.rawQuery("SELECT * FROM cycleResources", null);
+        String tableString = "";
+        if (rows.moveToFirst() ){
+            String[] columnNames = rows.getColumnNames();
+            do {
+                for (String name: columnNames) {
+                    tableString += String.format("%s: %s\n", name,
+                            rows.getString(rows.getColumnIndex(name)));
+                }
+                tableString += "\n";
+
+            } while (rows.moveToNext());
+        }
+        Log.d("DESIGN UPDATE 1"," " + tableString);
 
         return true;
     }

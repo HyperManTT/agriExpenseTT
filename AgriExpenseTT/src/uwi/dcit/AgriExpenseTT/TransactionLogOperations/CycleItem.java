@@ -3,6 +3,7 @@ package uwi.dcit.AgriExpenseTT.TransactionLogOperations;
 import android.app.Application;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteAbortException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -23,6 +24,7 @@ public class CycleItem extends Application implements Item {
     public CycleItem(DbHelper dbh, SQLiteDatabase db){
         this.dbh = dbh;
         this.db = db;
+
     }
 
     /* this function inserts a cycle fetched from the end point to the local database. */
@@ -33,6 +35,7 @@ public class CycleItem extends Application implements Item {
         ContentValues cv = new ContentValues();
 
         cv.put(CycleContract.CycleEntry._ID, log.getRowId());
+        cv.put(CycleContract.CycleEntry.CROPCYCLE_NAME, c.getCropName());
         cv.put(CycleContract.CycleEntry.CROPCYCLE_CROPID, c.getCropId());
         cv.put(CycleContract.CycleEntry.CROPCYCLE_LAND_TYPE, c.getLandType());
         cv.put(CycleContract.CycleEntry.CROPCYCLE_LAND_AMOUNT, c.getLandQty());
@@ -43,6 +46,7 @@ public class CycleItem extends Application implements Item {
 
         db.insert(CycleContract.CycleEntry.TABLE_NAME, null, cv);
         Log.i("DESIGN UPDATE 1", "INSERTED INTO CYCLE TABLE.");
+
     }
 
     /* this function updates a cycle fetched from the end point in the local database. */
@@ -54,6 +58,7 @@ public class CycleItem extends Application implements Item {
 
         cv.put(CycleContract.CycleEntry._ID, log.getRowId());
         cv.put(CycleContract.CycleEntry.CROPCYCLE_CROPID, c.getCropId());
+        cv.put(CycleContract.CycleEntry.CROPCYCLE_NAME, c.getCropName());
         cv.put(CycleContract.CycleEntry.CROPCYCLE_LAND_TYPE, c.getLandType());
         cv.put(CycleContract.CycleEntry.CROPCYCLE_LAND_AMOUNT, c.getLandQty());
         cv.put(CycleContract.CycleEntry.CROPCYCLE_TOTALSPENT, c.getTotalSpent());
@@ -135,7 +140,23 @@ public class CycleItem extends Application implements Item {
         cursor.close();
         */
 
+        /* DEMO CODE TO SHOW WHAT WILL BE PUSHED TO CLOUD. */
         Log.i("DESIGN UPDATE 1", "CREATING CLOUD, UPLOADING CYCLES TO THE CLOUD.");
+
+        Cursor rows = db.rawQuery("SELECT * FROM CropCycle", null);
+        String tableString = "";
+        if (rows.moveToFirst() ){
+            String[] columnNames = rows.getColumnNames();
+            do {
+                for (String name: columnNames) {
+                    tableString += String.format("%s: %s\n", name,
+                            rows.getString(rows.getColumnIndex(name)));
+                }
+                tableString += "\n";
+
+            } while (rows.moveToNext());
+        }
+        Log.d("DESIGN UPDATE 1"," " + tableString);
 
         return true;
     }
@@ -160,6 +181,8 @@ public class CycleItem extends Application implements Item {
         */
 
         Log.i("DESIGN UPDATE 1", "REMOVING ENTRIES IN CLOUD FOR CYCLES.");
+
+
     }
 
 

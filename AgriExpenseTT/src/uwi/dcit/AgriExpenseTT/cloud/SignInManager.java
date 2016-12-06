@@ -19,6 +19,7 @@ import com.google.android.gms.auth.GoogleAuthUtil;
 import java.util.ArrayList;
 
 import uwi.dcit.AgriExpenseTT.Main;
+import uwi.dcit.AgriExpenseTT.TransactionLogOperations.CloudDemo;
 import uwi.dcit.AgriExpenseTT.helpers.DbHelper;
 import uwi.dcit.AgriExpenseTT.helpers.DbQuery;
 import uwi.dcit.AgriExpenseTT.models.UpdateAccountContract;
@@ -36,7 +37,6 @@ public class SignInManager {
     private final String TAG_NAME = "SignInManager";
 
     public SignInManager(Activity activity, Context ctx){
-		Log.i("DESIGN UPDATE 1", "SIGNINMANAGER CREATED.");
         this.context = ctx;
         this.activity = activity;
         dbh = new DbHelper(context);
@@ -47,14 +47,7 @@ public class SignInManager {
         Log.d(TAG_NAME, "Attempting to Log in");
 		UpAcc acc = isExisting();// Check if Account is already created
 
-		acc = new UpAcc();
-
-		acc.setLastUpdated(1480810747384l);
-		acc.setSignedIn(1);
-		acc.setAddress("No Address");
-		acc.setCountry("Trinidad and Tobago");
-		acc.setKeyrep("Personal");
-		acc.setAcc("anderson");
+		acc = new CloudDemo().getCloudAccout();
 
 		if(acc == null) accountSetUp();							// Account doesn't exist so we've to setup a new one (means we never signed in)
 		else startSync(acc.getAcc());						    // Account exists already so we can Initiate Sign-in process
@@ -69,7 +62,6 @@ public class SignInManager {
 	}
 	
 	private void startSync(final String namespace){
-		Log.i("DESIGN UPDATE 1", "ATTEMPTING TO CALL SIGN IN TASK.");
 		new SetupSignInTask(namespace).execute(); //The SetupSignInTask will handle the process of signing in within a new task/thread
 	}
 	
@@ -173,7 +165,6 @@ public class SignInManager {
 
 		@Override
 		protected UpAcc doInBackground(String... params) {
-			Log.i("DESIGN UPDATE 1", "DOING IN BACKGROUND");
 			/*
 			CloudInterface cloudIF = new CloudInterface(context, db, dbh);
             UpAcc account = cloudIF.getUpAcc(namespace);//returns  UpAcc if there is any to the onPostExecute
@@ -188,16 +179,15 @@ public class SignInManager {
 
 		@Override
 		protected void onPostExecute(UpAcc cloudAcc) {
-			Log.i("DESIGN UPDATE 1", "SIGN IN MANGER ON POST EXEC.");
 
 			cloudAcc = new UpAcc();
 
 		/* cloud account details */
-			cloudAcc.setLastUpdated(1480805372843l);
-			cloudAcc.setSignedIn(1);
-			cloudAcc.setAddress("No Address");
-			cloudAcc.setCountry("Trinidad and Tobago");
-			cloudAcc.setKeyrep("Personal");
+			//cloudAcc.setLastUpdated(1480805372843l);
+			//cloudAcc.setSignedIn(1);
+			//cloudAcc.setAddress("No Address");
+			//cloudAcc.setCountry("Trinidad and Tobago");
+			//cloudAcc.setKeyrep("Personal");
 
 			if (cloudAcc != null) {
                 Sync sync = new Sync(db, dbh, context, getSigninObject());

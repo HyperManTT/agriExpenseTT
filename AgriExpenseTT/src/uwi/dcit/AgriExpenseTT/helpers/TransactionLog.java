@@ -67,8 +67,8 @@ public class TransactionLog {
 		translogList = cloudDemo.getTranslogs();
 
 		ContentValues cv;
-		dbh.dropTables(db);
-		dbh.onCreate(db);
+		//dbh.dropTables(db);
+		//dbh.createDB(db);
 
 		/* for each item in transloglist, insert into the local database. */
 		for(TransLog t:translogList){
@@ -99,6 +99,7 @@ public class TransactionLog {
 		cv.put(UpdateAccountContract.UpdateAccountEntry.UPDATE_ACCOUNT_ACC, cloudAcc.getAcc());
 		cv.put(UpdateAccountContract.UpdateAccountEntry.UPDATE_ACCOUNT_CLOUD_KEY, cloudAcc.getKeyrep());
 		db.update(UpdateAccountContract.UpdateAccountEntry.TABLE_NAME, cv, UpdateAccountContract.UpdateAccountEntry._ID+"=1", null);
+
 		
 		return true;
 		
@@ -137,8 +138,8 @@ public class TransactionLog {
 			DbQuery.insertRedoLog(db, dbh, table, rowId, operation);
 		}
         cursor.close();
-		CloudInterface c=new CloudInterface(context, db, dbh);
-		c.flushToCloud();
+		//CloudInterface c=new CloudInterface(context, db, dbh);
+		//c.flushToCloud();
 	}
 
 	/* this function uploads all entries in the local database for an account, as if the account is completely new. */

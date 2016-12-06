@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import uwi.dcit.AgriExpenseTT.TransactionLogOperations.CloudDemo;
 import uwi.dcit.AgriExpenseTT.helpers.DbHelper;
 import uwi.dcit.AgriExpenseTT.helpers.DbQuery;
 import uwi.dcit.AgriExpenseTT.helpers.TransactionLog;
@@ -37,18 +38,11 @@ public class Sync {
         UpAcc localAcc = DbQuery.getUpAcc(db);
 		this.cloudAcc=cloudAcc;
 
-		localAcc = new UpAcc();
-
-		localAcc.setLastUpdated(1480805211187l);
-		localAcc.setSignedIn(1);
-		localAcc.setAddress("No Address");
-		localAcc.setCountry("Trinidad and Tobago");
-		localAcc.setKeyrep("Personal");
-		localAcc.setAcc("anderson");
+		cloudAcc = new CloudDemo().getCloudAccout();
+		localAcc = new CloudDemo().getLocalAccount();
 
 		//both exist
 		if(cloudAcc!=null){
-			Log.i("DESIGN UPDATE 1", "SYNC CLOUD ACCOUNT IS NOT NULL");
 			long localUpdate= localAcc.getLastUpdated();
 			long cloudUpdate= cloudAcc.getLastUpdated();
 			if(localUpdate>=cloudUpdate){//local more recent than cloud
@@ -106,6 +100,7 @@ public class Sync {
 			this.cloudUpdate=cloudUpdate;
 			this.localUpdate=localUpdate;
 		}
+
 		@Override
 		protected Boolean doInBackground(Option... params) {
 			Option option=params[0];
@@ -119,7 +114,6 @@ public class Sync {
 					break;
 					
 				case updateLocalOpt:
-					Log.i("DESIGN UPDATE 1", "UPDATING LOCAL DEVICE");
 					tL.logsUpdateLocal(namespace,localUpdate);
 					cv.put(UpdateAccountContract.UpdateAccountEntry.UPDATE_ACCOUNT_SIGNEDIN, 1);
 					db.update(UpdateAccountContract.UpdateAccountEntry.TABLE_NAME, cv, UpdateAccountContract.UpdateAccountEntry._ID+"=1", null);
@@ -136,8 +130,9 @@ public class Sync {
 					db.update(UpdateAccountContract.UpdateAccountEntry.TABLE_NAME, cv, UpdateAccountContract.UpdateAccountEntry._ID+"=1", null);
 					break;
 				case createCloudNewOpt:
-					CloudInterface cloudIF=new CloudInterface(context, db, dbh);
-					cloudIF.insertUpAccC(namespace,0,signin.getCountry(),signin.getCounty());
+					/* commented out the lines below because cloud is not working. */
+					//CloudInterface cloudIF=new CloudInterface(context, db, dbh);
+					//cloudIF.insertUpAccC(namespace,0,signin.getCountry(),signin.getCounty());
 					success=tL.createCloud(namespace);
 					break;
 			}

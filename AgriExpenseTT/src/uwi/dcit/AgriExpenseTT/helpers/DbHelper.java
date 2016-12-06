@@ -45,7 +45,7 @@ public class DbHelper extends SQLiteOpenHelper{
 		createDb(db);
 		populate(db, new TransactionLog(this,db,ctx));
 	}
-	
+
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		//We will be required to implement upgrade functionality that is specific to each version of the upgrade
@@ -198,6 +198,7 @@ public class DbHelper extends SQLiteOpenHelper{
 		db.setTransactionSuccessful();
 		db.endTransaction();
 	}
+
 
 	private void createUpdateAccount(SQLiteDatabase db){
 		db.execSQL(UpdateAccountContract.SQL_CREATE_UPDATE_ACCOUNT);
