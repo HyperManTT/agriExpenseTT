@@ -69,7 +69,8 @@ public class FragmentPurchaseUse extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 		view=inflater.inflate(R.layout.activity_use_purchase_frag, container, false);
 
-		dbh = new DbHelper(this.getActivity().getBaseContext());
+		//dbh = new DbHelper(this.getActivity().getBaseContext());
+		dbh= DbHelper.getInstance(getActivity().getApplicationContext());
 		db = dbh.getWritableDatabase();
 
 		int pId = Integer.parseInt(getArguments().getString("pId"));

@@ -2,46 +2,56 @@ package uwi.dcit.AgriExpenseTT.CRUD;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 
 import java.util.List;
 
-import uwi.dcit.AgriExpenseTT.CRUD.Cycle.CycleContract;
+import uwi.dcit.AgriExpenseTT.helpers.DbHelper;
+
 
 /**
  * Created by shivr on 12/4/2016.
+ * Abstractions were done on the insertion, deletion and updating of objects with the use of this class.
  */
 
 public abstract class ObjectTypeMapper {
 
     protected Context context;
     protected String tableName;
+    protected  String idFieldName;
 
-    public ObjectTypeMapper(Context context, String tableName){
+    protected SQLiteDatabase db;
+    protected DbHelper dbh;
+
+    public ObjectTypeMapper(Context context, String tableName, String idFieldName){
         this.context = context;
         this.tableName = tableName;
+        this.idFieldName = idFieldName;
+        dbh= DbHelper.getInstance(context);
+        db = dbh.getWritableDatabase();
     }
 
     public int insertObject(ObjectMapper objectTypeMapper){
         ContentValues cv = objectTypeMapper.getContentValues();
-        DBOperations dbOperations = new DBOperations(context);
+        DBOperations dbOperations = new DBOperations(db);
         int rowId = dbOperations.insertObject(cv, tableName);
         return rowId;
     }
 
     public void updateObject(ObjectMapper objectMapper) {
         if(objectMapper.isValidObject()){
-            DBOperations dbOperations = new DBOperations(context);
+            DBOperations dbOperations = new DBOperations(db);
             ContentValues contentValues = objectMapper.getContentValues();
-            dbOperations.updateObject(tableName, contentValues, CycleContract.CycleEntry.CROPCYCLE_CROPID, objectMapper.getId());
+            dbOperations.updateObject(tableName, contentValues, idFieldName, objectMapper.getId());
         }
     }
 
-    public void deleteObject(int id, String IDFieldName) {
-        DBOperations dbOperations = new DBOperations(context);
-        dbOperations.deleteObject(tableName, IDFieldName, id);
+    public void deleteObject(int id) {
+        DBOperations dbOperations = new DBOperations(db);
+        dbOperations.deleteObject(tableName, idFieldName, id);
     }
 
-    public abstract void getObjectFromDB(int id);
+    public abstract ObjectMapper getObjectFromDB(int id);
 
     public abstract List getAllObjectsFromDB();
 

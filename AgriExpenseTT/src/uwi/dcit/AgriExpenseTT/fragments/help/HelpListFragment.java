@@ -35,46 +35,19 @@ public class HelpListFragment extends ListFragment{
 	public void setupListeners(){
         this.getListView().setOnItemClickListener(new OnItemClickListener(){
 			public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
-				
-				Fragment frag = null;
-				
-				switch (position){
-					case 0:
-						frag = new HelpIntroFragment();
-						break;
-					case 1:
-						frag = new HelpNewPurchaseFragment();
-						break;
-					case 2:
-						frag = new HelpNewCropCycleFragment();
-						break;
-					case 3:
-						frag = new HelpManageResourceFragment();
-						break;
-					case 4:
-						frag = new HelpHiringLabourFragment();
-						break;
-					case 5:
-						frag = new HelpManageDataFragment();
-						break;
-					case 6:
-						frag = new HelpCalculateSalesFragment();
-						break;
-					case 7:
-						frag = new HelpGenerateReportFragment();
-						break;
-					default:
-						Toast.makeText(getActivity(), "Help Topic not found", Toast.LENGTH_SHORT).show();
-						break;
-				}
-				
-				
-				if (frag != null)
+
+				HelpClient helpClient = new HelpClient(new HelpFactory());
+				Fragment fragment = helpClient.getProduct(position);
+
+				if (fragment != null)
 					getFragmentManager()
 						.beginTransaction()
-						.replace(R.id.help_lists, frag)
+						.replace(R.id.help_lists, fragment)
 						.addToBackStack("Help List")
 						.commit();
+				else
+					Toast.makeText(getActivity(), "Help Topic not found", Toast.LENGTH_SHORT).show();
+
 				
 			}
         });

@@ -47,7 +47,8 @@ public class SalesCost extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sales_cost);
 		currCycle = getIntent().getParcelableExtra("cycle");
-		dbh = new DbHelper(this);
+		//dbh = new DbHelper(this);
+		dbh= DbHelper.getInstance(this.getApplicationContext());
 		db  = dbh.getWritableDatabase();
 		crop= DbQuery.findResourceName(db, dbh, currCycle.getCropId());
 		setup();
@@ -117,7 +118,8 @@ public class SalesCost extends BaseActivity {
 		private void save() {
 			ContentValues cv=new ContentValues();
 			cv.put(CycleContract.CycleEntry.CROPCYCLE_COSTPER, sellp);
-			DbHelper dbh=new DbHelper(SalesCost.this);
+			//DbHelper dbh=new DbHelper(SalesCost.this);
+			DbHelper dbh= DbHelper.getInstance(SalesCost.this);
 			SQLiteDatabase db=dbh.getWritableDatabase();
 			int res = db.update(CycleContract.CycleEntry.TABLE_NAME, cv, CycleContract.CycleEntry._ID+"="+currCycle.getId(), null);
             if (res != -1){

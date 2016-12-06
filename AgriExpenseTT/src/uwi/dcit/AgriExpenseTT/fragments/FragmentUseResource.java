@@ -38,8 +38,11 @@ public class FragmentUseResource extends Fragment{
     }
 
     private void setup() {
-        SQLiteDatabase db=new DbHelper(getActivity().getApplicationContext()).getWritableDatabase();
+        //SQLiteDatabase db=new DbHelper(getActivity().getApplicationContext()).getWritableDatabase();
 
+        DbHelper dbh= DbHelper.getInstance(getActivity().getApplicationContext());
+        SQLiteDatabase db = dbh.getWritableDatabase();
+        
         if(!DbQuery.resourceExist(db, type)){
             Fragment fragment	= new FragmentEmpty();
             Bundle parameter 	= new Bundle();

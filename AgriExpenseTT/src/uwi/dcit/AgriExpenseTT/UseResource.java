@@ -57,7 +57,8 @@ public class UseResource extends BaseActivity {
 	}
 	
 	private void start(LocalCycle cycle, String type) {
-		DbHelper dbh=new DbHelper(this);
+		//DbHelper dbh=new DbHelper(this);
+		DbHelper dbh= DbHelper.getInstance(this.getApplicationContext());
 		SQLiteDatabase db=dbh.getWritableDatabase();
 		ArrayList<LocalResourcePurchase> pList=new ArrayList<LocalResourcePurchase>();
 		DbQuery.getPurchases(db, dbh, pList, type, null, false);

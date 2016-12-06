@@ -4,12 +4,20 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Observer;
 
+import uwi.dcit.AgriExpenseTT.CloudModState;
+import uwi.dcit.AgriExpenseTT.CycleObserver;
+import uwi.dcit.AgriExpenseTT.CycleUseObserver;
+import uwi.dcit.AgriExpenseTT.PurchaseObserver;
+import uwi.dcit.AgriExpenseTT.TransLogObserver;
 import uwi.dcit.AgriExpenseTT.cloud.CloudInterface;
 import uwi.dcit.AgriExpenseTT.models.CycleContract;
+import uwi.dcit.AgriExpenseTT.models.CycleResourceContract;
 import uwi.dcit.AgriExpenseTT.models.CycleResourceContract.CycleResourceEntry;
 import uwi.dcit.AgriExpenseTT.models.LocalCycle;
 import uwi.dcit.AgriExpenseTT.models.LocalCycleUse;
@@ -22,18 +30,26 @@ import uwi.dcit.agriexpensesvr.upAccApi.model.UpAcc;
 
 
 public class DataManager {
+
+	private ArrayList<TransLogObserver> observers;
+	private CloudModState state;
 	SQLiteDatabase db;
 	DbHelper dbh;
 	Context context;
 	TransactionLog tL;
 	UpAcc acc;
 	public DataManager(Context context){
-		dbh= new DbHelper(context);
+		//dbh= new DbHelper(context);
+		dbh= DbHelper.getInstance(context);
 //		db=dbh.getReadableDatabase();
         db = dbh.getWritableDatabase();
 		this.context=context;
 		tL=new TransactionLog(dbh,db,context);
 		acc=DbQuery.getUpAcc(db);
+		observers = new ArrayList<TransLogObserver>();
+		new PurchaseObserver(this);
+		new CycleObserver(this);
+		new CycleUseObserver(this);
 	}
 	public DataManager(Context context,SQLiteDatabase db,DbHelper dbh){
 		this.dbh= dbh;
@@ -44,11 +60,20 @@ public class DataManager {
 
 		//for testing since cloud offline.
 		acc.setSignedIn(0);
+		
+		observers = new ArrayList<TransLogObserver>();
+		new PurchaseObserver(this);
+		new CycleObserver(this);
+		new CycleUseObserver(this);
+
 	}
 
 	public void insertCycle(int cropId, String landType, double landQty,long time){
 		//insert into database
 		int id=DbQuery.insertCycle(db, dbh, cropId, landType, landQty,tL,time);
+
+		setState(new CloudModState(CycleContract.CycleEntry.TABLE_NAME, TransactionLog.TL_INS,id));
+		/*
 		if(acc!=null){
 			//insert into transaction table
 			DbQuery.insertRedoLog(db, dbh, CycleContract.CycleEntry.TABLE_NAME, id, "ins");
@@ -58,12 +83,17 @@ public class DataManager {
 				c.insertCycle();
 			}
 		}
+		*/
 		//update database last updated time
 	}
 
     public int insertCycle(int cropId, String name, String landType, double landQty,long time){
         //insert into database
         int id=DbQuery.insertCycle(db, dbh, cropId, name, landType, landQty,tL,time);
+
+		setState(new CloudModState(CycleContract.CycleEntry.TABLE_NAME, TransactionLog.TL_INS,id));
+
+		/*
         if(acc!=null){
             //insert into transaction table
             DbQuery.insertRedoLog(db, dbh, CycleContract.CycleEntry.TABLE_NAME, id, "ins");
@@ -73,6 +103,7 @@ public class DataManager {
                 c.insertCycle();
             }
         }
+        */
         return id;
     }
 
@@ -81,6 +112,8 @@ public class DataManager {
 		//insert into database
 		int id=DbQuery.insertResourceExp(db, dbh, type, resourceId, quantifier, qty, cost, tL);
 
+		setState(new CloudModState(ResourcePurchaseContract.ResourcePurchaseEntry.TABLE_NAME, TransactionLog.TL_INS,id));
+		/*
 		if(acc!=null){
 			//insert into redo log table
 			int i=DbQuery.insertRedoLog(db, dbh, ResourcePurchaseContract.ResourcePurchaseEntry.TABLE_NAME, id, "ins");
@@ -90,12 +123,15 @@ public class DataManager {
 				c.insertPurchase();
 			}
 		}
+		*/
         return id;
 	}
 
     public int insertPurchase( int resourceId, String quantifier, double qty,String type, double cost, long time){
         int id = DbQuery.insertResourceExp(db, dbh, type, resourceId, quantifier, qty, cost, time, tL);
 
+		setState(new CloudModState(ResourcePurchaseContract.ResourcePurchaseEntry.TABLE_NAME, TransactionLog.TL_INS,id));
+		/*
         if(acc!=null){
             //insert into redo log table
             int i=DbQuery.insertRedoLog(db, dbh, ResourcePurchaseContract.ResourcePurchaseEntry.TABLE_NAME, id, "ins");
@@ -105,6 +141,7 @@ public class DataManager {
                 c.insertPurchase();
             }
         }
+        */
         return id;
     }
 	
@@ -127,10 +164,15 @@ public class DataManager {
 		db.update(ResourcePurchaseContract.ResourcePurchaseEntry.TABLE_NAME, cv, ResourcePurchaseContract.ResourcePurchaseEntry._ID+"="+l.getPurchaseId(), null);
 		//record transaction in log
 		tL.insertTransLog(ResourcePurchaseContract.ResourcePurchaseEntry.TABLE_NAME, l.getPurchaseId(), TransactionLog.TL_DEL);
+
+		setState(new CloudModState(ResourcePurchaseContract.ResourcePurchaseEntry.TABLE_NAME, TransactionLog.TL_UPDATE, l.getPurchaseId()));
+		/*
 		if(acc!=null){
 			//redo log (cloud)
 			DbQuery.insertRedoLog(db, dbh, ResourcePurchaseContract.ResourcePurchaseEntry.TABLE_NAME, l.getPurchaseId(),TransactionLog.TL_UPDATE);
 		}
+		*/
+
 		//CYCLE
 		//updating local Cycle
 		Cycle c=DbQuery.getCycle(db, dbh, l.getCycleid());
@@ -139,10 +181,15 @@ public class DataManager {
 		db.update(CycleContract.CycleEntry.TABLE_NAME, cv, CycleContract.CycleEntry._ID+"="+l.getCycleid(), null);
 		//record transaction in log
 		tL.insertTransLog(CycleContract.CycleEntry.TABLE_NAME, l.getCycleid(), TransactionLog.TL_UPDATE);
+
+		setState(new CloudModState(CycleContract.CycleEntry.TABLE_NAME, TransactionLog.TL_UPDATE, l.getCycleid()));
+		/*
 		if(acc!=null){
 			//redo log (cloud)
 			DbQuery.insertRedoLog(db, dbh, CycleContract.CycleEntry.TABLE_NAME, l.getCycleid(), TransactionLog.TL_UPDATE);
 		}
+		*/
+
 		//CYCLEUSE
 		//Delete CycleUse
 		//db.delete(CycleResourceEntry.TABLE_NAME, DbHelper.CYCLE_RESOURCE_ID+"="+l.getId(), null);
@@ -150,10 +197,14 @@ public class DataManager {
             DbQuery.deleteRecord(db, dbh, CycleResourceEntry.TABLE_NAME, l.getId());
         }catch(Exception e){e.printStackTrace();}
         tL.insertTransLog(CycleResourceEntry.TABLE_NAME, l.getId(), TransactionLog.TL_DEL);
+
+		setState(new CloudModState(CycleResourceEntry.TABLE_NAME, TransactionLog.TL_DEL, l.getId()));
+		/*
 		if(acc!=null){
 			//redo log (cloud)
 			DbQuery.insertRedoLog(db, dbh, CycleResourceEntry.TABLE_NAME, l.getId(), TransactionLog.TL_DEL);
 		}
+		*/
 	}
 	
 	//--------------------------------------READY TO USE (FROM FRONT)
@@ -174,6 +225,9 @@ public class DataManager {
 		//delete purchase 
 		db.delete(ResourcePurchaseContract.ResourcePurchaseEntry.TABLE_NAME, ResourcePurchaseContract.ResourcePurchaseEntry._ID+"="+p.getPId(), null);
 		tL.insertTransLog(ResourcePurchaseContract.ResourcePurchaseEntry.TABLE_NAME, p.getPId(), TransactionLog.TL_DEL);
+
+		setState(new CloudModState(ResourcePurchaseContract.ResourcePurchaseEntry.TABLE_NAME, TransactionLog.TL_DEL, p.getPId()));
+		/*
 		if(acc!=null){
 			//redo log (cloud)
 			DbQuery.insertRedoLog(db, dbh, ResourcePurchaseContract.ResourcePurchaseEntry.TABLE_NAME, p.getPId(), TransactionLog.TL_DEL);
@@ -182,6 +236,7 @@ public class DataManager {
 				c.deletePurchase();
 			}
 		}
+		*/
 	}
 	
 	//-----------------------------------READY TO USE (FROM FRONT)
@@ -204,6 +259,9 @@ public class DataManager {
             DbQuery.deleteRecord(db, dbh, CycleContract.CycleEntry.TABLE_NAME, c.getId());
         }catch (Exception e){e.printStackTrace();}
         tL.insertTransLog(CycleContract.CycleEntry.TABLE_NAME, c.getId(), TransactionLog.TL_DEL);
+
+		setState(new CloudModState(CycleContract.CycleEntry.TABLE_NAME, TransactionLog.TL_DEL, c.getId()));
+		/*
 		if(acc!=null){
 			//insert into redo log (cloud)
 			DbQuery.insertRedoLog(db, dbh, CycleContract.CycleEntry.TABLE_NAME, c.getId(), TransactionLog.TL_DEL);
@@ -212,6 +270,7 @@ public class DataManager {
 				cloud.deleteCycle();
 			}
 		}
+		*/
 	}
 	//---------------------- READY TO USE [WITHOUT INCLUSION OF RESOURCES TABLE]
 	public void deleteResource(int rId){
@@ -247,6 +306,9 @@ public class DataManager {
 		
 		//insert into database
 		int id=DbQuery.insertResourceUse(db, dbh, cycleId, type, resPurchaseId, qty,quantifier,useCost, tL);
+
+		setState(new CloudModState(CycleResourceEntry.TABLE_NAME, TransactionLog.TL_INS, id));
+		/*
 		//insert into redo log table
 		DbQuery.insertRedoLog(db, dbh, CycleResourceEntry.TABLE_NAME, id, "ins");
 		//try to insert into cloud
@@ -254,6 +316,7 @@ public class DataManager {
 			CloudInterface c= new CloudInterface(context,db,dbh);//new CloudInterface(context);
 			c.insertCycleUseC();
 		}
+		*/
 	}
 	
 	
@@ -262,6 +325,10 @@ public class DataManager {
 		//update the cloud
 		TransactionLog tl=new TransactionLog(dbh, db,context);
 		tl.insertTransLog(ResourcePurchaseContract.ResourcePurchaseEntry.TABLE_NAME, p.getPId(), TransactionLog.TL_UPDATE);
+
+		setState(new CloudModState(ResourcePurchaseContract.ResourcePurchaseEntry.TABLE_NAME, TransactionLog.TL_UPDATE, p.getPId()));
+
+		/*
 		if(acc!=null){
 			DbQuery.insertRedoLog(db, dbh, ResourcePurchaseContract.ResourcePurchaseEntry.TABLE_NAME,p.getPId(), TransactionLog.TL_UPDATE);
 			//record in transaction log
@@ -270,20 +337,26 @@ public class DataManager {
 				cloud.updatePurchase();
 			}
 		}
+		*/
 	}
 	public boolean updateCycle(LocalCycle c, ContentValues cv){
 		int result = db.update(CycleContract.CycleEntry.TABLE_NAME, cv, CycleContract.CycleEntry._ID+"="+c.getId(), null);
 		//update the cloud
 		TransactionLog tl = new TransactionLog(dbh, db,context);
 		tl.insertTransLog(CycleContract.CycleEntry.TABLE_NAME, c.getId(),TransactionLog.TL_UPDATE);
+
+		setState(new CloudModState(CycleContract.CycleEntry.TABLE_NAME,TransactionLog.TL_UPDATE,c.getId()));
+/*
 		if(acc!=null){
 			DbQuery.insertRedoLog(db, dbh, CycleContract.CycleEntry.TABLE_NAME, c.getId(), TransactionLog.TL_UPDATE);
+
 			//record in transaction log
 			if(acc.getSignedIn()==1){
 				CloudInterface cloud= new CloudInterface(context,db,dbh);// new CloudInterface(context);
 				cloud.updateCycle();
 			}
 		}
+	*/
         return (result != -1);
 	}
 	
@@ -309,5 +382,28 @@ public class DataManager {
 		cv.put(ResourceContract.ResourceEntry.RESOURCES_NAME, name);
 		cv.put(ResourceContract.ResourceEntry.RESOURCES_TYPE, type);
 		db.insert(ResourceContract.ResourceEntry.TABLE_NAME, null, cv);
+	}
+
+	public CloudModState getState(){
+		return state;
+	}
+
+	public void setState(CloudModState state){
+		this.state = state;
+		notifyAllObservers();
+	}
+
+	public void attach(TransLogObserver observer){
+		observers.add(observer);
+	}
+
+	public void notifyAllObservers(){
+		for(TransLogObserver observer : observers){
+			observer.update();
+		}
+	}
+
+	public Context getContext(){
+		return context;
 	}
 }

@@ -38,7 +38,8 @@ public class FragmentOtherResourceList  extends ListFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		dbh=new DbHelper(this.getActivity().getBaseContext());
+		//dbh=new DbHelper(this.getActivity().getBaseContext());
+		dbh= DbHelper.getInstance(getActivity().getApplicationContext());
 		db=dbh.getWritableDatabase();
 		populateList();
 		Collections.sort(list);

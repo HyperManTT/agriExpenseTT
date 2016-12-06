@@ -108,7 +108,8 @@ public class EditChooseLists extends BaseActivity {
 
 
 	private void initialize() {
-		dbh=new DbHelper(EditChooseLists.this);
+		//dbh=new DbHelper(EditChooseLists.this);
+		dbh= DbHelper.getInstance(this.getApplicationContext());
 //		db=dbh.getReadableDatabase();
         db=dbh.getWritableDatabase();
 		list=new ArrayList<>();

@@ -39,7 +39,8 @@ public class CloudInterface {
 	TransactionLog tL;
 
 	public CloudInterface(Context context) {
-		dbh= new DbHelper(context);
+		//dbh= new DbHelper(context);
+		dbh= DbHelper.getInstance(context);
 		db=dbh.getWritableDatabase();
 		tL=new TransactionLog(dbh,db,context);
 	}

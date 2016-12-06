@@ -14,11 +14,19 @@ public abstract class ObjectMapper {
 
     protected Integer id;
 
+    public ObjectMapper() {
+
+    }
+
     public abstract ContentValues getContentValues();
 
     public abstract void setCursorValues(Cursor cursor);
 
     public abstract boolean isValidObject();
+
+    public void setId(int id){
+        this.id = id;
+    }
 
     public int getId(){
         return this.id;

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -52,7 +53,8 @@ public class FragmentNewCycleLast extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		final View view = inflater.inflate(R.layout.fragment_newcycle_last, container, false);
 		
-		dbh = new DbHelper(getActivity().getBaseContext());
+		//dbh = new DbHelper(getActivity().getBaseContext());
+        DbHelper dbh= DbHelper.getInstance(getActivity().getApplicationContext());
 		db = dbh.getWritableDatabase();
 		
 		plantMaterial = getArguments().getString(DHelper.cat_plantingMaterial);
@@ -148,13 +150,16 @@ public class FragmentNewCycleLast extends Fragment {
                 }
 
 
-                DataManager dm = new DataManager(getActivity().getBaseContext(), db, dbh);
-                int res = dm.insertCycle(plantMaterialId, et_CycleName.getText().toString() , land, Double.parseDouble(et_landQty.getText().toString()), unixDate);
+                //DataManager dm = new DataManager(getActivity().getBaseContext(), db, dbh);
+                //int res = dm.insertCycle(plantMaterialId, et_CycleName.getText().toString() , land, Double.parseDouble(et_landQty.getText().toString()), unixDate);
 
                 // TODO: 12/5/2016 Uncomment this code for new cycle insertion code to work.
-//                CycleCRUD cycleCRUD = new CycleCRUD(getActivity().getApplicationContext());
-//                Cycle cyc = new Cycle(land, cycleCRUD.getCropNameFromID(plantMaterialId), "lb", Double.parseDouble(et_landQty.getText().toString()), unixDate , et_CycleName.getText().toString());
-//                int res = cycleCRUD.insertObject(cyc);
+                CycleCRUD cycleCRUD = new CycleCRUD(getActivity().getApplicationContext());
+                Cycle cyc = new Cycle(land, cycleCRUD.getCropNameFromID(plantMaterialId), "lb", Double.parseDouble(et_landQty.getText().toString()), unixDate , et_CycleName.getText().toString(), plantMaterialId);
+                int res = cycleCRUD.insertObject(cyc);
+                //Log.i("RES IS",""+res);
+                Cycle gettingCycle = cycleCRUD.getObjectFromDB(res);
+                //Log.i("TRYING SOMETHING",""+gettingCycle.getCropName());
 
 
                 if (res != -1)Toast.makeText(getActivity(), "Cycle Successfully Created", Toast.LENGTH_SHORT).show();

@@ -38,7 +38,8 @@ public class NewPurchaseLists extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		dbh=new DbHelper(this.getActivity().getBaseContext());
+		//dbh=new DbHelper(this.getActivity().getBaseContext());
+		dbh= DbHelper.getInstance(this.getActivity().getApplicationContext());
 		db=dbh.getWritableDatabase();
 		type=getArguments().getString("type");
 		populateList();

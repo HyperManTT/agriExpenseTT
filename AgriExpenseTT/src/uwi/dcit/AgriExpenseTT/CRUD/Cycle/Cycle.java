@@ -2,6 +2,8 @@ package uwi.dcit.AgriExpenseTT.CRUD.Cycle;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import uwi.dcit.AgriExpenseTT.CRUD.ObjectMapper;
 
@@ -10,9 +12,10 @@ import uwi.dcit.AgriExpenseTT.CRUD.ObjectMapper;
  * Edited by Kirk on 12/4/2016.
  */
 
-public class Cycle extends ObjectMapper{
+public class Cycle extends ObjectMapper implements Parcelable {
 
     private String cropName;
+    private int cropId;
     private String landType;
     private String harvestType;
     private Double landAmount;
@@ -20,14 +23,13 @@ public class Cycle extends ObjectMapper{
     private Double totalSpent;
     private Double harvestAmount;
     private Double costPer;
-    private String county;
     private String cycleName;
 
     public Cycle(){
         super(-1);
     }
 
-    public Cycle(String landType, String cropName, String harvestType, Double landAmount, Long date, String cycleName) {
+    public Cycle(String landType, String cropName, String harvestType, Double landAmount, Long date, String cycleName, int cropId) {
         super(-1);
         this.landType = landType;
         this.cropName = cropName;
@@ -38,11 +40,12 @@ public class Cycle extends ObjectMapper{
         this.harvestAmount = 0.0;
         this.costPer = 0.0;
         this.cycleName = cycleName;
+        this.cropId = cropId;
     }
 
     public ContentValues getContentValues(){
         ContentValues cv = new ContentValues();
-        cv.put(CycleContract.CycleEntry.CROPCYCLE_CROPID, id);
+        cv.put(CycleContract.CycleEntry.CROPCYCLE_CROPID, cropId);
         cv.put(CycleContract.CycleEntry.CROPCYCLE_LAND_TYPE, landType);
         cv.put(CycleContract.CycleEntry.CROPCYCLE_LAND_AMOUNT, landAmount);
         cv.put(CycleContract.CycleEntry.CROPCYCLE_DATE, date);
@@ -50,14 +53,14 @@ public class Cycle extends ObjectMapper{
         cv.put(CycleContract.CycleEntry.CROPCYCLE_HARVEST_TYPE, harvestType);
         cv.put(CycleContract.CycleEntry.CROPCYCLE_HARVEST_AMT, harvestAmount);
         cv.put(CycleContract.CycleEntry.CROPCYCLE_COSTPER, costPer);
-        cv.put(CycleContract.CycleEntry.CROPCYCLE_COUNTY, county);
         cv.put(CycleContract.CycleEntry.CROPCYCLE_RESOURCE, cropName);
         cv.put(CycleContract.CycleEntry.CROPCYCLE_NAME, cycleName);
         return cv;
     }
 
     public void setCursorValues(Cursor cycleCursor){
-        this.id = cycleCursor.getInt(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_CROPID));
+        this.id = cycleCursor.getInt(cycleCursor.getColumnIndex(CycleContract.CycleEntry._ID));
+        this.cropId = cycleCursor.getInt(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_CROPID));
         this.landType = cycleCursor.getString(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_LAND_TYPE));
         this.landAmount = cycleCursor.getDouble(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_LAND_AMOUNT));
         this.date = cycleCursor.getLong(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_DATE));
@@ -65,11 +68,8 @@ public class Cycle extends ObjectMapper{
         this.harvestType = cycleCursor.getString(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_HARVEST_TYPE));
         this.harvestAmount = cycleCursor.getDouble(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_HARVEST_AMT));
         this.costPer = cycleCursor.getDouble(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_COSTPER));
-        this.county = cycleCursor.getString(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_COUNTY));
         this.cropName = cycleCursor.getString(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_RESOURCE));
         this.cycleName = cycleCursor.getString(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_NAME));
-        cycleCursor.close();
-
     }
 
     public boolean isValidObject() {
@@ -116,11 +116,11 @@ public class Cycle extends ObjectMapper{
         this.landAmount = landAmount;
     }
 
-    public Long getDate() {
+    public Long getTime() {
         return date;
     }
 
-    public void setDate(Long date) {
+    public void setTime(Long date) {
         this.date = date;
     }
 
@@ -148,10 +148,6 @@ public class Cycle extends ObjectMapper{
         this.costPer = costPer;
     }
 
-    public String getCounty() {
-        return county;
-    }
-
     public void setCycleName(String cycleName) {
         this.cycleName = cycleName;
     }
@@ -160,7 +156,48 @@ public class Cycle extends ObjectMapper{
         return cycleName;
     }
 
-    public void setCounty(String county) {
-        this.county = county;
+    public Cycle(Parcel dest){
+        id=dest.readInt();
+        cropId=dest.readInt();
+        landType=dest.readString();
+        landAmount=dest.readDouble();
+        date=dest.readLong();
+        totalSpent=dest.readDouble();
+        harvestAmount=dest.readDouble();
+        harvestType=dest.readString();
+        costPer=dest.readDouble();
+        cycleName =dest.readString();
+    }
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeInt(id);
+        dest.writeInt(cropId);
+        dest.writeString(landType);
+        dest.writeDouble(landAmount);
+        dest.writeLong(date);
+        dest.writeDouble(totalSpent);
+        dest.writeDouble(harvestAmount);
+        dest.writeString(harvestType);
+        dest.writeDouble(costPer);
+        dest.writeString(cycleName);
+    }
+
+    public static final Parcelable.Creator<Cycle> CREATOR = new Parcelable.Creator<Cycle>() {
+
+        @Override
+        public Cycle createFromParcel(Parcel source) {
+            return new Cycle(source);
+        }
+
+        @Override
+        public Cycle[] newArray(int size) {
+            return new Cycle[size];
+        }
+    };
+    @Override
+    public int describeContents() {
+
+        return 0;
     }
 }

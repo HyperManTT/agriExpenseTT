@@ -35,7 +35,8 @@ public class ViewCycleUsege extends BaseActivity {
 		list=new ArrayList<LocalCycleUse>();
 		type=getIntent().getStringExtra("type");
 		int cycleId=Integer.parseInt(getIntent().getStringExtra("id"));
-		dbh=new DbHelper(this);
+		//dbh=new DbHelper(this);
+		dbh= DbHelper.getInstance(this.getApplicationContext());
 		db=dbh.getWritableDatabase();
 		
 		pList=new ArrayList<LocalResourcePurchase>();

@@ -29,14 +29,24 @@ import uwi.dcit.AgriExpenseTT.DefaultInput.defaultInsert;
 
 public class DbHelper extends SQLiteOpenHelper{
 
+	public static DbHelper mInstance=null;
 	public static final int VERSION = 172;
 	public static final String DATABASE_NAME="agriDb";
 	public static final String TAG_NAME = "AgriExpenseDBHelper";
-	public Context ctx;
-	
-	public DbHelper(Context context) {
+	public static Context ctx;
+
+	private DbHelper(Context context) {
 		super(context, DATABASE_NAME, null,VERSION);
+		Log.i("Being Accessed!","!");
 		this.ctx = context;
+	}
+
+	public static DbHelper getInstance(Context ctx) {
+		//Allows creation of only one instance of the database. Having multiple instances were resulting in leakages.
+		if (mInstance == null) {
+			mInstance = new DbHelper(ctx.getApplicationContext());
+		}
+		return mInstance;
 	}
 	
 	@Override

@@ -1,9 +1,12 @@
 package uwi.dcit.AgriExpenseTT.CRUD.ResourcePurchase;
 
 import android.content.Context;
+import android.database.Cursor;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import uwi.dcit.AgriExpenseTT.CRUD.DBOperations;
 import uwi.dcit.AgriExpenseTT.CRUD.ObjectTypeMapper;
 
 /**
@@ -13,16 +16,45 @@ import uwi.dcit.AgriExpenseTT.CRUD.ObjectTypeMapper;
 public class ResourcePurchaseCRUD extends ObjectTypeMapper{
 
     public ResourcePurchaseCRUD(Context context){
-        super(context, ResourcePurchaseContract.ResourcePurchaseEntry.TABLE_NAME);
+        super(context, ResourcePurchaseContract.ResourcePurchaseEntry.TABLE_NAME, ResourcePurchaseContract.ResourcePurchaseEntry._ID);
     }
 
     @Override
-    public void getObjectFromDB(int id) {
-        
+    public ResourcePurchase getObjectFromDB(int id) {
+        ResourcePurchase resourcePurchase = new ResourcePurchase();
+        DBOperations dbOperations = new DBOperations(db);
+        Cursor receivedData = dbOperations.getObject(tableName, idFieldName, id);
+        if(receivedData.getCount()<1){
+            resourcePurchase.setId(-1);
+        }
+        else{
+            receivedData.moveToFirst();
+            resourcePurchase.setCursorValues(receivedData);
+        }
+        receivedData.close();
+        return resourcePurchase;
     }
 
     @Override
     public List getAllObjectsFromDB() {
-        return null;
+        List<ResourcePurchase> list = new ArrayList();
+        DBOperations dbOperations = new DBOperations(db);
+        Cursor allObjectsCursor = dbOperations.getAllObjects(tableName);
+        allObjectsCursor.moveToFirst();
+        if(allObjectsCursor.getCount()>0){
+            while(allObjectsCursor.moveToNext()){
+                ResourcePurchase resourcePurchase = new ResourcePurchase();
+                resourcePurchase.setCursorValues(allObjectsCursor);
+                list.add(resourcePurchase);
+                allObjectsCursor.moveToNext();
+            }
+        }
+        allObjectsCursor.close();
+        return list;
+    }
+
+    public String getResourceFromID(int id){
+        DBOperations dbOperations = new DBOperations(db);
+        return dbOperations.findResourceName(id);
     }
 }
