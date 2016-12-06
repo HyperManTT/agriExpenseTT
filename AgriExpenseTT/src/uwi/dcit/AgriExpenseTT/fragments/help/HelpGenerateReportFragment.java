@@ -8,26 +8,52 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import uwi.dcit.AgriExpenseTT.R;
 import uwi.dcit.AgriExpenseTT.helpers.GAnalyticsHelper;
 
-public class HelpGenerateReportFragment extends Fragment {
+public class HelpGenerateReportFragment extends HelpOption {
 
-	@Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view =  inflater.inflate(R.layout.fragment_help_article_view, container, false);
-		
-		TextView txtHeading = (TextView)view.findViewById(R.id.article_heading);
-		txtHeading.setText("Introduction");
-		
-		ImageView img = (ImageView)view.findViewById(R.id.article_image);
-		img.setImageDrawable(getResources().getDrawable(R.drawable.help_homescreen));
-		
-		
-		TextView txtContent = (TextView)view.findViewById(R.id.article_text);
-		txtContent.setText(getResources().getString(R.string.help_intro));
 
-        GAnalyticsHelper.getInstance(this.getActivity()).sendScreenView("Help Generate Report Fragment");
-		return view;
+	public ArrayList<String> getScreenTexts()
+	{
+		ArrayList<String> screenTexts = new ArrayList<String>();
+		screenTexts.add("Introduction");
+		screenTexts.add(getResources().getString(R.string.help_intro));
+		return screenTexts;
+	}
+
+	public ArrayList<Integer> getScreenTextIds()
+	{
+		ArrayList<Integer> screenTextIds = new ArrayList<Integer>();
+		screenTextIds.add(R.id.article_heading);
+		screenTextIds.add(R.id.article_text);
+		return screenTextIds;
+	}
+
+	public ArrayList<Integer> getImages()
+	{
+		ArrayList<Integer> images = new ArrayList<Integer>();
+		images.add(R.drawable.help_homescreen);
+		return images;
+	}
+
+	public ArrayList<Integer> getImageIds()
+	{
+		ArrayList<Integer> imageIds = new ArrayList<Integer>();
+		imageIds.add(R.id.article_image);
+		return imageIds;
+	}
+
+	public String getScreenViewText()
+	{
+		String screenViewText = "Help Generate Report Fragment";
+		return screenViewText;
+	}
+
+	public int getLayout()
+	{
+		int layout = R.layout.fragment_help_article_view;
+		return layout;
 	}
 }
