@@ -33,8 +33,8 @@ public class DbHelper extends SQLiteOpenHelper{
 	public static final int VERSION = 172;
 	public static final String DATABASE_NAME="agriDb";
 	public static final String TAG_NAME = "AgriExpenseDBHelper";
-	static public Context ctx;
-	
+	public static Context ctx;
+
 	private DbHelper(Context context) {
 		super(context, DATABASE_NAME, null,VERSION);
 		Log.i("Being Accessed!","!");
@@ -42,9 +42,7 @@ public class DbHelper extends SQLiteOpenHelper{
 	}
 
 	public static DbHelper getInstance(Context ctx) {
-		// Use the application context, which will ensure that you
-		// don't accidentally leak an Activity's context.
-		// See this article for more information: http://bit.ly/6LRzfx
+		//Allows creation of only one instance of the database. Having multiple instances were resulting in leakages.
 		if (mInstance == null) {
 			mInstance = new DbHelper(ctx.getApplicationContext());
 		}

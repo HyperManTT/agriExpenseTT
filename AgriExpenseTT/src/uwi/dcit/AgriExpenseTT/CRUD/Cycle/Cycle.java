@@ -59,7 +59,6 @@ public class Cycle extends ObjectMapper implements Parcelable {
     }
 
     public void setCursorValues(Cursor cycleCursor){
-        cycleCursor.moveToFirst();
         this.id = cycleCursor.getInt(cycleCursor.getColumnIndex(CycleContract.CycleEntry._ID));
         this.cropId = cycleCursor.getInt(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_CROPID));
         this.landType = cycleCursor.getString(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_LAND_TYPE));

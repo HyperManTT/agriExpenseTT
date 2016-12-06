@@ -11,6 +11,7 @@ import uwi.dcit.AgriExpenseTT.helpers.DbHelper;
 
 /**
  * Created by shivr on 12/4/2016.
+ * Abstractions were done on the insertion, deletion and updating of objects with the use of this class.
  */
 
 public abstract class ObjectTypeMapper {
@@ -32,21 +33,21 @@ public abstract class ObjectTypeMapper {
 
     public int insertObject(ObjectMapper objectTypeMapper){
         ContentValues cv = objectTypeMapper.getContentValues();
-        DBOperations dbOperations = new DBOperations(db, dbh);
+        DBOperations dbOperations = new DBOperations(db);
         int rowId = dbOperations.insertObject(cv, tableName);
         return rowId;
     }
 
     public void updateObject(ObjectMapper objectMapper) {
         if(objectMapper.isValidObject()){
-            DBOperations dbOperations = new DBOperations(db, dbh);
+            DBOperations dbOperations = new DBOperations(db);
             ContentValues contentValues = objectMapper.getContentValues();
             dbOperations.updateObject(tableName, contentValues, idFieldName, objectMapper.getId());
         }
     }
 
     public void deleteObject(int id) {
-        DBOperations dbOperations = new DBOperations(db, dbh);
+        DBOperations dbOperations = new DBOperations(db);
         dbOperations.deleteObject(tableName, idFieldName, id);
     }
 

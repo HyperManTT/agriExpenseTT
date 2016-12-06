@@ -23,12 +23,13 @@ public class CycleCRUD extends ObjectTypeMapper {
     @Override
     public Cycle getObjectFromDB(int id) {
         Cycle cycle = new Cycle();
-        DBOperations dbOperations = new DBOperations(db, dbh);
+        DBOperations dbOperations = new DBOperations(db);
         Cursor receivedData = dbOperations.getObject(tableName, idFieldName, id);
         if(receivedData.getCount()<1){
             cycle.setCropId(-1);
         }
         else{
+            receivedData.moveToFirst();
             cycle.setCursorValues(receivedData);
         }
         receivedData.close();
@@ -38,7 +39,7 @@ public class CycleCRUD extends ObjectTypeMapper {
     @Override
     public ArrayList getAllObjectsFromDB() {
         ArrayList<Cycle> list = new ArrayList();
-        DBOperations dbOperations = new DBOperations(db, dbh);
+        DBOperations dbOperations = new DBOperations(db);
         Cursor allObjectsCursor = dbOperations.getAllObjects(CycleContract.CycleEntry.TABLE_NAME);
         allObjectsCursor.moveToFirst();
         if(allObjectsCursor.getCount()>0){
@@ -54,7 +55,7 @@ public class CycleCRUD extends ObjectTypeMapper {
     }
 
     public String getCropNameFromID(int id){
-        DBOperations dbOperations = new DBOperations(db, dbh);
+        DBOperations dbOperations = new DBOperations(db);
         return dbOperations.findResourceName(id);
     }
 }

@@ -13,16 +13,15 @@ import uwi.dcit.AgriExpenseTT.models.ResourceContract;
 
 /**
  * Created by shivr on 12/1/2016.
+ * This class allows the purchase and cycle CRUD classes to interact with the database.
  */
 
 public class DBOperations {
 
     protected SQLiteDatabase db;
-    protected DbHelper dbh;
 
 
-    public DBOperations(SQLiteDatabase db, DbHelper dbh){
-        this.dbh= dbh;
+    public DBOperations(SQLiteDatabase db){
         this.db = db;
     }
 
