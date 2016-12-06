@@ -35,7 +35,7 @@ public class ResourcePurchaseCRUD extends ObjectTypeMapper{
 
     @Override
     public List getAllObjectsFromDB() {
-        List list = new ArrayList();
+        List<ResourcePurchase> list = new ArrayList();
         DBOperations dbOperations = new DBOperations(context);
         Cursor allObjectsCursor = dbOperations.getAllObjects(tableName);
         allObjectsCursor.moveToFirst();

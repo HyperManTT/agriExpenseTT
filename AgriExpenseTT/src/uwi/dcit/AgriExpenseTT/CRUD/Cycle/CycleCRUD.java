@@ -37,7 +37,7 @@ public class CycleCRUD extends ObjectTypeMapper {
 
     @Override
     public List getAllObjectsFromDB() {
-        List list = new ArrayList();
+        List<Cycle> list = new ArrayList();
         DBOperations dbOperations = new DBOperations(context);
         Cursor allObjectsCursor = dbOperations.getAllObjects(CycleContract.CycleEntry.TABLE_NAME);
         allObjectsCursor.moveToFirst();
