@@ -60,7 +60,7 @@ public class DataManager {
 
 		//for testing since cloud offline.
 		acc.setSignedIn(0);
-		
+
 		observers = new ArrayList<TransLogObserver>();
 		new PurchaseObserver(this);
 		new CycleObserver(this);

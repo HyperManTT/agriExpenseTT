@@ -4,14 +4,9 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-<<<<<<< HEAD
+
         classpath 'com.android.tools.build:gradle:2.1.3'
-=======
-        classpath 'com.android.tools.build:gradle:2.2.2'
-<<<<<<< HEAD
-=======
->>>>>>> fd92c753ee2943ee5d97056834a59d10812f4744
         classpath 'com.google.gms:google-services:3.0.0'
->>>>>>> bd0c7eba659b5fb982f51ad5cccac6d4e23b5db8
+
     }
 }
