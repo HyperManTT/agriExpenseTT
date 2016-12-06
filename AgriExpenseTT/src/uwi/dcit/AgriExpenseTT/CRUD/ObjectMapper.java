@@ -14,6 +14,10 @@ public abstract class ObjectMapper {
 
     protected Integer id;
 
+    public ObjectMapper() {
+
+    }
+
     public abstract ContentValues getContentValues();
 
     public abstract void setCursorValues(Cursor cursor);

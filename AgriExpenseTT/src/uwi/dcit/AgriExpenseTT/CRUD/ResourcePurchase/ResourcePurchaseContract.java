@@ -27,7 +27,7 @@ public class ResourcePurchaseContract {
 
 	public static abstract class ResourcePurchaseEntry implements BaseColumns{
 		public static final String TABLE_NAME = "resPurchases";
-//		public static final String RESOURCE_PURCHASE_ID = "id";
+		public static final String RESOURCE_PURCHASE_ID = "id";
 		public static final String RESOURCE_PURCHASE_RESID = "rId";
 		public static final String RESOURCE_PURCHASE_TYPE = "type";
 		public static final String RESOURCE_PURCHASE_QUANTIFIER = "quantifier";

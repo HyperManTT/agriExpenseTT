@@ -18,14 +18,14 @@ import uwi.dcit.AgriExpenseTT.CRUD.ObjectTypeMapper;
 public class CycleCRUD extends ObjectTypeMapper {
 
     public CycleCRUD(Context context){
-        super(context, CycleContract.CycleEntry.TABLE_NAME);
+        super(context, CycleContract.CycleEntry.TABLE_NAME, CycleContract.CycleEntry._ID);
     }
 
     @Override
     public Cycle getObjectFromDB(int id) {
         Cycle cycle = new Cycle();
         DBOperations dbOperations = new DBOperations(context);
-        Cursor receivedData = dbOperations.getObject(tableName, CycleContract.CycleEntry.TABLE_NAME, id);
+        Cursor receivedData = dbOperations.getObject(tableName, idFieldName, id);
         if(receivedData.getCount()<1){
             cycle.setCropId(-1);
         }

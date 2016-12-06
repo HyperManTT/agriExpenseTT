@@ -29,32 +29,32 @@ public class DBOperations {
 
     public int insertObject(ContentValues cv, String tableName){
         Long rowId = db.insert(tableName, null, cv);
-        db.close();
+        //db.close();
         return rowId.intValue();
     }
 
     public void updateObject(String tableName, ContentValues contentValues, String fieldName, int id){
         db.update(tableName, contentValues, fieldName+"="+id, null);
-        db.close();
+        //db.close();
     }
 
     public void deleteObject(String tableName, String fieldName, int id){
         db.delete(tableName, fieldName+"="+id, null);
-        db.close();
+        //db.close();
     }
 
     //The following two methods are not bound to the object itself in the respective classes.
 
     public Cursor getObject(String tableName, String fieldName, int id){
         Cursor cursor = db.rawQuery("select * from "+tableName+" where "+fieldName+"="+id+";", null);
-        db.close();
+        //db.close();
         return cursor;
     }
 
     public Cursor getAllObjects(String tableName){
         List list = new ArrayList();
         Cursor cursor =db.rawQuery("select * from "+tableName, null);
-        db.close();
+        //db.close();
         return cursor;
     }
 
@@ -67,7 +67,7 @@ public class DBOperations {
             res = cursor.getString(cursor.getColumnIndex("name"));
         }
         cursor.close();
-        db.close();
+        //db.close();
         return res;
     }
 }

@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,6 +28,8 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import uwi.dcit.AgriExpenseTT.CRUD.ResourcePurchase.ResourcePurchase;
+import uwi.dcit.AgriExpenseTT.CRUD.ResourcePurchase.ResourcePurchaseCRUD;
 import uwi.dcit.AgriExpenseTT.Main;
 import uwi.dcit.AgriExpenseTT.NewPurchase;
 import uwi.dcit.AgriExpenseTT.R;
@@ -200,7 +203,17 @@ public class FragmentNewPurchaseLast extends Fragment{
 						}
 					}
 //					dm.insertPurchase(resId, quantifier, qty, category, cost);
-                    res = dm.insertPurchase(resId, quantifier, qty, category, cost, unixDate);
+
+
+                    //Below is old code.
+                    //res = dm.insertPurchase(resId, quantifier, qty, category, cost, unixDate);
+                    // TODO: 12/6/2016 Trying new code for purchase insertion.
+                    ResourcePurchaseCRUD resPCrud = new ResourcePurchaseCRUD(this.activity.getApplicationContext());
+                    ResourcePurchase resp = new ResourcePurchase(resId, qty, quantifier, category, cost, unixDate, resPCrud.getResourceFromID(resId));
+                    res = resPCrud.insertObject(resp);
+                    //ResourcePurchase resp2 = resPCrud.getObjectFromDB(res);
+                    //Log.i("TRYING AGAIN","HELLO"+resp2.getResourceName());
+
 				}
 
                 if (res != -1)Toast.makeText(getActivity(), "Purchase Successfully Saved", Toast.LENGTH_SHORT).show();

@@ -2,10 +2,8 @@ package uwi.dcit.AgriExpenseTT.CRUD;
 
 import android.content.ContentValues;
 import android.content.Context;
-
 import java.util.List;
 
-import uwi.dcit.AgriExpenseTT.CRUD.Cycle.CycleContract;
 
 /**
  * Created by shivr on 12/4/2016.
@@ -15,10 +13,12 @@ public abstract class ObjectTypeMapper {
 
     protected Context context;
     protected String tableName;
+    protected  String idFieldName;
 
-    public ObjectTypeMapper(Context context, String tableName){
+    public ObjectTypeMapper(Context context, String tableName, String idFieldName){
         this.context = context;
         this.tableName = tableName;
+        this.idFieldName = idFieldName;
     }
 
     public int insertObject(ObjectMapper objectTypeMapper){
@@ -32,13 +32,13 @@ public abstract class ObjectTypeMapper {
         if(objectMapper.isValidObject()){
             DBOperations dbOperations = new DBOperations(context);
             ContentValues contentValues = objectMapper.getContentValues();
-            dbOperations.updateObject(tableName, contentValues, CycleContract.CycleEntry.CROPCYCLE_CROPID, objectMapper.getId());
+            dbOperations.updateObject(tableName, contentValues, idFieldName, objectMapper.getId());
         }
     }
 
-    public void deleteObject(int id, String IDFieldName) {
+    public void deleteObject(int id) {
         DBOperations dbOperations = new DBOperations(context);
-        dbOperations.deleteObject(tableName, IDFieldName, id);
+        dbOperations.deleteObject(tableName, idFieldName, id);
     }
 
     public abstract ObjectMapper getObjectFromDB(int id);

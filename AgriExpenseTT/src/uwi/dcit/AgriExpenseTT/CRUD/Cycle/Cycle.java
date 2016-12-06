@@ -13,6 +13,7 @@ import uwi.dcit.AgriExpenseTT.CRUD.ObjectMapper;
 public class Cycle extends ObjectMapper{
 
     private String cropName;
+    private int cropId;
     private String landType;
     private String harvestType;
     private Double landAmount;
@@ -26,7 +27,7 @@ public class Cycle extends ObjectMapper{
         super(-1);
     }
 
-    public Cycle(String landType, String cropName, String harvestType, Double landAmount, Long date, String cycleName) {
+    public Cycle(String landType, String cropName, String harvestType, Double landAmount, Long date, String cycleName, int cropId) {
         super(-1);
         this.landType = landType;
         this.cropName = cropName;
@@ -37,11 +38,12 @@ public class Cycle extends ObjectMapper{
         this.harvestAmount = 0.0;
         this.costPer = 0.0;
         this.cycleName = cycleName;
+        this.cropId = cropId;
     }
 
     public ContentValues getContentValues(){
         ContentValues cv = new ContentValues();
-        cv.put(CycleContract.CycleEntry.CROPCYCLE_CROPID, id);
+        cv.put(CycleContract.CycleEntry.CROPCYCLE_CROPID, cropId);
         cv.put(CycleContract.CycleEntry.CROPCYCLE_LAND_TYPE, landType);
         cv.put(CycleContract.CycleEntry.CROPCYCLE_LAND_AMOUNT, landAmount);
         cv.put(CycleContract.CycleEntry.CROPCYCLE_DATE, date);
@@ -55,7 +57,9 @@ public class Cycle extends ObjectMapper{
     }
 
     public void setCursorValues(Cursor cycleCursor){
-        this.id = cycleCursor.getInt(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_CROPID));
+        cycleCursor.moveToFirst();
+        this.id = cycleCursor.getInt(cycleCursor.getColumnIndex(CycleContract.CycleEntry._ID));
+        this.cropId = cycleCursor.getInt(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_CROPID));
         this.landType = cycleCursor.getString(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_LAND_TYPE));
         this.landAmount = cycleCursor.getDouble(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_LAND_AMOUNT));
         this.date = cycleCursor.getLong(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_DATE));
@@ -66,7 +70,6 @@ public class Cycle extends ObjectMapper{
         this.cropName = cycleCursor.getString(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_RESOURCE));
         this.cycleName = cycleCursor.getString(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_NAME));
         cycleCursor.close();
-
     }
 
     public boolean isValidObject() {

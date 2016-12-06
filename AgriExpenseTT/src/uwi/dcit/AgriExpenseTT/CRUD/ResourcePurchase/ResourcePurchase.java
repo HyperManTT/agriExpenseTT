@@ -11,7 +11,7 @@ import uwi.dcit.AgriExpenseTT.CRUD.ObjectMapper;
 
 public class ResourcePurchase extends ObjectMapper{
 
-
+    private int resId;
     private String type;
     private String quantifier;
     private Double quantity;
@@ -20,8 +20,9 @@ public class ResourcePurchase extends ObjectMapper{
     private Long date;
     private String resourceName;
 
-    public ResourcePurchase(Double quantity, String quantifier, String type, Double cost, Long date, String resourceName) {
+    public ResourcePurchase(int resId, Double quantity, String quantifier, String type, Double cost, Long date, String resourceName) {
         super(-1);
+        this.resId = resId;
         this.quantity = quantity;
         this.quantifier = quantifier;
         this.type = type;
@@ -38,7 +39,7 @@ public class ResourcePurchase extends ObjectMapper{
     @Override
     public ContentValues getContentValues() {
         ContentValues cv= new ContentValues();
-        cv.put(ResourcePurchaseContract.ResourcePurchaseEntry.RESOURCE_PURCHASE_RESID, id);
+        cv.put(ResourcePurchaseContract.ResourcePurchaseEntry.RESOURCE_PURCHASE_RESID, resId);
         cv.put(ResourcePurchaseContract.ResourcePurchaseEntry.RESOURCE_PURCHASE_TYPE, type);
         cv.put(ResourcePurchaseContract.ResourcePurchaseEntry.RESOURCE_PURCHASE_QUANTIFIER, quantifier);
         cv.put(ResourcePurchaseContract.ResourcePurchaseEntry.RESOURCE_PURCHASE_QTY, quantity);
@@ -50,7 +51,9 @@ public class ResourcePurchase extends ObjectMapper{
 
     @Override
     public void setCursorValues(Cursor cursor) {
+        cursor.moveToFirst();
         this.setId(cursor.getInt(cursor.getColumnIndex(ResourcePurchaseContract.ResourcePurchaseEntry._ID)));
+        this.setResId(cursor.getInt(cursor.getColumnIndex(ResourcePurchaseContract.ResourcePurchaseEntry.RESOURCE_PURCHASE_RESID)));
         this.setType(cursor.getString(cursor.getColumnIndex(ResourcePurchaseContract.ResourcePurchaseEntry.RESOURCE_PURCHASE_TYPE)));
         this.setQuantifier(cursor.getString(cursor.getColumnIndex(ResourcePurchaseContract.ResourcePurchaseEntry.RESOURCE_PURCHASE_QUANTIFIER)));
         this.setQuantity(cursor.getDouble(cursor.getColumnIndex(ResourcePurchaseContract.ResourcePurchaseEntry.RESOURCE_PURCHASE_QTY)));
@@ -58,6 +61,14 @@ public class ResourcePurchase extends ObjectMapper{
         this.setQuantityRemaining(cursor.getDouble(cursor.getColumnIndex(ResourcePurchaseContract.ResourcePurchaseEntry.RESOURCE_PURCHASE_REMAINING)));
         this.setDate(cursor.getLong(cursor.getColumnIndex(ResourcePurchaseContract.ResourcePurchaseEntry.RESOURCE_PURCHASE_DATE)));
         this.setResourceName(cursor.getString(cursor.getColumnIndex(ResourcePurchaseContract.ResourcePurchaseEntry.RESOURCE_PURCHASE_RESOURCE)));
+    }
+
+    public int getResId() {
+        return resId;
+    }
+
+    public void setResId(int resId) {
+        this.resId = resId;
     }
 
     @Override
