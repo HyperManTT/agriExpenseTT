@@ -45,6 +45,7 @@ public class ResourcePurchaseCRUD extends ObjectTypeMapper{
                 ResourcePurchase resourcePurchase = new ResourcePurchase();
                 resourcePurchase.setCursorValues(allObjectsCursor);
                 list.add(resourcePurchase);
+                allObjectsCursor.moveToNext();
             }
         }
         //allObjectsCursor.close();
