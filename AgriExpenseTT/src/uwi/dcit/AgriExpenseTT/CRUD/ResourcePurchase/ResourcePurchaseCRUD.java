@@ -1,9 +1,12 @@
 package uwi.dcit.AgriExpenseTT.CRUD.ResourcePurchase;
 
 import android.content.Context;
+import android.database.Cursor;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import uwi.dcit.AgriExpenseTT.CRUD.DBOperations;
 import uwi.dcit.AgriExpenseTT.CRUD.ObjectTypeMapper;
 
 /**
@@ -17,12 +20,32 @@ public class ResourcePurchaseCRUD extends ObjectTypeMapper{
     }
 
     @Override
-    public void getObjectFromDB(int id) {
-        
+    public ResourcePurchase getObjectFromDB(int id) {
+        ResourcePurchase resourcePurchase = new ResourcePurchase();
+        DBOperations dbOperations = new DBOperations(context);
+        Cursor receivedData = dbOperations.getObject(tableName, tableName, id);
+        if(receivedData.getCount()<1){
+            resourcePurchase.setId(-1);
+        }
+        else{
+            resourcePurchase.setCursorValues(receivedData);
+        }
+        return resourcePurchase;
     }
 
     @Override
     public List getAllObjectsFromDB() {
-        return null;
+        List list = new ArrayList();
+        DBOperations dbOperations = new DBOperations(context);
+        Cursor allObjectsCursor = dbOperations.getAllObjects(tableName);
+        allObjectsCursor.moveToFirst();
+        if(allObjectsCursor.getCount()>0){
+            while(allObjectsCursor.moveToNext()){
+                ResourcePurchase resourcePurchase = new ResourcePurchase();
+                resourcePurchase.setCursorValues(allObjectsCursor);
+                list.add(resourcePurchase);
+            }
+        }
+        return list;
     }
 }

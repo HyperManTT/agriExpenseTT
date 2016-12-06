@@ -22,7 +22,7 @@ public class CycleCRUD extends ObjectTypeMapper {
     }
 
     @Override
-    public void getObjectFromDB(int id) {
+    public Cycle getObjectFromDB(int id) {
         Cycle cycle = new Cycle();
         DBOperations dbOperations = new DBOperations(context);
         Cursor receivedData = dbOperations.getObject(tableName, CycleContract.CycleEntry.TABLE_NAME, id);
@@ -32,6 +32,7 @@ public class CycleCRUD extends ObjectTypeMapper {
         else{
             cycle.setCursorValues(receivedData);
         }
+        return cycle;
     }
 
     @Override

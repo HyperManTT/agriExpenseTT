@@ -59,7 +59,7 @@ public class DBOperations {
     }
 
     public String findResourceName(int id){
-        String code="select name from "+ ResourceContract.ResourceEntry.TABLE_NAME+" where "+ ResourceContract.ResourceEntry._ID +"="+id+";";
+        String code="select name from "+ ResourceContract.ResourceEntry.TABLE_NAME +" where "+ ResourceContract.ResourceEntry._ID +"="+id+";";
         String res = null;
         Cursor cursor = db.rawQuery(code, null);
         if(cursor.getCount()>0){

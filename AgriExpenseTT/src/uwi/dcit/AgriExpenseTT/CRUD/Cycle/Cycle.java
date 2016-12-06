@@ -20,7 +20,6 @@ public class Cycle extends ObjectMapper{
     private Double totalSpent;
     private Double harvestAmount;
     private Double costPer;
-    private String county;
     private String cycleName;
 
     public Cycle(){
@@ -50,7 +49,6 @@ public class Cycle extends ObjectMapper{
         cv.put(CycleContract.CycleEntry.CROPCYCLE_HARVEST_TYPE, harvestType);
         cv.put(CycleContract.CycleEntry.CROPCYCLE_HARVEST_AMT, harvestAmount);
         cv.put(CycleContract.CycleEntry.CROPCYCLE_COSTPER, costPer);
-        cv.put(CycleContract.CycleEntry.CROPCYCLE_COUNTY, county);
         cv.put(CycleContract.CycleEntry.CROPCYCLE_RESOURCE, cropName);
         cv.put(CycleContract.CycleEntry.CROPCYCLE_NAME, cycleName);
         return cv;
@@ -65,7 +63,6 @@ public class Cycle extends ObjectMapper{
         this.harvestType = cycleCursor.getString(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_HARVEST_TYPE));
         this.harvestAmount = cycleCursor.getDouble(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_HARVEST_AMT));
         this.costPer = cycleCursor.getDouble(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_COSTPER));
-        this.county = cycleCursor.getString(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_COUNTY));
         this.cropName = cycleCursor.getString(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_RESOURCE));
         this.cycleName = cycleCursor.getString(cycleCursor.getColumnIndex(CycleContract.CycleEntry.CROPCYCLE_NAME));
         cycleCursor.close();
@@ -148,19 +145,11 @@ public class Cycle extends ObjectMapper{
         this.costPer = costPer;
     }
 
-    public String getCounty() {
-        return county;
-    }
-
     public void setCycleName(String cycleName) {
         this.cycleName = cycleName;
     }
 
     public String getCycleName(){
         return cycleName;
-    }
-
-    public void setCounty(String county) {
-        this.county = county;
     }
 }

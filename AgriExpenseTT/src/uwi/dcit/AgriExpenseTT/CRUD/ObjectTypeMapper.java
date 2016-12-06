@@ -41,7 +41,7 @@ public abstract class ObjectTypeMapper {
         dbOperations.deleteObject(tableName, IDFieldName, id);
     }
 
-    public abstract void getObjectFromDB(int id);
+    public abstract ObjectMapper getObjectFromDB(int id);
 
     public abstract List getAllObjectsFromDB();
 

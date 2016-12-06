@@ -20,6 +20,10 @@ public abstract class ObjectMapper {
 
     public abstract boolean isValidObject();
 
+    public void setId(int id){
+        this.id = id;
+    }
+
     public int getId(){
         return this.id;
     }
