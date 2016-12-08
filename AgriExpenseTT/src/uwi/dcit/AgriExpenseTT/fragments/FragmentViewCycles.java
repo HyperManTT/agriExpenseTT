@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import uwi.dcit.AgriExpenseTT.CRUD.CRUDManager;
 import uwi.dcit.AgriExpenseTT.CRUD.Cycle.Cycle;
 import uwi.dcit.AgriExpenseTT.CRUD.Cycle.CycleCRUD;
 import uwi.dcit.AgriExpenseTT.EditCycle;
@@ -341,7 +342,7 @@ public class FragmentViewCycles extends ListFragment{
 
 	private static final String STATE_ACTIVATED_POSITION = "cycle_activated_position";
 	private int mActivatedPosition = ListView.INVALID_POSITION;
-	private CycleCRUD cycleCRUD;
+	private CRUDManager crudManager;
 
 
 	ArrayList<Cycle> cycleList = new ArrayList<Cycle>();
@@ -365,7 +366,7 @@ public class FragmentViewCycles extends ListFragment{
 		//dbh	= new DbHelper(this.getActivity().getBaseContext());
 		//db	= dbh.getWritableDatabase();
 
-		cycleCRUD = new CycleCRUD(this.getActivity().getApplicationContext());
+		crudManager = new CRUDManager(this.getActivity().getApplicationContext());
 
 		if (getArguments() != null && getArguments().containsKey("type"))
 			type = getArguments().getString("type");
@@ -382,7 +383,7 @@ public class FragmentViewCycles extends ListFragment{
 	public void populateList() {
 		//DbQuery.getCycles(db, dbh, cycleList);
 		cycleList=new ArrayList<Cycle>();
-		cycleList = cycleCRUD.getAllObjectsFromDB();
+		cycleList = crudManager.getAllCycles();
 
 		//Attempt to solve the List of Cycles in Descending order of time (Most recent cycle first)
 		Collections.sort(cycleList, new Comparator<Cycle>(){
@@ -548,7 +549,7 @@ public class FragmentViewCycles extends ListFragment{
 		//refill list
 		cycleList=new ArrayList<Cycle>();
 		//CycleCRUD cycleCRUD = new CycleCRUD(this.getActivity().getApplicationContext());
-		cycleList = cycleCRUD.getAllObjectsFromDB();
+		cycleList = crudManager.getAllCycles();
 	}
 
 	public class DeleteConfirmator implements DialogInterface.OnClickListener{
@@ -566,8 +567,10 @@ public class FragmentViewCycles extends ListFragment{
 
 				//DataManager dm=new DataManager(getActivity(), db, dbh);
 				//dm.deleteCycle(cycleList.get(position));
-
 				//DbQuery.deleteRecord(db, dbh, DbHelper.TABLE_CROPCYLE, cList.get(position).getId());
+
+				crudManager.deleteCycle(cycleList.get(position));
+
 				cycleList.remove(position);
 				listAdapter.notifyDataSetChanged();
 				Toast.makeText(getActivity(),"Cycle successfully deleted", Toast.LENGTH_SHORT).show();

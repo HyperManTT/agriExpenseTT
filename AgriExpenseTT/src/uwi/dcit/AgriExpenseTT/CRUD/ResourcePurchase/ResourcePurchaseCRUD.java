@@ -2,12 +2,14 @@ package uwi.dcit.AgriExpenseTT.CRUD.ResourcePurchase;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import uwi.dcit.AgriExpenseTT.CRUD.DBOperations;
 import uwi.dcit.AgriExpenseTT.CRUD.ObjectTypeMapper;
+import uwi.dcit.AgriExpenseTT.helpers.DbHelper;
 
 /**
  * Created by shivr on 12/4/2016.
@@ -15,8 +17,8 @@ import uwi.dcit.AgriExpenseTT.CRUD.ObjectTypeMapper;
 
 public class ResourcePurchaseCRUD extends ObjectTypeMapper{
 
-    public ResourcePurchaseCRUD(Context context){
-        super(context, ResourcePurchaseContract.ResourcePurchaseEntry.TABLE_NAME, ResourcePurchaseContract.ResourcePurchaseEntry._ID);
+    public ResourcePurchaseCRUD(Context context, SQLiteDatabase db, DbHelper dbh){
+        super(context, ResourcePurchaseContract.ResourcePurchaseEntry.TABLE_NAME, ResourcePurchaseContract.ResourcePurchaseEntry._ID, db, dbh);
     }
 
     @Override
@@ -36,8 +38,8 @@ public class ResourcePurchaseCRUD extends ObjectTypeMapper{
     }
 
     @Override
-    public List getAllObjectsFromDB() {
-        List<ResourcePurchase> list = new ArrayList();
+    public ArrayList getAllObjectsFromDB() {
+        ArrayList<ResourcePurchase> list = new ArrayList();
         DBOperations dbOperations = new DBOperations(db);
         Cursor allObjectsCursor = dbOperations.getAllObjects(tableName);
         allObjectsCursor.moveToFirst();
@@ -51,10 +53,5 @@ public class ResourcePurchaseCRUD extends ObjectTypeMapper{
         }
         allObjectsCursor.close();
         return list;
-    }
-
-    public String getResourceFromID(int id){
-        DBOperations dbOperations = new DBOperations(db);
-        return dbOperations.findResourceName(id);
     }
 }

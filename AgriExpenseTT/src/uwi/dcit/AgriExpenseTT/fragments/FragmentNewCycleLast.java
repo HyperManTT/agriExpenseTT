@@ -26,6 +26,7 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import uwi.dcit.AgriExpenseTT.CRUD.CRUDManager;
 import uwi.dcit.AgriExpenseTT.CRUD.Cycle.Cycle;
 import uwi.dcit.AgriExpenseTT.CRUD.Cycle.CycleCRUD;
 import uwi.dcit.AgriExpenseTT.Main;
@@ -48,6 +49,7 @@ public class FragmentNewCycleLast extends Fragment {
 	TextView error;
     private Button btnDate;
     private EditText et_CycleName;
+    private CRUDManager crudManager;
 
     @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,6 +66,8 @@ public class FragmentNewCycleLast extends Fragment {
 
         setDetails(view);
         GAnalyticsHelper.getInstance(this.getActivity()).sendScreenView("New Cycle Fragment");
+
+        crudManager = new CRUDManager(this.getActivity().getApplicationContext());
 
         view.setOnTouchListener(
             new View.OnTouchListener() {
@@ -154,13 +158,15 @@ public class FragmentNewCycleLast extends Fragment {
                 //int res = dm.insertCycle(plantMaterialId, et_CycleName.getText().toString() , land, Double.parseDouble(et_landQty.getText().toString()), unixDate);
 
                 // TODO: 12/5/2016 Uncomment this code for new cycle insertion code to work.
-                CycleCRUD cycleCRUD = new CycleCRUD(getActivity().getApplicationContext());
-                Cycle cyc = new Cycle(land, cycleCRUD.getCropNameFromID(plantMaterialId), "lb", Double.parseDouble(et_landQty.getText().toString()), unixDate , et_CycleName.getText().toString(), plantMaterialId);
-                int res = cycleCRUD.insertObject(cyc);
-                //Log.i("RES IS",""+res);
-                Cycle gettingCycle = cycleCRUD.getObjectFromDB(res);
-                //Log.i("TRYING SOMETHING",""+gettingCycle.getCropName());
+//                CycleCRUD cycleCRUD = new CycleCRUD(getActivity().getApplicationContext());
+//                Cycle cyc = new Cycle(land, cycleCRUD.getCropNameFromID(plantMaterialId), "lb", Double.parseDouble(et_landQty.getText().toString()), unixDate , et_CycleName.getText().toString(), plantMaterialId);
+//                int res = cycleCRUD.insertObject(cyc);
+//                //Log.i("RES IS",""+res);
+//                Cycle gettingCycle = cycleCRUD.getObjectFromDB(res);
+//                //Log.i("TRYING SOMETHING",""+gettingCycle.getCropName());
+                int res=9;
 
+                crudManager.insertCycle(land, plantMaterialId, "lb", Double.parseDouble(et_landQty.getText().toString()), unixDate , et_CycleName.getText().toString(), plantMaterialId);
 
                 if (res != -1)Toast.makeText(getActivity(), "Cycle Successfully Created", Toast.LENGTH_SHORT).show();
                 else Toast.makeText(getActivity(), "Unable to create Cycle", Toast.LENGTH_SHORT).show();

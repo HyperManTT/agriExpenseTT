@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import uwi.dcit.AgriExpenseTT.CRUD.Cycle.Cycle;
 import uwi.dcit.AgriExpenseTT.R;
 import uwi.dcit.AgriExpenseTT.helpers.DHelper;
 import uwi.dcit.AgriExpenseTT.models.LocalCycle;
@@ -33,7 +34,8 @@ public class FragmentCycleUseage extends Fragment {
 
 
         Bundle data = getArguments();
-        LocalCycle curr = data.getParcelable("cycleMain");
+//        LocalCycle curr = data.getParcelable("cycleMain");
+        Cycle curr = data.getParcelable("cycleMain");
         Log.d("CycleUsage", "Received: " + curr.toString());
 
         Bundle generalArguments = new Bundle();

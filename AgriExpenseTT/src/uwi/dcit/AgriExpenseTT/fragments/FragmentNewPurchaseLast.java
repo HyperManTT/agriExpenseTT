@@ -28,6 +28,8 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import uwi.dcit.AgriExpenseTT.CRUD.CRUDManager;
+import uwi.dcit.AgriExpenseTT.CRUD.Cycle.Cycle;
 import uwi.dcit.AgriExpenseTT.CRUD.ResourcePurchase.ResourcePurchase;
 import uwi.dcit.AgriExpenseTT.CRUD.ResourcePurchase.ResourcePurchaseCRUD;
 import uwi.dcit.AgriExpenseTT.Main;
@@ -60,6 +62,7 @@ public class FragmentNewPurchaseLast extends Fragment{
 	private DbHelper dbh;
     private long unixDate;
     private TextView helper_cost;
+    private CRUDManager crudManager;
 
     @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -73,6 +76,9 @@ public class FragmentNewPurchaseLast extends Fragment{
         dbh= DbHelper.getInstance(getActivity().getApplicationContext());
         db = dbh.getWritableDatabase();
         resId = DbQuery.getNameResourceId(db, dbh, resource);
+
+        //Instantiating CRUDManager
+        crudManager = new CRUDManager(getActivity().getApplicationContext());
 
         setDetails(view);
         GAnalyticsHelper.getInstance(this.getActivity()).sendScreenView("New Purchase Fragment");
@@ -177,6 +183,7 @@ public class FragmentNewPurchaseLast extends Fragment{
 				//this is for when labour is 'purchased'/hired for a single cycle
 				if(category.equals(DHelper.cat_labour) && currC != null){
 
+                    /*
 					//insert purchase
 					res = dm.insertPurchase(resId, quantifier, qty, category, cost);
 					int pId=DbQuery.getLast(db, dbh,ResourcePurchaseEntry.TABLE_NAME);
@@ -196,6 +203,19 @@ public class FragmentNewPurchaseLast extends Fragment{
 					cv=new ContentValues();
 					cv.put(CycleEntry.CROPCYCLE_TOTALSPENT, currC.getTotalSpent());
 					dm.updateCycle(currC,cv);
+					*/
+
+                    res = crudManager.insertResourcePurchase(resId,qty,quantifier, category, cost, unixDate);
+                    ResourcePurchase resourcePurchase = crudManager.getResourcePurchase(res);
+
+                    dm.insertCycleUse(currC.getId(), resourcePurchase.getResId(), qty, category,quantifier,cost);
+                    resourcePurchase.setQuantityRemaining(resourcePurchase.getQuantityRemaining()- qty);
+                    crudManager.updateResourcePurchase(resourcePurchase);
+
+                    Cycle currentCycle = crudManager.getCycle(currC.getId());
+                    currentCycle.setTotalSpent(currentCycle.getTotalSpent() + cost);
+                    crudManager.updateCycle(currentCycle);
+
 
 				}else{
 					if(category.equals(DHelper.cat_other)){//if its the other category
@@ -205,15 +225,17 @@ public class FragmentNewPurchaseLast extends Fragment{
 					}
 //					dm.insertPurchase(resId, quantifier, qty, category, cost);
 
+                    res = crudManager.insertResourcePurchase(resId, qty, quantifier, category, cost, unixDate);
+
 
                     //Below is old code.
                     //res = dm.insertPurchase(resId, quantifier, qty, category, cost, unixDate);
                     // TODO: 12/6/2016 Trying new code for purchase insertion.
-                    ResourcePurchaseCRUD resPCrud = new ResourcePurchaseCRUD(this.activity.getApplicationContext());
-                    ResourcePurchase resp = new ResourcePurchase(resId, qty, quantifier, category, cost, unixDate, resPCrud.getResourceFromID(resId));
-                    res = resPCrud.insertObject(resp);
-                    //ResourcePurchase resp2 = resPCrud.getObjectFromDB(res);
-                    //Log.i("TRYING AGAIN","HELLO"+resp2.getResourceName());
+//                    ResourcePurchaseCRUD resPCrud = new ResourcePurchaseCRUD(this.activity.getApplicationContext());
+//                    ResourcePurchase resp = new ResourcePurchase(resId, qty, quantifier, category, cost, unixDate, resPCrud.getResourceFromID(resId));
+//                    res = resPCrud.insertObject(resp);
+//                    //ResourcePurchase resp2 = resPCrud.getObjectFromDB(res);
+//                    //Log.i("TRYING AGAIN","HELLO"+resp2.getResourceName());
 
 				}
 

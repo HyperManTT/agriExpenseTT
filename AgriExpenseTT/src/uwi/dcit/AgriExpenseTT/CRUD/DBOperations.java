@@ -38,7 +38,7 @@ public class DBOperations {
         db.delete(tableName, fieldName+"="+id, null);
     }
 
-    //The following two methods are not bound to the object itself in the respective classes.
+    //The following methods are not bound to the object itself in the respective classes.
 
     public Cursor getObject(String tableName, String fieldName, int id){
         Cursor cursor = db.rawQuery("select * from "+tableName+" where "+fieldName+"="+id+";", null);
@@ -59,6 +59,17 @@ public class DBOperations {
             cursor.moveToFirst();
             res = cursor.getString(cursor.getColumnIndex("name"));
         }
+        cursor.close();
+        return res;
+    }
+
+    public int getNameResourceId(String name){
+        String code="select "+ ResourceContract.ResourceEntry._ID+" from "+ ResourceContract.ResourceEntry.TABLE_NAME+" where "+ ResourceContract.ResourceEntry.RESOURCES_NAME+"='"+name+"';";
+        Cursor cursor=db.rawQuery(code, null);
+        if(cursor.getCount()<1)
+            return -1;
+        cursor.moveToFirst();
+        int res = cursor.getInt(cursor.getColumnIndex(ResourceContract.ResourceEntry._ID));
         cursor.close();
         return res;
     }

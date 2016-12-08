@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
+import uwi.dcit.AgriExpenseTT.CRUD.CRUDManager;
+import uwi.dcit.AgriExpenseTT.CRUD.Cycle.Cycle;
 import uwi.dcit.AgriExpenseTT.helpers.DHelper;
 import uwi.dcit.AgriExpenseTT.helpers.DataManager;
 import uwi.dcit.AgriExpenseTT.helpers.DateFormatHelper;
@@ -47,7 +49,8 @@ public class EditCycle extends BaseActivity {
 	SQLiteDatabase db;
 	DbHelper dbh;
 	
-	LocalCycle cycle;
+	private Cycle cycle;
+    private CRUDManager crudManager;
     private EditText et_name;
     private String name;
 
@@ -56,9 +59,12 @@ public class EditCycle extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_cycle);
 		//dbh = new DbHelper(this);
-        dbh= DbHelper.getInstance(this.getApplicationContext());
+        //dbh= DbHelper.getInstance(this.getApplicationContext());
 //		db= dbh.getReadableDatabase();
-        db = dbh.getWritableDatabase();
+        //db = dbh.getWritableDatabase();
+
+        crudManager = new CRUDManager(this.getApplicationContext());
+
 		initialize();
         GAnalyticsHelper.getInstance(this.getApplicationContext()).sendScreenView("Edit Cycle");
         View v=findViewById(R.id.contEditCycle);
@@ -84,7 +90,7 @@ public class EditCycle extends BaseActivity {
         cycle   = getIntent().getExtras().getParcelable("cycle");
 		crop    = DbQuery.findResourceName(db, dbh, cycle.getCropId());
 		land    = cycle.getLandType();
-		landQty = cycle.getLandQty();
+		landQty = cycle.getLandAmount();
 		date    = cycle.getTime();
         name    = cycle.getCycleName();
 		
@@ -156,21 +162,31 @@ public class EditCycle extends BaseActivity {
 		}
         name = et_name.getText().toString();
 
-		ContentValues cv = new ContentValues();
-		cv.put(CycleEntry.CROPCYCLE_CROPID, DbQuery.getNameResourceId(db, dbh, crop));
-        cv.put(CycleEntry.CROPCYCLE_RESOURCE, crop);
-		cv.put(CycleEntry.CROPCYCLE_LAND_TYPE,land);
-		cv.put(CycleEntry.CROPCYCLE_LAND_AMOUNT, landQty);
-		cv.put(CycleEntry.CROPCYCLE_DATE, date);
-        cv.put(CycleEntry.CROPCYCLE_NAME, name);
+        cycle.setCropName(name);
+        cycle.setLandAmount(landQty);
+        cycle.setLandType(land);
+        cycle.setTime(date);
+        cycle.setCropName(crop);
+        cycle.setCropId(crudManager.getResourceID(crop));
+
+        crudManager.updateCycle(cycle);
+
+
+		//ContentValues cv = new ContentValues();
+		//cv.put(CycleEntry.CROPCYCLE_CROPID, DbQuery.getNameResourceId(db, dbh, crop));
+        //cv.put(CycleEntry.CROPCYCLE_RESOURCE, crop);
+		//cv.put(CycleEntry.CROPCYCLE_LAND_TYPE,land);
+		//cv.put(CycleEntry.CROPCYCLE_LAND_AMOUNT, landQty);
+		//cv.put(CycleEntry.CROPCYCLE_DATE, date);
+        //cv.put(CycleEntry.CROPCYCLE_NAME, name);
 
 		Toast.makeText(getApplicationContext(),"Updating "+ " "+name+crop+" "+land+" "+landQty+" "+date, Toast.LENGTH_SHORT).show();
 
-		DataManager dm=new DataManager(EditCycle.this, db, dbh);
-		boolean result = dm.updateCycle(cycle, cv);
+		//DataManager dm=new DataManager(EditCycle.this, db, dbh);
+		//boolean result = dm.updateCycle(cycle, cv);
 
-        if (result) Toast.makeText(getApplicationContext(), "Cycle was successfully Updated", Toast.LENGTH_SHORT).show();
-        else Toast.makeText(getApplicationContext(), "Cycle was not updated", Toast.LENGTH_SHORT).show();
+        //if (result) Toast.makeText(getApplicationContext(), "Cycle was successfully Updated", Toast.LENGTH_SHORT).show();
+        //else Toast.makeText(getApplicationContext(), "Cycle was not updated", Toast.LENGTH_SHORT).show();
 
 		finish();
 	}

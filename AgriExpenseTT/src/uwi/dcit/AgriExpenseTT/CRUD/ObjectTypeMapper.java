@@ -23,12 +23,12 @@ public abstract class ObjectTypeMapper {
     protected SQLiteDatabase db;
     protected DbHelper dbh;
 
-    public ObjectTypeMapper(Context context, String tableName, String idFieldName){
+    public ObjectTypeMapper(Context context, String tableName, String idFieldName, SQLiteDatabase db, DbHelper dbh){
         this.context = context;
         this.tableName = tableName;
         this.idFieldName = idFieldName;
-        dbh= DbHelper.getInstance(context);
-        db = dbh.getWritableDatabase();
+        this.dbh= dbh;
+        this.db = db;
     }
 
     public int insertObject(ObjectMapper objectTypeMapper){
