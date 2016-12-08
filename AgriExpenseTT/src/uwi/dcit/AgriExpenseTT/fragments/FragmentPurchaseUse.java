@@ -27,6 +27,8 @@ import android.widget.Toast;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import uwi.dcit.AgriExpenseTT.CRUD.CRUDManager;
+import uwi.dcit.AgriExpenseTT.CRUD.Cycle.Cycle;
 import uwi.dcit.AgriExpenseTT.CycleUseage;
 import uwi.dcit.AgriExpenseTT.R;
 import uwi.dcit.AgriExpenseTT.helpers.DHelper;
@@ -42,10 +44,12 @@ import uwi.dcit.agriexpensesvr.rPurchaseApi.model.RPurchase;
 //import com.dcit.agriexpensett.rPurchaseApi.model.RPurchase;
 
 public class FragmentPurchaseUse extends Fragment {
+	private CRUDManager crudManager;
 	private View view;
 	private SQLiteDatabase db;
 	private DbHelper dbh;
-	private LocalCycle c = null;
+	//private LocalCycle c = null;
+	private Cycle c=null;
 	private RPurchase p;
 	
 	private double useAmount= 0.0, //the amount you are going to use
@@ -72,6 +76,8 @@ public class FragmentPurchaseUse extends Fragment {
 		//dbh = new DbHelper(this.getActivity().getBaseContext());
 		dbh= DbHelper.getInstance(getActivity().getApplicationContext());
 		db = dbh.getWritableDatabase();
+
+		crudManager = new CRUDManager(this.getActivity().getApplicationContext());
 
 		int pId = Integer.parseInt(getArguments().getString("pId"));
 		int cycleId = Integer.parseInt(getArguments().getString("cycleId"));
@@ -180,7 +186,11 @@ public class FragmentPurchaseUse extends Fragment {
 					c.setTotalSpent(c.getTotalSpent()+ calCost);
 					cv=new ContentValues();
 					cv.put(CycleContract.CycleEntry.CROPCYCLE_TOTALSPENT, c.getTotalSpent());
-					dm.updateCycle(c,cv); 
+
+					//dm.updateCycle(c,cv);
+					crudManager.updateCycle(c);
+
+
 					Log.i(getTag(), c.getTotalSpent()+" "+c.getId());
 					/*IntentLauncher i=new IntentLauncher();
 					i.start();*/

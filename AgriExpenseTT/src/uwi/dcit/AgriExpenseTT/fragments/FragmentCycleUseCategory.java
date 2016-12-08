@@ -21,6 +21,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import uwi.dcit.AgriExpenseTT.CRUD.Cycle.Cycle;
 import uwi.dcit.AgriExpenseTT.R;
 import uwi.dcit.AgriExpenseTT.ViewCycleUsege;
 import uwi.dcit.AgriExpenseTT.helpers.DHelper;
@@ -43,7 +44,7 @@ public class FragmentCycleUseCategory extends Fragment {
 	Button btn_useMore;
 	View view;
 	String category;
-	LocalCycle currCycle;
+	Cycle currCycle;
 	Double catTotal=0.0;
 
     public static final String TAG = "CycleUseCategory";

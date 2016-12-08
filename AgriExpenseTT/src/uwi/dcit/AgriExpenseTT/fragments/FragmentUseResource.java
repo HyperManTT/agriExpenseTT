@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import uwi.dcit.AgriExpenseTT.CRUD.Cycle.Cycle;
 import uwi.dcit.AgriExpenseTT.R;
 import uwi.dcit.AgriExpenseTT.helpers.DHelper;
 import uwi.dcit.AgriExpenseTT.helpers.DbHelper;
@@ -22,7 +23,7 @@ import uwi.dcit.AgriExpenseTT.models.LocalCycle;
  */
 public class FragmentUseResource extends Fragment{
     View view;
-    LocalCycle cycle;
+    Cycle cycle;
     String type;
     double total;
 

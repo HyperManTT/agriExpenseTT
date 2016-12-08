@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import uwi.dcit.AgriExpenseTT.CRUD.Cycle.Cycle;
 import uwi.dcit.AgriExpenseTT.EditPurchase;
 import uwi.dcit.AgriExpenseTT.R;
 import uwi.dcit.AgriExpenseTT.helpers.CurrencyFormatHelper;
@@ -50,7 +51,8 @@ public class FragmentChoosePurchase extends ListFragment {
 	DataManager dm;
 	String type = null;
 	int cycleId;
-	LocalCycle curr = null;
+	//LocalCycle curr = null;
+	Cycle curr=null;
 	
 	final int req_edit = 1;
 	

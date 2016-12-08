@@ -16,6 +16,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import uwi.dcit.AgriExpenseTT.CRUD.Cycle.Cycle;
 import uwi.dcit.AgriExpenseTT.R;
 import uwi.dcit.AgriExpenseTT.SalesCost;
 import uwi.dcit.AgriExpenseTT.helpers.DHelper;
@@ -40,7 +41,7 @@ public class FragmentGeneralCategory extends Fragment {
 	double pm=0,fer=0,soilam=0,chem=0,labr=0,other=0;//totals
 	View view;
 	
-	LocalCycle currCycle;
+	Cycle currCycle;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,10 +78,10 @@ public class FragmentGeneralCategory extends Fragment {
 		TextView sum=(TextView)view.findViewById(R.id.tv_catTotal_sum);
 		sum.setText("Total:$"+Double.valueOf(df.format(currCycle.getTotalSpent())));
 		TextView harvest=(TextView)view.findViewById(R.id.tv_catTotal_harvest);
-		harvest.setText("Harvested:"+currCycle.getHarvestAmt()+" "+currCycle.getHarvestType());
+		harvest.setText("Harvested:"+currCycle.getHarvestAmount()+" "+currCycle.getHarvestType());
 		statement1=(TextView)view.findViewById(R.id.tv_catTotal_harvest1);
 		statement1.setText("Sales:$"+Double.valueOf(df.format(currCycle.getCostPer()))+" "
-				+currCycle.getHarvestType()+" = "+(currCycle.getCostPer()*currCycle.getHarvestAmt()));
+				+currCycle.getHarvestType()+" = "+(currCycle.getCostPer()*currCycle.getHarvestAmount()));
 	}
 	public class Click implements OnClickListener{
 
