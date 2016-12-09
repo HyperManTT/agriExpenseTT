@@ -23,6 +23,7 @@ public class CycleUseObserver extends TransLogObserver {
     private SQLiteDatabase db;
 
     public CycleUseObserver(DataManager dm){
+        // when instance of this is created, it is immediately attached as an observer to the subject (DataManager)
         this.dm = dm;
         this.dm.attach(this);
     }
@@ -31,11 +32,12 @@ public class CycleUseObserver extends TransLogObserver {
     public void update() {
         Log.v("CycleUse Observer", "Notified");
 
+        // get the current state of the Subject
         CloudModState state = dm.getState();
 
         if(state.getTableName().equals(CycleResourceContract.CycleResourceEntry.TABLE_NAME)) {
+            // the state change is related to this observer
 
-            //dbh = new DbHelper(dm.getContext());
             dbh= DbHelper.getInstance(dm.getContext());
             db = dbh.getWritableDatabase();
 
@@ -44,11 +46,15 @@ public class CycleUseObserver extends TransLogObserver {
             if (acc != null) {
                 Log.v("acc check", "not null");
                 if (DbQuery.insertRedoLog(db, dbh, state.getTableName(), state.getId(), state.getOperation()) != -1)
-                    Log.v("Redo log insert", "cycle-use record");
+                    Log.v("Cycle-use Observer", "Cycle-use record inserted into redo log");
+
+                // for testing to simulate that the cloud is online
+                acc.setSignedIn(1);
 
                 if (acc.getSignedIn() == 1) {
                     Log.v("Signed in?", "YES");
 
+                    // determine which CRUD operation is necessary and execute the required update to the cloud
                     switch (state.getOperation()) {
                         case TransactionLog.TL_UPDATE:
                             updateCycleUse();
@@ -66,16 +72,18 @@ public class CycleUseObserver extends TransLogObserver {
     }
 
     private void insertCycleUse(){
+        Log.v("Cloud update", "Inserting Cycle-Use");
         CloudInterface c= new CloudInterface(dm.getContext(),db,dbh);//new CloudInterface(context);
-        c.insertCycleUseC();
+        //c.insertCycleUseC();
     }
 
     private void deleteCycleUse(){
+        Log.v("Cloud update", "Deleting Cycle-Use");
         CloudInterface c= new CloudInterface(dm.getContext(),db,dbh);//new CloudInterface(context);
-        c.deleteCycleUse();
+        //c.deleteCycleUse();
     }
 
     private void updateCycleUse(){
-
+        Log.v("Cloud update", "Updating Cycle-Use");
     }
 }

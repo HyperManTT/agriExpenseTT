@@ -153,10 +153,6 @@ public class FragmentNewCycleLast extends Fragment {
                     formatDisplayDate(null);
                 }
 
-
-                //DataManager dm = new DataManager(getActivity().getBaseContext(), db, dbh);
-                //int res = dm.insertCycle(plantMaterialId, et_CycleName.getText().toString() , land, Double.parseDouble(et_landQty.getText().toString()), unixDate);
-
                 // TODO: 12/5/2016 Uncomment this code for new cycle insertion code to work.
 //                CycleCRUD cycleCRUD = new CycleCRUD(getActivity().getApplicationContext());
 //                Cycle cyc = new Cycle(land, cycleCRUD.getCropNameFromID(plantMaterialId), "lb", Double.parseDouble(et_landQty.getText().toString()), unixDate , et_CycleName.getText().toString(), plantMaterialId);
@@ -164,11 +160,15 @@ public class FragmentNewCycleLast extends Fragment {
 //                //Log.i("RES IS",""+res);
 //                Cycle gettingCycle = cycleCRUD.getObjectFromDB(res);
 //                //Log.i("TRYING SOMETHING",""+gettingCycle.getCropName());
-                int res=9;
 
-                crudManager.insertCycle(land, plantMaterialId, "lb", Double.parseDouble(et_landQty.getText().toString()), unixDate , et_CycleName.getText().toString(), plantMaterialId);
+                int res = crudManager.insertCycle(land, plantMaterialId, "lb", Double.parseDouble(et_landQty.getText().toString()), unixDate , et_CycleName.getText().toString(), plantMaterialId);
 
-                if (res != -1)Toast.makeText(getActivity(), "Cycle Successfully Created", Toast.LENGTH_SHORT).show();
+                if (res != -1){
+                    Toast.makeText(getActivity(), "Cycle Successfully Created", Toast.LENGTH_SHORT).show();
+
+                    DataManager dm = new DataManager(getActivity().getBaseContext(), db, dbh);
+                    dm.insertCycle(res);
+                }
                 else Toast.makeText(getActivity(), "Unable to create Cycle", Toast.LENGTH_SHORT).show();
 
                 Bundle args = new Bundle();

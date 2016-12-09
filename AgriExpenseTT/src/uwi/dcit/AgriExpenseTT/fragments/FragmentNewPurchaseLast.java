@@ -206,15 +206,18 @@ public class FragmentNewPurchaseLast extends Fragment{
 					*/
 
                     res = crudManager.insertResourcePurchase(resId,qty,quantifier, category, cost, unixDate);
+                    dm.insertPurchase(res);
                     ResourcePurchase resourcePurchase = crudManager.getResourcePurchase(res);
 
                     dm.insertCycleUse(currC.getId(), resourcePurchase.getResId(), qty, category,quantifier,cost);
                     resourcePurchase.setQuantityRemaining(resourcePurchase.getQuantityRemaining()- qty);
                     crudManager.updateResourcePurchase(resourcePurchase);
+                    dm.updatePurchase(resourcePurchase.getResId());
 
                     Cycle currentCycle = crudManager.getCycle(currC.getId());
                     currentCycle.setTotalSpent(currentCycle.getTotalSpent() + cost);
                     crudManager.updateCycle(currentCycle);
+                    dm.updateCycle(currC.getId());
 
 
 				}else{
@@ -226,6 +229,7 @@ public class FragmentNewPurchaseLast extends Fragment{
 //					dm.insertPurchase(resId, quantifier, qty, category, cost);
 
                     res = crudManager.insertResourcePurchase(resId, qty, quantifier, category, cost, unixDate);
+                    dm.insertPurchase(res);
 
 
                     //Below is old code.

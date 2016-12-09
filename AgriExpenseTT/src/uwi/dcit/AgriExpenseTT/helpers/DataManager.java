@@ -87,9 +87,9 @@ public class DataManager {
 		//update database last updated time
 	}
 
-    public int insertCycle(int cropId, String name, String landType, double landQty,long time){
-        //insert into database
-        int id=DbQuery.insertCycle(db, dbh, cropId, name, landType, landQty,tL,time);
+	public int insertCycle(int cropId, String name, String landType, double landQty,long time){
+		//insert into database
+		int id=DbQuery.insertCycle(db, dbh, cropId, name, landType, landQty,tL,time);
 
 		setState(new CloudModState(CycleContract.CycleEntry.TABLE_NAME, TransactionLog.TL_INS,id));
 
@@ -104,9 +104,17 @@ public class DataManager {
             }
         }
         */
-        return id;
+		return id;
+	}
+
+    public void insertCycle(int id){
+		setState(new CloudModState(CycleContract.CycleEntry.TABLE_NAME, TransactionLog.TL_INS,id));
     }
 
+
+	public void insertPurchase(int id){
+		setState(new CloudModState(ResourcePurchaseContract.ResourcePurchaseEntry.TABLE_NAME, TransactionLog.TL_INS,id));
+	}
 
 	public int insertPurchase( int resourceId, String quantifier, double qty,String type,double cost){
 		//insert into database
@@ -124,7 +132,7 @@ public class DataManager {
 			}
 		}
 		*/
-        return id;
+		return id;
 	}
 
     public int insertPurchase( int resourceId, String quantifier, double qty,String type, double cost, long time){
@@ -245,6 +253,7 @@ public class DataManager {
 		//delete each one using delete cycleUse as to restore to purchase the amounts used by the cycleUse
 		//delete the cycle Locally
 		//insert into redo log (cloud)
+		Log.v("Deleting cycle", "work nah");
 
 		ArrayList<LocalCycleUse> list=new ArrayList<LocalCycleUse>();
 		DbQuery.getCycleUse(db, dbh, c.getId(), list, null);
@@ -261,6 +270,7 @@ public class DataManager {
         tL.insertTransLog(CycleContract.CycleEntry.TABLE_NAME, c.getId(), TransactionLog.TL_DEL);
 
 		setState(new CloudModState(CycleContract.CycleEntry.TABLE_NAME, TransactionLog.TL_DEL, c.getId()));
+
 		/*
 		if(acc!=null){
 			//insert into redo log (cloud)
@@ -318,8 +328,7 @@ public class DataManager {
 		}
 		*/
 	}
-	
-	
+
 	public void updatePurchase(RPurchase p,ContentValues cv){
 		db.update(ResourcePurchaseContract.ResourcePurchaseEntry.TABLE_NAME, cv, ResourcePurchaseContract.ResourcePurchaseEntry._ID+"="+p.getPId(),null);
 		//update the cloud
@@ -339,6 +348,11 @@ public class DataManager {
 		}
 		*/
 	}
+
+	public void updatePurchase(int id){
+		setState(new CloudModState(ResourcePurchaseContract.ResourcePurchaseEntry.TABLE_NAME, TransactionLog.TL_UPDATE, id));
+	}
+
 	public boolean updateCycle(LocalCycle c, ContentValues cv){
 		int result = db.update(CycleContract.CycleEntry.TABLE_NAME, cv, CycleContract.CycleEntry._ID+"="+c.getId(), null);
 		//update the cloud
@@ -349,7 +363,6 @@ public class DataManager {
 /*
 		if(acc!=null){
 			DbQuery.insertRedoLog(db, dbh, CycleContract.CycleEntry.TABLE_NAME, c.getId(), TransactionLog.TL_UPDATE);
-
 			//record in transaction log
 			if(acc.getSignedIn()==1){
 				CloudInterface cloud= new CloudInterface(context,db,dbh);// new CloudInterface(context);
@@ -357,7 +370,11 @@ public class DataManager {
 			}
 		}
 	*/
-        return (result != -1);
+		return (result != -1);
+	}
+
+	public void updateCycle(int id){
+		setState(new CloudModState(CycleContract.CycleEntry.TABLE_NAME,TransactionLog.TL_UPDATE,id));
 	}
 	
 	//------------------------------------------------------------------fixed deletes
@@ -394,10 +411,12 @@ public class DataManager {
 	}
 
 	public void attach(TransLogObserver observer){
+		// add a new observer to the list of observers that receive notification about change in state
 		observers.add(observer);
 	}
 
 	public void notifyAllObservers(){
+		// informs all observers attached to DataManager that there has been a change in state
 		for(TransLogObserver observer : observers){
 			observer.update();
 		}

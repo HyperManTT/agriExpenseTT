@@ -22,6 +22,7 @@ public class PurchaseObserver extends TransLogObserver {
     private SQLiteDatabase db;
 
     public PurchaseObserver(DataManager dm){
+        // when instance of this is created, it is immediately attached as an observer to the subject (DataManager)
         this.dm = dm;
         this.dm.attach(this);
     }
@@ -30,11 +31,12 @@ public class PurchaseObserver extends TransLogObserver {
     public void update() {
         Log.v("Purchase Observer", "Notified");
 
+        // get the current state of the Subject
         CloudModState state = dm.getState();
 
         if(state.getTableName().equals(ResourcePurchaseContract.ResourcePurchaseEntry.TABLE_NAME)) {
+            // the state change is related to this observer
 
-            //dbh= new DbHelper(dm.getContext());
             dbh= DbHelper.getInstance(dm.getContext());
             db = dbh.getWritableDatabase();
 
@@ -43,11 +45,15 @@ public class PurchaseObserver extends TransLogObserver {
             if(acc != null){
                 Log.v("acc check", "not null");
                 if(DbQuery.insertRedoLog(db, dbh, state.getTableName(), state.getId(), state.getOperation()) != -1)
-                    Log.v("Redo log insert", "purchase record");
+                    Log.v("Purchase Observer", "Purchase record inserted into redo log");
+
+                // for testing to simulate that the cloud is online
+                acc.setSignedIn(1);
 
                 if(acc.getSignedIn() == 1){
                     Log.v("Signed in?", "YES");
 
+                    // determine which CRUD operation is necessary and execute the required update to the cloud
                     switch(state.getOperation()){
                         case TransactionLog.TL_UPDATE:
                             updatePurchase();
@@ -65,17 +71,20 @@ public class PurchaseObserver extends TransLogObserver {
     }
 
     private void updatePurchase(){
+        Log.v("Cloud update", "Updating Purchase");
         CloudInterface cloud= new CloudInterface(dm.getContext(),db,dbh);// new CloudInterface(context);
-        cloud.updatePurchase();
+        //cloud.updatePurchase();
     }
 
     private void insertPurchase(){
+        Log.v("Cloud update", "Inserting Purchase");
         CloudInterface c= new CloudInterface(dm.getContext(),db,dbh);//new CloudInterface(context);
-        c.insertPurchase();
+        //c.insertPurchase();
     }
 
     private void deletePurchase(){
+        Log.v("Cloud update", "Deleting Purchase");
         CloudInterface c= new CloudInterface(dm.getContext(),db,dbh);//new CloudInterface(context);
-        c.deletePurchase();
+        //c.deletePurchase();
     }
 }

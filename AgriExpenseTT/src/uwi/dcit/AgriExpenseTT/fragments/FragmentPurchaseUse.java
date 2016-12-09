@@ -187,8 +187,8 @@ public class FragmentPurchaseUse extends Fragment {
 					cv=new ContentValues();
 					cv.put(CycleContract.CycleEntry.CROPCYCLE_TOTALSPENT, c.getTotalSpent());
 
-					//dm.updateCycle(c,cv);
 					crudManager.updateCycle(c);
+					dm.updateCycle(c.getId());
 
 
 					Log.i(getTag(), c.getTotalSpent()+" "+c.getId());
