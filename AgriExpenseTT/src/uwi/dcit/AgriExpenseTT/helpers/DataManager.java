@@ -253,7 +253,6 @@ public class DataManager {
 		//delete each one using delete cycleUse as to restore to purchase the amounts used by the cycleUse
 		//delete the cycle Locally
 		//insert into redo log (cloud)
-		Log.v("Deleting cycle", "work nah");
 
 		ArrayList<LocalCycleUse> list=new ArrayList<LocalCycleUse>();
 		DbQuery.getCycleUse(db, dbh, c.getId(), list, null);
