@@ -3,6 +3,7 @@ package uwi.dcit.AgriExpenseTT.fragments;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -77,10 +78,16 @@ public class FragmentAddData extends ListFragment {
         if (getActivity() instanceof AddData)
             ((AddData)getActivity()).appendSub(" "+option);
 
-        getFragmentManager()
-            .beginTransaction()
-            .replace(R.id.NewCycleListContainer, newFragment)
-            .commit();
+//        getFragmentManager()
+//            .beginTransaction()
+//            .replace(R.id.NewCycleListContainer, newFragment)
+//            .commit();
+
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.manage_data_container,newFragment);
+		transaction.addToBackStack(null);
+		transaction.commit();
+
     }
 
     @Override

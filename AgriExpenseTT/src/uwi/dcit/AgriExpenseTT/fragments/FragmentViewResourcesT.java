@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public class FragmentViewResourcesT extends FragmentSysModuleT implements Interf
     ArrayList<String> rList;
     DataManager dm;
 
+    /*
     @Override
     public boolean isExistInDb() {
         return true;
@@ -71,7 +73,7 @@ public class FragmentViewResourcesT extends FragmentSysModuleT implements Interf
         return Color.RED;
     }
 
-
+*/
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,6 +115,46 @@ public class FragmentViewResourcesT extends FragmentSysModuleT implements Interf
         }
     }
 
+    @Override
+    public int getTabColor() {
+        return 0;
+    }
+
+    @Override
+    public String getTabName() {
+        return null;
+    }
+
+    @Override
+    public boolean isExistInDb() {
+        return false;
+    }
+
+    @Override
+    public Fragment getEmptyFrag() {
+        return null;
+    }
+
+    @Override
+    public void setModuleRegisteredLocation(ArrayList<String> moduleLocationList) {
+
+    }
+
+    @Override
+    public void initializeSysModule(DbHelper dbh) {
+
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+    }
+
 
     private class Confirm implements DialogInterface.OnClickListener{
         int position;
@@ -137,4 +179,6 @@ public class FragmentViewResourcesT extends FragmentSysModuleT implements Interf
             }
         }
     }
+
+
 }

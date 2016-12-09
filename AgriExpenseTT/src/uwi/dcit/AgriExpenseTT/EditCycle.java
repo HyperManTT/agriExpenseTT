@@ -63,6 +63,9 @@ public class EditCycle extends BaseActivity {
 //		db= dbh.getReadableDatabase();
         //db = dbh.getWritableDatabase();
 
+        dbh = DbHelper.getInstance(this);
+        db = dbh.getWritableDatabase();
+
         crudManager = new CRUDManager(this.getApplicationContext());
 
 		initialize();

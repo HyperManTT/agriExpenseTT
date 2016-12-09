@@ -10,22 +10,38 @@ import android.widget.Button;
 
 import uwi.dcit.AgriExpenseTT.InterfaceSlideInLocationT;
 import uwi.dcit.AgriExpenseTT.Main;
+import uwi.dcit.AgriExpenseTT.ManageData;
 import uwi.dcit.AgriExpenseTT.R;
 
 /**
  * Created by jason on 29/11/2016.
  */
 
-public class FragmentManageDataT extends Fragment implements InterfaceSlideInLocationT {
+public class FragmentManageData extends Fragment implements InterfaceSlideInLocationT {
     private Button add;
     private Button edit;
     private Button delete;
-    private String locationName;
+    private String userLocationRequest;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        locationName = getArguments().getString("locationName");
+
+//        if (getArguments().containsKey("userLocationRequest")){
+//            this.userLocationRequest = getArguments().getString("userLocationRequest");
+//        }
+        if (savedInstanceState != null){
+            if (savedInstanceState.containsKey("userLocationRequest")){
+                this.userLocationRequest = savedInstanceState.getString("userLocationRequest");
+                startSlideInLocation(this.userLocationRequest);
+            }
+        }
+
+
+
+//        if (getArguments().containsKey("location")){
+//            locationName = getArguments().getString("locationName");
+//        }
     }
 
     @Override
@@ -44,8 +60,8 @@ public class FragmentManageDataT extends Fragment implements InterfaceSlideInLoc
             @Override
             public void onClick(View v) {
 //                startSlideInLocation("add");
-                Main main = (Main) getActivity();
-                main.goToLocation(new FragmentAddDataT(),"add");
+                ManageData manageData = (ManageData) getActivity();
+                manageData.loadLocation(new FragmentAddData(),"add");
 
             }
         });
@@ -71,10 +87,29 @@ public class FragmentManageDataT extends Fragment implements InterfaceSlideInLoc
 
 
     @Override
-    public void startSlideInLocation(String userLocationRequest) {
+    public void onSaveInstanceState(Bundle outState) {
+       if (userLocationRequest != null) outState.putString("userLocationRequest",userLocationRequest);
+        super.onSaveInstanceState(outState);
+    }
 
-        Main main = (Main) getActivity();
-        main.loadSysModules(userLocationRequest);
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        if (savedInstanceState != null){
+            if (savedInstanceState.containsKey("userLocationRequest")){
+                this.userLocationRequest = savedInstanceState.getString("userLocationRequest");
+                startSlideInLocation(this.userLocationRequest);
+            }
+        }
+    }
+
+    @Override
+    public void startSlideInLocation(String userLocationRequest) {
+        this.userLocationRequest = userLocationRequest;
+
+        ManageData manageData = (ManageData) getActivity();
+        manageData.loadSysModules(userLocationRequest);
 
     }
 }

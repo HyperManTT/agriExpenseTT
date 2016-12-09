@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import uwi.dcit.AgriExpenseTT.ManageData;
 import uwi.dcit.AgriExpenseTT.R;
 import uwi.dcit.AgriExpenseTT.helpers.DataManager;
 import uwi.dcit.AgriExpenseTT.helpers.GAnalyticsHelper;
@@ -63,7 +64,9 @@ public class FragmentAddDataLast extends Fragment {
                         getActivity().runOnUiThread(new Runnable() {
                             public void run() {
                                 NotifyHelper.notify(getActivity(),getArguments().getString("type") + " Saved" );
-                                getActivity().finish();
+//                                getActivity().finish();
+								ManageData manageData = (ManageData) getActivity();
+								manageData.loadLocation(new FragmentManageData(),"manage data");
                             }
                         });
                     }

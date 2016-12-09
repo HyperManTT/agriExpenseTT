@@ -3,6 +3,7 @@ package uwi.dcit.AgriExpenseTT.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.FragmentBreadCrumbs;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,9 @@ import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -21,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +36,8 @@ import java.util.Comparator;
 
 import uwi.dcit.AgriExpenseTT.CRUD.Cycle.Cycle;
 import uwi.dcit.AgriExpenseTT.EditPurchase;
+import uwi.dcit.AgriExpenseTT.InterfaceSysModuleTabElement;
+import uwi.dcit.AgriExpenseTT.NewPurchase;
 import uwi.dcit.AgriExpenseTT.R;
 import uwi.dcit.AgriExpenseTT.helpers.CurrencyFormatHelper;
 import uwi.dcit.AgriExpenseTT.helpers.DHelper;
@@ -43,16 +50,19 @@ import uwi.dcit.AgriExpenseTT.helpers.NavigationControl;
 import uwi.dcit.AgriExpenseTT.models.LocalCycle;
 import uwi.dcit.AgriExpenseTT.models.LocalResourcePurchase;
 
-public class FragmentChoosePurchase extends ListFragment {
+public class FragmentChoosePurchase extends FragmentSysModuleT implements InterfaceSysModuleTabElement {
 	PurchaseListAdapter myListAdapter;
 	ArrayList<LocalResourcePurchase> pList;
 	SQLiteDatabase db;
 	DbHelper dbh;
 	DataManager dm;
 	String type = null;
+	String userLocationRequest;
+
 	int cycleId;
 	//LocalCycle curr = null;
 	Cycle curr=null;
+
 	
 	final int req_edit = 1;
 	
@@ -65,13 +75,14 @@ public class FragmentChoosePurchase extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		//dbh	= new DbHelper(this.getActivity().getBaseContext());
+
+//		dbh	= new DbHelper(this.getActivity().getBaseContext());
 		DbHelper dbh= DbHelper.getInstance(getActivity().getApplicationContext());
 		db	= dbh.getWritableDatabase();
-		dm	= new DataManager(getActivity(), db, dbh);
-		
-        if (getArguments() != null){
+		this.dm	= new DataManager(getActivity(), this.db, this.dbh);
+
+
+		if (getArguments() != null){
             curr = getArguments().getParcelable("cycle");
             type = getArguments().getString("det");
         }else{
@@ -80,6 +91,9 @@ public class FragmentChoosePurchase extends ListFragment {
 		
 		if(curr != null)cycleId = curr.getId();
 
+		if (getArguments() != null && getArguments().containsKey("userLocationRequest")) {
+			userLocationRequest = getArguments().getString("userLocationRequest");
+		}
 		
 		populateList();
 		myListAdapter = new PurchaseListAdapter(getActivity(), R.layout.purchased_item, pList);
@@ -203,8 +217,77 @@ public class FragmentChoosePurchase extends ListFragment {
 		 DbQuery.getPurchases(db, dbh, pList, null, null,true);
 		 myListAdapter.notifyDataSetChanged();
 	 }
-	 
-	 private class Confirm implements DialogInterface.OnClickListener{
+
+	@Override
+	public int getTabColor() {
+		return Color.YELLOW;
+	}
+
+	@Override
+	public String getTabName() {
+		return  "Purchases";
+	}
+
+	@Override
+	public boolean isExistInDb() {
+		return DbQuery.resourceExist(this.db);
+	}
+
+	@Override
+	public Fragment getEmptyFrag() {
+		return new FragmentChoosePurchaseEmpty();
+	}
+
+	@Override
+	public void setModuleRegisteredLocation(ArrayList<String> moduleLocationList) {
+
+		moduleLocationList.add("edit");
+		moduleLocationList.add("delete");
+
+	}
+
+	@Override
+	public void initializeSysModule(DbHelper dbh) {
+
+		this.dbh = dbh;
+		this.db = dbh.getWritableDatabase();
+
+
+
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+
+		dest.writeStringArray(new String[]{this.userLocationRequest,this.type});
+	}
+
+	public FragmentChoosePurchase (Parcel in){
+		String [] data = new String [2];
+		in.readStringArray(data);
+		this.userLocationRequest = data[0];
+		this.type = data[1];
+	}
+	public FragmentChoosePurchase(){}
+	public static final Parcelable.Creator CREATOR = new Parcelable.Creator(){
+
+		@Override
+		public FragmentChoosePurchase createFromParcel(Parcel source) {
+			return null;
+		}
+
+		@Override
+		public FragmentChoosePurchase[] newArray(int size) {
+			return new FragmentChoosePurchase[size];
+		}
+	};
+
+	private class Confirm implements DialogInterface.OnClickListener{
 		int position;
 		PurchaseListAdapter l;
 		public Confirm(int position,PurchaseListAdapter l){
@@ -274,5 +357,27 @@ public class FragmentChoosePurchase extends ListFragment {
 			 return row;
 		 }
 	 }
+
+	public class FragmentChoosePurchaseEmpty extends Fragment {
+		TextView textView;
+		ImageView imageView;
+		@Override
+		public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+			View view = inflater.inflate(R.layout.fragment_empty_purchases,container,false);
+			textView = (TextView) view.findViewById(R.id.tv_empty_desc);
+			imageView = (ImageView) view.findViewById(R.id.img_empty_frag);
+			imageView.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					startActivity(new Intent(getActivity().getApplicationContext(), NewPurchase.class));
+				}
+			});
+
+
+			return view;
+		}
+	}
+
 
 }

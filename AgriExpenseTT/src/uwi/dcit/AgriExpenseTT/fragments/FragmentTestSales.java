@@ -14,8 +14,8 @@ import uwi.dcit.AgriExpenseTT.helpers.DbHelper;
  * Created by jason on 04/12/2016.
  */
 
-public class FragmentTestSales extends FragmentSysModuleT implements InterfaceSysModuleTabElement {
-
+public class FragmentTestSales  {
+/*
     @Override
     public int getTabColor() {
         return Color.CYAN;
@@ -48,5 +48,6 @@ public class FragmentTestSales extends FragmentSysModuleT implements InterfaceSy
 
 
     }
+    */
 
 }

@@ -12,15 +12,12 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-import uwi.dcit.AgriExpenseTT.fragments.FragmentChoosePurchaseT;
 import uwi.dcit.AgriExpenseTT.fragments.FragmentEmpty;
-import uwi.dcit.AgriExpenseTT.fragments.FragmentHomeT;
-import uwi.dcit.AgriExpenseTT.fragments.FragmentSlideInLocationT;
+import uwi.dcit.AgriExpenseTT.fragments.FragmentSysModuleMgr;
 import uwi.dcit.AgriExpenseTT.fragments.FragmentSlidingMain;
 import uwi.dcit.AgriExpenseTT.fragments.FragmentSysModuleT;
-import uwi.dcit.AgriExpenseTT.fragments.FragmentTestSales;
+import uwi.dcit.AgriExpenseTT.fragments.FragmentViewCycles;
 import uwi.dcit.AgriExpenseTT.fragments.FragmentViewCyclesT;
-import uwi.dcit.AgriExpenseTT.fragments.FragmentViewResourcesT;
 import uwi.dcit.AgriExpenseTT.helpers.GAnalyticsHelper;
 
 
@@ -32,19 +29,18 @@ public class Main extends BaseActivity {
     public final static String TAG = "Main";
     public ArrayList<FragmentSysModuleT> fragmentSysModuleTArrayList;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_navigation);
         // Needed after setContentView to refer to the appropriate XML View
         setupNavDrawer();
-
-        if(this.isTablet && this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            setupLand();
-        }else {
-            setupPort();
-        }
-
+            if (this.isTablet && this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                setupLand();
+            } else {
+                setupPort();
+            }
 //        Fragment currentFrag = getSupportFragmentManager().findFragmentById(R.id.container);
 //        mTitle = currentFrag.getTag();
         mTitle = getTitle();
@@ -53,14 +49,7 @@ public class Main extends BaseActivity {
         GAnalyticsHelper.getInstance(this.getApplicationContext()).sendScreenView("Main Screen");
     }
 
-    @Override
-    public void onAttachFragment(Fragment fragment) {
-//        String fragTag = fragment.getTag();
-//        if (fragTag != null) {
-//            mTitle = fragTag.substring(0, 1).toUpperCase() + fragTag.substring(1);
-//            restoreActionBar();
-//        }
-    }
+
 
     @Override
     protected void onResume(){
@@ -97,16 +86,8 @@ public class Main extends BaseActivity {
             .commit();
     }
 
-    private void setupPortT(){
-        this.loadHomeFragment();
-    }
-    private void setupLandT(){
-        this.loadHomeFragment();
-    }
-    private void loadHomeFragment(){
 
-        super.goToLocation(new FragmentHomeT(),"home");
-    }
+
 
     public void restoreActionBar() {
         getSupportActionBar().setDisplayShowTitleEnabled(true);
@@ -148,12 +129,14 @@ public class Main extends BaseActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        FragmentTransaction ft=getSupportFragmentManager().beginTransaction();
+
         if(findViewById(R.id.navContentRight)!=null){
-            FragmentTransaction ft=getSupportFragmentManager().beginTransaction();
             ft.remove(rightFrag).commit();
             //have to put in someting here to purge transaction to ensure its still not running
             getSupportFragmentManager().executePendingTransactions();
         }
+
         super.onSaveInstanceState(outState);
     }
 
@@ -188,28 +171,24 @@ public class Main extends BaseActivity {
         //Add modules to  be used by system
         fragmentSysModuleTArrayList = new ArrayList<FragmentSysModuleT>();
 
-        fragmentSysModuleTArrayList.add(new FragmentViewCyclesT());
+        fragmentSysModuleTArrayList.add(new FragmentViewCycles());
 //        fragmentSysModuleTArrayList.add(new FragmentViewResourcesT());
 //        fragmentSysModuleTArrayList.add(new FragmentChoosePurchaseT());
 //        fragmentSysModuleTArrayList.add(new FragmentTestSales());
 
-        FragmentSlideInLocationT fragmentSlideInLocationT = new FragmentSlideInLocationT();
-        fragmentSlideInLocationT.initializer(fragmentSysModuleTArrayList);
+        FragmentSysModuleMgr fragmentSysModuleMgr = new FragmentSysModuleMgr();
+        fragmentSysModuleMgr.initializer(fragmentSysModuleTArrayList);
 
         Bundle args = new Bundle();
         args.putString("userLocationRequest",userLocationRequest);
-        fragmentSlideInLocationT.setArguments(args);
+        fragmentSysModuleMgr.setArguments(args);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.navContentLeft, fragmentSlideInLocationT,userLocationRequest);
+        transaction.replace(R.id.navContentLeft, fragmentSysModuleMgr,userLocationRequest);
         transaction.addToBackStack(null);
         transaction.commit();
 
 
     }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-    }
 }

@@ -2,12 +2,18 @@ package uwi.dcit.AgriExpenseTT;
 
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 import uwi.dcit.AgriExpenseTT.fragments.FragmentSlidingTabsEdit;
 import uwi.dcit.AgriExpenseTT.helpers.GAnalyticsHelper;
 
 public class EditData extends BaseActivity {
 
+
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+    }
 
     @Override
 	protected void onCreate(Bundle savedInstanceState) {

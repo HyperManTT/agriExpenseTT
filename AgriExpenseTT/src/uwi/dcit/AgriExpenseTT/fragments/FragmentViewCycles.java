@@ -8,7 +8,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -20,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,7 +38,9 @@ import uwi.dcit.AgriExpenseTT.CRUD.Cycle.Cycle;
 import uwi.dcit.AgriExpenseTT.CRUD.Cycle.CycleCRUD;
 import uwi.dcit.AgriExpenseTT.EditCycle;
 import uwi.dcit.AgriExpenseTT.HireLabour;
+import uwi.dcit.AgriExpenseTT.InterfaceSysModuleTabElement;
 import uwi.dcit.AgriExpenseTT.Main;
+import uwi.dcit.AgriExpenseTT.NewCycle;
 import uwi.dcit.AgriExpenseTT.R;
 import uwi.dcit.AgriExpenseTT.helpers.DHelper;
 import uwi.dcit.AgriExpenseTT.helpers.DataManager;
@@ -44,7 +51,7 @@ import uwi.dcit.AgriExpenseTT.helpers.GAnalyticsHelper;
 import uwi.dcit.AgriExpenseTT.helpers.NavigationControl;
 import uwi.dcit.AgriExpenseTT.models.LocalCycle;
 
-public class FragmentViewCycles extends ListFragment{
+public class FragmentViewCycles extends FragmentSysModuleT implements InterfaceSysModuleTabElement {
 //	String type=null;
 //	SQLiteDatabase db;
 //	DbHelper dbh;
@@ -332,13 +339,13 @@ public class FragmentViewCycles extends ListFragment{
 //	 }
 
 
-
-
 	String type=null;
 	SQLiteDatabase db;
 	DbHelper dbh;
 	final int req_edit=1;
 	final String className = "ViewCycles";
+	String userLocationRequest;
+
 
 	private static final String STATE_ACTIVATED_POSITION = "cycle_activated_position";
 	private int mActivatedPosition = ListView.INVALID_POSITION;
@@ -375,6 +382,10 @@ public class FragmentViewCycles extends ListFragment{
 
 		cycAdapt = new CycleListAdapter(getActivity(), R.layout.cycle_list_item, cycleList);
 		setListAdapter(cycAdapt);
+
+		if (getArguments() != null && getArguments().containsKey("userLocationRequest")) {
+			userLocationRequest = getArguments().getString("userLocationRequest");
+		}
 
 		GAnalyticsHelper.getInstance(this.getActivity()).sendScreenView("View Cycles Fragment");
 
@@ -436,15 +447,38 @@ public class FragmentViewCycles extends ListFragment{
 		super.onListItemClick(l, v, position, id);
 		setActivatedPosition(position);
 
-		if(type == null){
-			launchCycleUsage(position);
-		}else if(type.equals(DHelper.cat_labour)){ //Assigning labour to cycle
-			assignCycleToLabour(position);
-		}else if(type.equals("delete")){ //When called by delete data
-			deletCycleOption(l, position);
-		}else if(type.equals("edit")){//when called by edit data
-			editCycleCoption(position);
+		if (userLocationRequest != null){
+			if(userLocationRequest.equals("delete")){ //When called by delete data
+				deletCycleOption(l, position);
+			}else if(userLocationRequest.equals("edit")){//when called by edit data
+				editCycleCoption(position);
+			}
+			else if (userLocationRequest.equalsIgnoreCase("home")){
+				launchCycleUsage(position);
+			}
 		}
+		else {
+			if(type == null){
+			launchCycleUsage(position);
+			}else if(type.equals(DHelper.cat_labour)){ //Assigning labour to cycle
+				assignCycleToLabour(position);
+			}else if(type.equals("delete")){ //When called by delete data
+				deletCycleOption(l, position);
+			}else if(type.equals("edit")){//when called by edit data
+				editCycleCoption(position);
+			}
+		}
+//		if(type == null){
+//			launchCycleUsage(position);
+//		}else if(type.equals(DHelper.cat_labour)){ //Assigning labour to cycle
+//			assignCycleToLabour(position);
+//		}else if(type.equals("delete")){ //When called by delete data
+//			deletCycleOption(l, position);
+//		}else if(type.equals("edit")){//when called by edit data
+//			editCycleCoption(position);
+//		}
+
+
 	}
 
 	@Override
@@ -552,6 +586,75 @@ public class FragmentViewCycles extends ListFragment{
 		cycleList = crudManager.getAllCycles();
 	}
 
+	@Override
+	public int getTabColor() {
+		return Color.MAGENTA;
+	}
+
+	@Override
+	public String getTabName() {
+		return "Cycles";
+
+	}
+
+	@Override
+	public boolean isExistInDb() {
+		if(DbQuery.cyclesExist(this.db))return true;
+		return false;
+	}
+
+	@Override
+	public Fragment getEmptyFrag() {
+		return new FragmentViewCyclesEmpty();
+	}
+
+	@Override
+	public void setModuleRegisteredLocation(ArrayList<String> moduleLocationList) {
+
+		moduleLocationList.add("edit");
+		moduleLocationList.add("delete");
+	}
+
+	@Override
+	public void initializeSysModule(DbHelper dbh) {
+		this.dbh = dbh;
+		this.db = dbh.getWritableDatabase();
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeStringArray(new String[] {this.userLocationRequest, this.type});
+	}
+
+	public static final Parcelable.Creator CREATOR = new Parcelable.Creator(){
+
+		@Override
+		public FragmentViewCycles createFromParcel(Parcel source) {
+			return new FragmentViewCycles(source);
+		}
+
+		@Override
+		public FragmentViewCycles[] newArray(int size) {
+			return new FragmentViewCycles[size];
+		}
+	};
+
+	public FragmentViewCycles (Parcel in){
+		String [] strings = new String[2];
+		in.readStringArray(strings);
+		this.userLocationRequest = strings[0];
+		this.type = strings[1];
+	}
+
+	public FragmentViewCycles(){
+
+	}
+
 	public class DeleteConfirmator implements DialogInterface.OnClickListener{
 		int position;
 		CycleListAdapter listAdapter;
@@ -628,4 +731,35 @@ public class FragmentViewCycles extends ListFragment{
 
 		//register click
 	}
+
+	public class FragmentViewCyclesEmpty extends Fragment {
+		TextView desc;
+		@Override
+		public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+			View view = inflater.inflate(R.layout.fragment_empty_cycles,container,false);
+
+			desc = (TextView) view.findViewById(R.id.tv_empty_desc_cycle);
+			desc.setText("Tap here to add new cycle");
+
+			ImageView imageView =(ImageView)view.findViewById(R.id.img_empty_frag_cycles);
+			imageView.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					startActivity(new Intent(getActivity().getApplicationContext(), NewCycle.class));
+				}
+			});
+
+
+			return view;
+		}
+
+		@Override
+		public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
+
+
+		}
+	}
+
 }

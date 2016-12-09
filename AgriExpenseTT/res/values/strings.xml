@@ -22,6 +22,7 @@
     <string name="title_activity_edit_purchase">Edit Purchase</string>
     <string name="title_activity_edit_data">Edit Data</string>
     <string name="title_activity_manage_data">Manage Data</string>
+    <string name="title_activity_manage_data_t">Manage Data</string>
     <string name="title_activity_edit_choose_lists">Edit Choose Lists</string>
     <string name="title_activity_add_data">Add Data</string>
     <string name="title_activity_view_cycle_usege">View Cycle Usage</string>

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
@@ -12,8 +11,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import uwi.dcit.AgriExpenseTT.cloud.SignInManager;
-import uwi.dcit.AgriExpenseTT.fragments.FragmentHomeT;
-import uwi.dcit.AgriExpenseTT.fragments.FragmentManageDataT;
 import uwi.dcit.AgriExpenseTT.fragments.NavigationDrawerFragment;
 import uwi.dcit.AgriExpenseTT.helpers.NavigationControl;
 
@@ -71,8 +68,7 @@ public abstract class BaseActivity extends ActionBarActivity implements Navigati
             case 5:
                 // manage data
                 startActivity(new Intent(this, ManageData.class));
-
-//                goToLocation(new FragmentManageDataT(),"manage data");
+//                goToLocation(new FragmentManageData(),"manage data");
                 break;
             case 6:
                 signInManager.signIn();
@@ -81,26 +77,6 @@ public abstract class BaseActivity extends ActionBarActivity implements Navigati
         }
     }
 
-    /**
-     * Go to Diffrent Locations with the application
-     * @param frag
-     * @param fragTag
-     */
-    public void goToLocation(Fragment frag, String fragTag){
-
-       FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        Bundle args = new Bundle();
-        args.putString("locationName",fragTag);
-        frag.setArguments(args);
-        transaction.replace(R.id.navContentLeft,frag,fragTag);
-        transaction.commit();
-
-//        this.mTitle = fragTag.substring(0, 1).toUpperCase() + fragTag.substring(1);
-//        getSupportActionBar().setTitle(fragTag.substring(0, 1).toUpperCase() + fragTag.substring(1));
-        // change icon to arrow drawable
-//        getSupportActionBar().setHomeAsUpIndicator(android.);
-
-    }
 
     public void backUpData(){
         Toast.makeText(getApplicationContext(), "Backing up data not available at this time. Please check back later", Toast.LENGTH_LONG).show();
@@ -161,7 +137,6 @@ public abstract class BaseActivity extends ActionBarActivity implements Navigati
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_settings) {
             startActivity(new Intent(getApplicationContext(),ManageData.class));
-//            this.goToLocation(new FragmentManageDataT(),"manage data");
             return true;
         }
         return super.onOptionsItemSelected(item);

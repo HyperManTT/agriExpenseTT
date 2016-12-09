@@ -15,7 +15,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import uwi.dcit.AgriExpenseTT.InterfaceSysModuleTabElement;
-import uwi.dcit.AgriExpenseTT.Main;
 import uwi.dcit.AgriExpenseTT.R;
 import uwi.dcit.AgriExpenseTT.helpers.DbHelper;
 import uwi.dcit.AgriExpenseTT.widgets.SlidingTabLayout;
@@ -24,12 +23,12 @@ import uwi.dcit.AgriExpenseTT.widgets.SlidingTabLayout;
  * Created by jason on 23/11/2016.
  */
 
-public class FragmentSlideInLocationT extends Fragment {
+public class FragmentSysModuleMgr extends Fragment {
 
     private ArrayList<FragmentSysModuleT> fragmentSysModuleList;
     private ArrayList<String> moduleLocationList;
-    private ArrayList<FragmentSlideInLocationT.FragItem> fragments;
-    private FragmentSlideInLocationT.ResourcePageAdapter adapter;
+    private ArrayList<FragmentSysModuleMgr.FragItem> fragments;
+    private FragmentSysModuleMgr.ResourcePageAdapter adapter;
     private boolean configured;
     SQLiteDatabase db;
     DbHelper dbh;
@@ -45,7 +44,14 @@ public class FragmentSlideInLocationT extends Fragment {
         db = dbh.getWritableDatabase();
         userLocationRequest = getArguments().getString("userLocationRequest");
 
-        populateList();
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey("fragmentSysModuleList")) {
+                this.fragmentSysModuleList = (ArrayList<FragmentSysModuleT>) savedInstanceState.getSerializable("fragmentSysModuleList");
+            }
+            savedInstanceState.remove("fragmentSysModuleList");
+        }
+
+            populateList();
 
     }
 
@@ -63,6 +69,20 @@ public class FragmentSlideInLocationT extends Fragment {
             adapter.notifyDataSetChanged();
             configured = true;
         }
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+//        outState.putSerializable("fragmentSysModuleList",fragmentSysModuleList);
+        outState.putParcelableArrayList("fragmentSysModuleList",fragmentSysModuleList);
+        super.onSaveInstanceState(outState);
     }
 
     public void populateList(){
@@ -111,7 +131,7 @@ public class FragmentSlideInLocationT extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState){
 
         ViewPager mViewPager = (ViewPager) view.findViewById(R.id.viewpager_manage_resources);
-        adapter = new FragmentSlideInLocationT.ResourcePageAdapter(getChildFragmentManager());
+        adapter = new FragmentSysModuleMgr.ResourcePageAdapter(getChildFragmentManager());
         mViewPager.setAdapter(adapter);
 
         SlidingTabLayout mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs_manage_resources);

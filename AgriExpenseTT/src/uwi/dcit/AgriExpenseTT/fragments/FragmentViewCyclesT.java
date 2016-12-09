@@ -10,8 +10,6 @@ import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
@@ -52,7 +50,7 @@ import uwi.dcit.AgriExpenseTT.models.LocalCycle;
  * Created by jason on 23/11/2016.
  */
 
-public class FragmentViewCyclesT extends FragmentSysModuleT implements InterfaceSysModuleTabElement {
+public class FragmentViewCyclesT extends ListFragment {
 
     String type = null;
     String userLocationRequest;
@@ -67,7 +65,7 @@ public class FragmentViewCyclesT extends FragmentSysModuleT implements Interface
     ArrayList<LocalCycle> cycleList = new ArrayList<LocalCycle>();
     FragmentViewCyclesT.CycleListAdapter cycAdapt;
 
-
+/*
     @Override
     public void initializeSysModule(DbHelper dbh) {
         this.dbh = dbh;
@@ -103,7 +101,7 @@ public class FragmentViewCyclesT extends FragmentSysModuleT implements Interface
     public int getTabColor() {
         return Color.BLUE;
     }
-
+*/
     @Override
     public void onActivityCreated(Bundle savedState){
         super.onActivityCreated(savedState);
@@ -115,10 +113,20 @@ public class FragmentViewCyclesT extends FragmentSysModuleT implements Interface
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (savedInstanceState != null){
+            if (savedInstanceState.containsKey("dbhlist")){
+              ArrayList<DbHelper> dbhLIst = ( ArrayList<DbHelper>) savedInstanceState.getSerializable("dbhlist");
+                this.dbh = dbhLIst.get(0);
+                this.db = this.dbh.getWritableDatabase();
 
-        if (getArguments() != null && getArguments().containsKey("type")) {
-            type = getArguments().getString("type");
+            }
+            savedInstanceState.remove("dbhlist");
         }
+
+//        if (getArguments() != null && getArguments().containsKey("type")) {
+//            type = getArguments().getString("type");
+//        }
+
         if (getArguments() != null && getArguments().containsKey("userLocationRequest")) {
             userLocationRequest = getArguments().getString("userLocationRequest");
         }
@@ -211,6 +219,9 @@ public class FragmentViewCyclesT extends FragmentSysModuleT implements Interface
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        ArrayList<DbHelper> dbhList = new ArrayList<DbHelper>();
+        dbhList.add(this.dbh);
+//        outState.putSerializable("dbhlist",dbhList);
         super.onSaveInstanceState(outState);
         if (mActivatedPosition != ListView.INVALID_POSITION) {
             // Serialize and persist the activated item position.

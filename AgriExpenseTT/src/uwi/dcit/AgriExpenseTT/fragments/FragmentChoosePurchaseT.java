@@ -14,6 +14,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -47,7 +48,7 @@ import uwi.dcit.AgriExpenseTT.helpers.NavigationControl;
 import uwi.dcit.AgriExpenseTT.models.LocalCycle;
 import uwi.dcit.AgriExpenseTT.models.LocalResourcePurchase;
 
-public class FragmentChoosePurchaseT extends FragmentSysModuleT implements InterfaceSysModuleTabElement {
+public class FragmentChoosePurchaseT extends ListFragment {
 	PurchaseListAdapter myListAdapter;
 	ArrayList<LocalResourcePurchase> pList;
 	SQLiteDatabase db;
@@ -207,6 +208,7 @@ public class FragmentChoosePurchaseT extends FragmentSysModuleT implements Inter
 		 myListAdapter.notifyDataSetChanged();
 	 }
 
+	/*
 	@Override
 	public boolean isExistInDb() {
 		if(DbQuery.resourceExist(this.db))return true;
@@ -243,7 +245,7 @@ public class FragmentChoosePurchaseT extends FragmentSysModuleT implements Inter
 	public String getTabName() {
 		return "Purchases";
 	}
-
+*/
 
 	private class Confirm implements DialogInterface.OnClickListener{
 		int position;
@@ -316,7 +318,7 @@ public class FragmentChoosePurchaseT extends FragmentSysModuleT implements Inter
 		 }
 	 }
 
-	public class FragmentChoosePurchaseEmptyT extends Fragment {
+	public class FragmentChoosePurchaseEmpty extends Fragment {
 		TextView textView;
 		ImageView imageView;
 		@Override
