@@ -2,6 +2,8 @@ package uwi.dcit.AgriExpenseTT.fragments;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,7 +27,7 @@ import uwi.dcit.AgriExpenseTT.widgets.SlidingTabLayout;
 
 public class FragmentSysModuleMgr extends Fragment {
 
-    private ArrayList<FragmentSysModuleT> fragmentSysModuleList;
+    private ArrayList<FragmentSysModule> fragmentSysModuleList;
     private ArrayList<String> moduleLocationList;
     private ArrayList<FragmentSysModuleMgr.FragItem> fragments;
     private FragmentSysModuleMgr.ResourcePageAdapter adapter;
@@ -46,7 +48,7 @@ public class FragmentSysModuleMgr extends Fragment {
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey("fragmentSysModuleList")) {
-                this.fragmentSysModuleList = (ArrayList<FragmentSysModuleT>) savedInstanceState.getSerializable("fragmentSysModuleList");
+                this.fragmentSysModuleList = (ArrayList<FragmentSysModule>) savedInstanceState.getSerializable("fragmentSysModuleList");
             }
             savedInstanceState.remove("fragmentSysModuleList");
         }
@@ -56,8 +58,8 @@ public class FragmentSysModuleMgr extends Fragment {
     }
 
 
-    public void initializer (ArrayList<FragmentSysModuleT> fragmentSysModuleTList){
-        this.fragmentSysModuleList = fragmentSysModuleTList;
+    public void initializer (ArrayList<FragmentSysModule> fragmentSysModuleList){
+        this.fragmentSysModuleList = fragmentSysModuleList;
 
     }
 
@@ -81,30 +83,31 @@ public class FragmentSysModuleMgr extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
 
 //        outState.putSerializable("fragmentSysModuleList",fragmentSysModuleList);
+//        outState.putParcelable("emptyFrag",);
         outState.putParcelableArrayList("fragmentSysModuleList",fragmentSysModuleList);
         super.onSaveInstanceState(outState);
     }
 
     public void populateList(){
         Bundle arguments = new Bundle();
-        for (FragmentSysModuleT fragmentSysModuleT: fragmentSysModuleList) {
+        for (FragmentSysModule fragmentSysModule: fragmentSysModuleList) {
 
-            fragmentSysModuleT.initializeSysModule(dbh);
+            fragmentSysModule.initializeSysModule(dbh);
             moduleLocationList = new ArrayList<String>();
-            fragmentSysModuleT.setModuleRegisteredLocation(moduleLocationList);
+            fragmentSysModule.setModuleRegisteredLocation(moduleLocationList);
             for (String moduleLocation: moduleLocationList) {
                 if (userLocationRequest.equalsIgnoreCase(moduleLocation)){
 
-                    InterfaceSysModuleTabElement interfaceSysModuleTabElement = (InterfaceSysModuleTabElement) fragmentSysModuleT;
-                    Fragment fragmentSysModule = (Fragment) fragmentSysModuleT;
-                    Fragment emptyFragment = fragmentSysModuleT.getEmptyFrag();
+                    InterfaceSysModuleTabElement interfaceSysModuleTabElement = (InterfaceSysModuleTabElement) fragmentSysModule;
+//                    Fragment fragSysModule= (Fragment) fragmentSysModule;
+                    Fragment emptyFragment = fragmentSysModule.getEmptyFrag();
                     if (emptyFragment == null){
                         emptyFragment = new FragmentEmptyDefault("System module: Nothing to show");
                     }
                     arguments.putString("userLocationRequest",userLocationRequest);
                     fragmentSysModule.setArguments(arguments);
 
-                    if (fragmentSysModuleT.isExistInDb()) {
+                    if (fragmentSysModule.isExistInDb()) {
 
                         fragments.add(new FragItem(fragmentSysModule,
                                 interfaceSysModuleTabElement.getTabColor(), interfaceSysModuleTabElement.getTabName()));
@@ -184,21 +187,58 @@ public class FragmentSysModuleMgr extends Fragment {
         }
     }
 
-    private class FragmentEmptyDefault extends Fragment{
-        TextView tv;
-        String textTodisplay;
-        @Override
-        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-            View v = inflater.inflate(R.layout.fragment_empty_default,container,false);
-            tv = (TextView) v.findViewById(R.id.tv_empty_desc_default);
-            tv.setText(textTodisplay);
+}
 
-            return v;
-        }
+ class FragmentEmptyDefault extends Fragment implements Parcelable{
+    TextView tv;
+    String textTodisplay;
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        public FragmentEmptyDefault(String textToDisplay){
-            this.textTodisplay = textToDisplay;
-        }
+        View v = inflater.inflate(R.layout.fragment_empty_default,container,false);
+        tv = (TextView) v.findViewById(R.id.tv_empty_desc_default);
+        tv.setText(textTodisplay);
+
+        return v;
     }
+
+    public FragmentEmptyDefault(String textToDisplay){
+        this.textTodisplay = textToDisplay;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public FragmentEmptyDefault(Parcel in){
+        String [] data = new String [1];
+        in.readStringArray(data);
+        this.textTodisplay = data[0];
+    }
+
+    public FragmentEmptyDefault(){
+
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeStringArray(new String[]{this.textTodisplay});
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator(){
+
+
+        @Override
+        public FragmentEmptyDefault createFromParcel(Parcel source) {
+            return new FragmentEmptyDefault(source);
+        }
+
+        @Override
+        public FragmentEmptyDefault[] newArray(int size) {
+            return new FragmentEmptyDefault[size];
+        }
+    };
+
 }

@@ -14,8 +14,8 @@ import uwi.dcit.AgriExpenseTT.helpers.DbHelper;
  * Created by jason on 04/12/2016.
  */
 
-public class FragmentTestSales  {
-/*
+public class FragmentTestSales extends FragmentSysModule implements InterfaceSysModuleTabElement {
+
     @Override
     public int getTabColor() {
         return Color.CYAN;
@@ -39,7 +39,7 @@ public class FragmentTestSales  {
     @Override
     public void setModuleRegisteredLocation(ArrayList<String> moduleLocationList) {
 
-        moduleLocationList.add("home");
+        moduleLocationList.add("edit");
 
     }
 
@@ -48,6 +48,33 @@ public class FragmentTestSales  {
 
 
     }
-    */
 
+    public FragmentTestSales(){}
+    public FragmentTestSales(Parcel in){
+
+
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator(){
+
+        @Override
+        public FragmentTestSales createFromParcel(Parcel source) {
+            return new FragmentTestSales(source);
+        }
+
+        @Override
+        public FragmentTestSales[] newArray(int size) {
+            return new FragmentTestSales[size];
+        }
+    };
 }

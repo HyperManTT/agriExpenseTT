@@ -13,7 +13,7 @@ import uwi.dcit.AgriExpenseTT.helpers.DbHelper;
  * Created by jason on 23/11/2016.
  */
 
-public abstract class FragmentSysModuleT extends ListFragment implements Parcelable  {
+public abstract class FragmentSysModule extends ListFragment implements Parcelable  {
 
     public abstract boolean isExistInDb();
     public abstract Fragment getEmptyFrag();

@@ -46,7 +46,6 @@ public abstract class BaseActivity extends ActionBarActivity implements Navigati
             case 0:
                 // Home
                 startActivity(new Intent(this, Main.class));
-//                goToLocation(new FragmentHomeT(),"home");
 
                 break;
             case 1:
@@ -68,7 +67,6 @@ public abstract class BaseActivity extends ActionBarActivity implements Navigati
             case 5:
                 // manage data
                 startActivity(new Intent(this, ManageData.class));
-//                goToLocation(new FragmentManageData(),"manage data");
                 break;
             case 6:
                 signInManager.signIn();

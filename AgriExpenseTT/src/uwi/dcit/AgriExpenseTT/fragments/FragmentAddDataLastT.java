@@ -19,7 +19,7 @@ import uwi.dcit.AgriExpenseTT.helpers.NotifyHelper;
 import uwi.dcit.AgriExpenseTT.helpers.TextHelper;
 
 
-public class FragmentAddDataLast extends Fragment {
+public class FragmentAddDataLastT extends Fragment {
 	DataManager dm;
 	View view;
 	EditText et_name;
@@ -64,9 +64,9 @@ public class FragmentAddDataLast extends Fragment {
                         getActivity().runOnUiThread(new Runnable() {
                             public void run() {
                                 NotifyHelper.notify(getActivity(),getArguments().getString("type") + " Saved" );
-                                getActivity().finish();
-//								ManageData manageData = (ManageData) getActivity();
-//								manageData.loadLocation(new FragmentManageData(),"manage data");
+//                                getActivity().finish();
+								ManageData manageData = (ManageData) getActivity();
+								manageData.loadLocation(new FragmentManageData(),"manage data");
                             }
                         });
                     }

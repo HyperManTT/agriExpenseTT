@@ -35,7 +35,6 @@ import java.util.Comparator;
 
 import uwi.dcit.AgriExpenseTT.CRUD.CRUDManager;
 import uwi.dcit.AgriExpenseTT.CRUD.Cycle.Cycle;
-import uwi.dcit.AgriExpenseTT.CRUD.Cycle.CycleCRUD;
 import uwi.dcit.AgriExpenseTT.EditCycle;
 import uwi.dcit.AgriExpenseTT.HireLabour;
 import uwi.dcit.AgriExpenseTT.InterfaceSysModuleTabElement;
@@ -43,15 +42,13 @@ import uwi.dcit.AgriExpenseTT.Main;
 import uwi.dcit.AgriExpenseTT.NewCycle;
 import uwi.dcit.AgriExpenseTT.R;
 import uwi.dcit.AgriExpenseTT.helpers.DHelper;
-import uwi.dcit.AgriExpenseTT.helpers.DataManager;
 import uwi.dcit.AgriExpenseTT.helpers.DateFormatHelper;
 import uwi.dcit.AgriExpenseTT.helpers.DbHelper;
 import uwi.dcit.AgriExpenseTT.helpers.DbQuery;
 import uwi.dcit.AgriExpenseTT.helpers.GAnalyticsHelper;
 import uwi.dcit.AgriExpenseTT.helpers.NavigationControl;
-import uwi.dcit.AgriExpenseTT.models.LocalCycle;
 
-public class FragmentViewCycles extends FragmentSysModuleT implements InterfaceSysModuleTabElement {
+public class FragmentViewCycles extends FragmentSysModule implements InterfaceSysModuleTabElement {
 //	String type=null;
 //	SQLiteDatabase db;
 //	DbHelper dbh;

@@ -23,7 +23,7 @@ import uwi.dcit.AgriExpenseTT.helpers.DHelper;
 import uwi.dcit.AgriExpenseTT.helpers.DbHelper;
 import uwi.dcit.AgriExpenseTT.helpers.GAnalyticsHelper;
 
-public class FragmentAddData extends ListFragment {
+public class FragmentAddDataT extends ListFragment {
 	String type;
 	ArrayList<String> list;
 	SQLiteDatabase db;
@@ -70,7 +70,7 @@ public class FragmentAddData extends ListFragment {
 	}
 
     private void startAddData(String option){
-        Fragment newFragment = new FragmentAddDataLast();
+        Fragment newFragment = new FragmentAddDataLastT();
         Bundle b=new Bundle();
         b.putString("type", option);//pass the category to the resource
         newFragment.setArguments(b);
@@ -78,15 +78,15 @@ public class FragmentAddData extends ListFragment {
         if (getActivity() instanceof AddData)
             ((AddData)getActivity()).appendSub(" "+option);
 
-        getFragmentManager()
-            .beginTransaction()
-            .replace(R.id.NewCycleListContainer, newFragment)
-            .commit();
+//        getFragmentManager()
+//            .beginTransaction()
+//            .replace(R.id.NewCycleListContainer, newFragment)
+//            .commit();
 
-//		FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//		transaction.replace(R.id.manage_data_container,newFragment);
-//		transaction.addToBackStack(null);
-//		transaction.commit();
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.manage_data_container,newFragment);
+		transaction.addToBackStack(null);
+		transaction.commit();
 
     }
 

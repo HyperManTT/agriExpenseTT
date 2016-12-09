@@ -10,14 +10,15 @@ import java.util.ArrayList;
 import uwi.dcit.AgriExpenseTT.fragments.FragmentChoosePurchase;
 import uwi.dcit.AgriExpenseTT.fragments.FragmentManageData;
 import uwi.dcit.AgriExpenseTT.fragments.FragmentSysModuleMgr;
-import uwi.dcit.AgriExpenseTT.fragments.FragmentSysModuleT;
+import uwi.dcit.AgriExpenseTT.fragments.FragmentSysModule;
+import uwi.dcit.AgriExpenseTT.fragments.FragmentTestSales;
 import uwi.dcit.AgriExpenseTT.fragments.FragmentViewCycles;
-import uwi.dcit.AgriExpenseTT.fragments.FragmentViewCyclesT;
+import uwi.dcit.AgriExpenseTT.fragments.FragmentViewResources;
 import uwi.dcit.AgriExpenseTT.helpers.GAnalyticsHelper;
 
 public class ManageData extends BaseActivity {
 
-	public ArrayList<FragmentSysModuleT> fragmentSysModuleTArrayList;
+	public ArrayList<FragmentSysModule> fragmentSysModuleTArrayList;
 
 
 	@Override
@@ -47,13 +48,12 @@ public class ManageData extends BaseActivity {
 	public void loadSysModules(String userLocationRequest ){
 
 		//Add modules to  be used by system
-		fragmentSysModuleTArrayList = new ArrayList<FragmentSysModuleT>();
+		fragmentSysModuleTArrayList = new ArrayList<FragmentSysModule>();
 
 		fragmentSysModuleTArrayList.add(new FragmentViewCycles());
-
-//        fragmentSysModuleTArrayList.add(new FragmentViewResources());
+        fragmentSysModuleTArrayList.add(new FragmentViewResources());
         fragmentSysModuleTArrayList.add(new FragmentChoosePurchase());
-//        fragmentSysModuleTArrayList.add(new FragmentTestSales());
+        fragmentSysModuleTArrayList.add(new FragmentTestSales());
 
 		FragmentSysModuleMgr fragmentSysModuleMgr = new FragmentSysModuleMgr();
 		fragmentSysModuleMgr.initializer(fragmentSysModuleTArrayList);

@@ -61,7 +61,7 @@ public class FragmentManageData extends Fragment implements InterfaceSlideInLoca
             public void onClick(View v) {
 //                startSlideInLocation("add");
                 ManageData manageData = (ManageData) getActivity();
-                manageData.loadLocation(new FragmentAddData(),"add");
+                manageData.loadLocation(new FragmentAddDataT(),"add");
 
             }
         });

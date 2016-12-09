@@ -15,9 +15,8 @@ import java.util.ArrayList;
 import uwi.dcit.AgriExpenseTT.fragments.FragmentEmpty;
 import uwi.dcit.AgriExpenseTT.fragments.FragmentSysModuleMgr;
 import uwi.dcit.AgriExpenseTT.fragments.FragmentSlidingMain;
-import uwi.dcit.AgriExpenseTT.fragments.FragmentSysModuleT;
+import uwi.dcit.AgriExpenseTT.fragments.FragmentSysModule;
 import uwi.dcit.AgriExpenseTT.fragments.FragmentViewCycles;
-import uwi.dcit.AgriExpenseTT.fragments.FragmentViewCyclesT;
 import uwi.dcit.AgriExpenseTT.helpers.GAnalyticsHelper;
 
 
@@ -27,7 +26,7 @@ public class Main extends BaseActivity {
     private CharSequence mTitle;
     public final static String APP_NAME = "AgriExpenseTT";
     public final static String TAG = "Main";
-    public ArrayList<FragmentSysModuleT> fragmentSysModuleTArrayList;
+    public ArrayList<FragmentSysModule> fragmentSysModuleTArrayList;
 
 
     @Override
@@ -166,15 +165,13 @@ public class Main extends BaseActivity {
      * Loads all the appropriate system modules depending a given user location request
      * @param userLocationRequest
      */
+    /*
     public void loadSysModules(String userLocationRequest ){
 
         //Add modules to  be used by system
-        fragmentSysModuleTArrayList = new ArrayList<FragmentSysModuleT>();
+        fragmentSysModuleTArrayList = new ArrayList<FragmentSysModule>();
 
         fragmentSysModuleTArrayList.add(new FragmentViewCycles());
-//        fragmentSysModuleTArrayList.add(new FragmentViewResourcesT());
-//        fragmentSysModuleTArrayList.add(new FragmentChoosePurchaseT());
-//        fragmentSysModuleTArrayList.add(new FragmentTestSales());
 
         FragmentSysModuleMgr fragmentSysModuleMgr = new FragmentSysModuleMgr();
         fragmentSysModuleMgr.initializer(fragmentSysModuleTArrayList);
@@ -190,5 +187,6 @@ public class Main extends BaseActivity {
 
 
     }
+    */
 
 }

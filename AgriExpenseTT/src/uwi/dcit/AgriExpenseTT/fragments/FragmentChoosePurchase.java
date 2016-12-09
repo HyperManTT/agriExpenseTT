@@ -3,7 +3,6 @@ package uwi.dcit.AgriExpenseTT.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.FragmentBreadCrumbs;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,7 +14,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -47,10 +45,9 @@ import uwi.dcit.AgriExpenseTT.helpers.DbHelper;
 import uwi.dcit.AgriExpenseTT.helpers.DbQuery;
 import uwi.dcit.AgriExpenseTT.helpers.GAnalyticsHelper;
 import uwi.dcit.AgriExpenseTT.helpers.NavigationControl;
-import uwi.dcit.AgriExpenseTT.models.LocalCycle;
 import uwi.dcit.AgriExpenseTT.models.LocalResourcePurchase;
 
-public class FragmentChoosePurchase extends FragmentSysModuleT implements InterfaceSysModuleTabElement {
+public class FragmentChoosePurchase extends FragmentSysModule implements InterfaceSysModuleTabElement {
 	PurchaseListAdapter myListAdapter;
 	ArrayList<LocalResourcePurchase> pList;
 	SQLiteDatabase db;
@@ -151,13 +148,27 @@ public class FragmentChoosePurchase extends FragmentSysModuleT implements Interf
 	 
 	 @Override
 	 public void onListItemClick(ListView l, View v, int position, long id) {
-		 if((type != null) && (type.equals("edit"))){				//when called by edit data
-			 editPurchaseOption(position);
-	 	}else if(type != null && type.equals("delete")){			//when called by delete data
-	 		deletePurchaseOption( l,  position);
-		}else if(type != null){										//when called by Use Purchases
-			launchPurchaseView(position);
-		}
+
+		 if (this.userLocationRequest != null){
+			 if (this.userLocationRequest.equalsIgnoreCase("edit")){
+				 editPurchaseOption(position);
+			 }
+			 else if (this.userLocationRequest.equalsIgnoreCase("delete")) {
+				 deletePurchaseOption(l,position);
+			 }
+			 else if (this.userLocationRequest.equalsIgnoreCase("home")){
+				 launchPurchaseView(position);
+			 }
+		 }
+		 else {
+			 if ((type != null) && (type.equals("edit"))) {                //when called by edit data
+				 editPurchaseOption(position);
+			 } else if (type != null && type.equals("delete")) {            //when called by delete data
+				 deletePurchaseOption(l, position);
+			 } else if (type != null) {                                        //when called by Use Purchases
+				 launchPurchaseView(position);
+			 }
+		 }
 	 }
 	 
 	 public void editPurchaseOption(int position){
@@ -278,7 +289,7 @@ public class FragmentChoosePurchase extends FragmentSysModuleT implements Interf
 
 		@Override
 		public FragmentChoosePurchase createFromParcel(Parcel source) {
-			return null;
+			return new FragmentChoosePurchase(source);
 		}
 
 		@Override
@@ -358,26 +369,26 @@ public class FragmentChoosePurchase extends FragmentSysModuleT implements Interf
 		 }
 	 }
 
-	public class FragmentChoosePurchaseEmpty extends Fragment {
-		TextView textView;
-		ImageView imageView;
-		@Override
-		public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-			View view = inflater.inflate(R.layout.fragment_empty_purchases,container,false);
-			textView = (TextView) view.findViewById(R.id.tv_empty_desc);
-			imageView = (ImageView) view.findViewById(R.id.img_empty_frag);
-			imageView.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					startActivity(new Intent(getActivity().getApplicationContext(), NewPurchase.class));
-				}
-			});
 
 
-			return view;
-		}
+}
+ class FragmentChoosePurchaseEmpty extends Fragment {
+	TextView textView;
+	ImageView imageView;
+	@Override
+	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+		View view = inflater.inflate(R.layout.fragment_empty_purchases,container,false);
+		textView = (TextView) view.findViewById(R.id.tv_empty_desc);
+		imageView = (ImageView) view.findViewById(R.id.img_empty_frag);
+		imageView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(getActivity().getApplicationContext(), NewPurchase.class));
+			}
+		});
+
+
+		return view;
 	}
-
-
 }
